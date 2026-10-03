@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Pupil Tracking System</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f7fb;color:#172033}
+.app{display:flex;min-height:100vh}
+.sidebar{width:250px;background:#102a43;color:#fff;padding:22px 16px;position:fixed;inset:0 auto 0 0}
+.brand{display:flex;gap:12px;align-items:center;margin-bottom:32px}
+.logo{width:42px;height:42px;border-radius:12px;background:#2f80ed;display:grid;place-items:center;font-weight:800}
+.brand small{display:block;color:#b9c9dc;margin-top:3px}
+.sidebar nav{display:grid;gap:8px}
+.nav-btn{border:0;background:transparent;color:#dce8f5;text-align:left;padding:12px 14px;border-radius:9px;cursor:pointer;font-size:14px}
+.nav-btn:hover,.nav-btn.active{background:#1d4f7a;color:#fff}
+.sidebar-footer{position:absolute;bottom:20px;color:#b9c9dc;font-size:12px;line-height:1.6}
+.main{margin-left:250px;width:calc(100% - 250px);padding:26px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.topbar h1{margin:0;font-size:28px}
+.topbar p{margin:6px 0;color:#68778c}
+.admin-badge{background:#e9f2ff;color:#1d5fa7;padding:9px 14px;border-radius:20px;font-size:13px;font-weight:700}
+.section{display:none}
+.section.active{display:block}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:20px}
+.stat,.card{background:#fff;border:1px solid #e2e8f0;border-radius:13px;box-shadow:0 3px 12px rgba(15,23,42,.04)}
+.stat{padding:18px}
+.stat span{display:block;color:#66758a;font-size:12px}
+.stat strong{display:block;font-size:27px;margin-top:8px}
+.grid-two{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+.card{padding:20px;margin-bottom:20px}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:16px}
+.card h2{font-size:18px;margin:0}
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.form-grid input,.form-grid select,.search,.filters input{border:1px solid #ccd6e2;border-radius:8px;padding:11px 12px;font-size:14px;background:#fff}
+.primary,.secondary{border:0;border-radius:8px;padding:11px 15px;cursor:pointer;font-weight:700}
+.primary{background:#1769aa;color:#fff}
+.secondary{background:#edf5ff;color:#1769aa}
+.form-grid button{width:max-content}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #edf0f4;font-size:13px}
+th{background:#f8fafc;color:#506176}
+.status{padding:5px 9px;border-radius:14px;font-size:11px;font-weight:700}
+.status.school{background:#e7f8ee;color:#19733e}
+.status.home{background:#eef2f7;color:#59697c}
+.status.pending{background:#fff4d8;color:#8b6500}
+.workflow{line-height:2;padding-left:20px;color:#53647a}
+.notice{margin-top:18px;background:#fff8e6;border-left:4px solid #e0a400;padding:12px;font-size:13px;color:#6c5a27}
+.filters{display:flex;gap:8px}
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.summary-item{background:#f7f9fc;padding:14px;border-radius:9px}
+.summary-item b{display:block;font-size:20px}
+.empty{text-align:center;color:#77869a;padding:25px}
+@media(max-width:1050px){.stats{grid-template-columns:repeat(3,1fr)}.grid-two{grid-template-columns:1fr}}
+@media(max-width:700px){
+.sidebar{width:72px;padding:15px 8px}
+.brand div:not(.logo),.sidebar-footer,.nav-btn{font-size:0}
+.nav-btn:before{content:"•";font-size:24px}
+.main{margin-left:72px;width:calc(100% - 72px);padding:15px}
+.form-grid{grid-template-columns:1fr}
+.stats{grid-template-columns:repeat(2,1fr)}
+.topbar h1{font-size:22px}
+.summary-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">SP</div><div><b>Smart Pupil</b><small>Tracking System</small></div></div>
+    <nav>
+      <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+      <button class="nav-btn" data-section="pupils">Pupils</button>
+      <button class="nav-btn" data-section="movement">Movement Tracking</button>
+      <button class="nav-btn" data-section="records">Movement Records</button>
+      <button class="nav-btn" data-section="reports">Reports</button>
+    </nav>
+    <div class="sidebar-footer">School Administration<br><span>v1.0</span></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="today"></p>
+      </div>
+      <div class="admin-badge">Administrator</div>
+    </header>
+
+    <section id="dashboard" class="section active">
+      <div class="stats">
+        <div class="stat"><span>Total Pupils</span><strong id="totalPupils">0</strong></div>
+        <div class="stat"><span>At School</span><strong id="atSchool">0</strong></div>
+        <div class="stat"><span>Yet to Arrive</span><strong id="yetArrive">0</strong></div>
+        <div class="stat"><span>Left School</span><strong id="leftSchool">0</strong></div>
+        <div class="stat"><span>Late Arrivals</span><strong id="lateArrivals">0</strong></div>
+        <div class="stat"><span>Late Departures</span><strong id="lateDepartures">0</strong></div>
+      </div>
+      <div class="grid-two">
+        <div class="card">
+          <div class="card-head"><h2>Today's Movement</h2><button class="secondary" onclick="showSection('movement')">Record Movement</button></div>
+          <div id="todaySummary"></div>
+        </div>
+        <div class="card">
+          <h2>System Workflow</h2>
+          <ol class="workflow">
+            <li>Register pupil and guardian details.</li>
+            <li>Record time pupil leaves home.</li>
+            <li>Record school arrival.</li>
+            <li>Record school departure.</li>
+            <li>Record home arrival.</li>
+            <li>Review history and generate reports.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="pupils" class="section">
+      <div class="card">
+        <div class="card-head"><h2>Register Pupil</h2></div>
+        <form id="pupilForm" class="form-grid">
+          <input id="pupilId" placeholder="Pupil ID" required>
+          <input id="pupilName" placeholder="Full name" required>
+          <input id="pupilClass" placeholder="Class e.g. P.5" required>
+          <input id="guardian" placeholder="Parent/Guardian name" required>
+          <input id="phone" placeholder="Guardian phone" required>
+          <input id="address" placeholder="Home area/address" required>
+          <button class="primary" type="submit">Register Pupil</button>
+        </form>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Registered Pupils</h2><input id="pupilSearch" class="search" placeholder="Search pupils..."></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Status</th></tr></thead><tbody id="pupilTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="movement" class="section">
+      <div class="card">
+        <div class="card-head"><h2>Record Pupil Movement</h2></div>
+        <form id="movementForm" class="form-grid">
+          <select id="movementPupil" required><option value="">Select pupil</option></select>
+          <select id="movementType" required>
+            <option value="">Select movement</option>
+            <option value="left_home">Left Home</option>
+            <option value="arrived_school">Arrived at School</option>
+            <option value="left_school">Left School</option>
+            <option value="arrived_home">Arrived Home</option>
+          </select>
+          <input id="movementTime" type="datetime-local" required>
+          <input id="movementNote" placeholder="Optional note">
+          <button class="primary" type="submit">Save Movement</button>
+        </form>
+        <div class="notice">For a real deployment, movement events should preferably be verified using QR/RFID, staff confirmation, or another approved method rather than relying only on manual entry.</div>
+      </div>
+    </section>
+
+    <section id="records" class="section">
+      <div class="card">
+        <div class="card-head">
+          <h2>Movement Records</h2>
+          <div class="filters"><input id="recordSearch" class="search" placeholder="Search pupil..."><input id="recordDate" type="date"></div>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>Date/Time</th><th>Pupil</th><th>Class</th><th>Movement</th><th>Note</th></tr></thead><tbody id="recordTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="reports" class="section">
+      <div class="card">
+        <div class="card-head"><h2>Daily Movement Report</h2><button class="primary" onclick="printReport()">Print Report</button></div>
+        <div id="reportArea"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const KEY_P='spms_pupils', KEY_R='spms_records';
+let pupils=JSON.parse(localStorage.getItem(KEY_P)||'[]');
+let records=JSON.parse(localStorage.getItem(KEY_R)||'[]');
+const movementNames={left_home:'Left Home',arrived_school:'Arrived at School',left_school:'Left School',arrived_home:'Arrived Home'};
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('movementTime').value=localDateTime();
+  document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>showSection(b.dataset.section));
+  document.getElementById('pupilForm').onsubmit=registerPupil;
+  document.getElementById('movementForm').onsubmit=recordMovement;
+  document.getElementById('pupilSearch').oninput=renderPupils;
+  document.getElementById('recordSearch').oninput=renderRecords;
+  document.getElementById('recordDate').oninput=renderRecords;
+  renderAll();
+});
+function localDateTime(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
+function save(){localStorage.setItem(KEY_P,JSON.stringify(pupils));localStorage.setItem(KEY_R,JSON.stringify(records))}
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.section===id));
+  document.getElementById('pageTitle').textContent=document.querySelector('[data-section="'+id+'"]').textContent;
+  if(id==='reports')renderReport();
+}
+function registerPupil(e){
+  e.preventDefault();
+  const id=document.getElementById('pupilId').value.trim();
+  if(pupils.some(p=>p.id.toLowerCase()===id.toLowerCase())) return alert('Pupil ID already exists.');
+  pupils.push({id,name:document.getElementById('pupilName').value.trim(),className:document.getElementById('pupilClass').value.trim(),guardian:document.getElementById('guardian').value.trim(),phone:document.getElementById('phone').value.trim(),address:document.getElementById('address').value.trim()});
+  save();e.target.reset();alert('Pupil registered successfully.');renderAll();
+}
+function recordMovement(e){
+  e.preventDefault();
+  const pupilId=document.getElementById('movementPupil').value;
+  const type=document.getElementById('movementType').value;
+  const time=document.getElementById('movementTime').value;
+  if(!pupilId||!type||!time)return;
+  records.push({id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())),pupilId,type,time,note:document.getElementById('movementNote').value.trim()});
+  records.sort((a,b)=>new Date(b.time)-new Date(a.time));save();alert('Movement saved successfully.');e.target.reset();document.getElementById('movementTime').value=localDateTime();renderAll();
+}
+function pupilName(id){const p=pupils.find(x=>x.id===id);return p?p.name:'Unknown pupil'}
+function pupil(id){return pupils.find(p=>p.id===id)}
+function todayRecords(){const d=new Date().toISOString().slice(0,10);return records.filter(r=>r.time.slice(0,10)===d)}
+function latestToday(id,type){return todayRecords().filter(r=>r.pupilId===id&&r.type===type).sort((a,b)=>new Date(b.time)-new Date(a.time))[0]}
+function renderAll(){renderPupilSelect();renderPupils();renderRecords();renderDashboard();renderReport()}
+function renderPupilSelect(){const s=document.getElementById('movementPupil');s.innerHTML='<option value="">Select pupil</option>'+pupils.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.name)+' — '+esc(p.className)+'</option>').join('')}
+function renderPupils(){
+ const q=(document.getElementById('pupilSearch').value||'').toLowerCase();
+ const rows=pupils.filter(p=>(p.id+' '+p.name+' '+p.className+' '+p.guardian).toLowerCase().includes(q)).map(p=>{
+   const arr=latestToday(p.id,'arrived_school'), left=latestToday(p.id,'left_school');
+   const status=arr&&!left?'At School':left?'Left School':'Pending';
+   const cls=status==='At School'?'school':status==='Left School'?'home':'pending';
+   return '<tr><td>'+esc(p.id)+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.className)+'</td><td>'+esc(p.guardian)+'</td><td>'+esc(p.phone)+'</td><td><span class="status '+cls+'">'+status+'</span></td></tr>'
+ }).join('');
+ document.getElementById('pupilTable').innerHTML=rows||'<tr><td colspan="6" class="empty">No pupils registered.</td></tr>';
+}
+function renderRecords(){
+ const q=(document.getElementById('recordSearch').value||'').toLowerCase(), date=document.getElementById('recordDate').value;
+ const data=records.filter(r=>(!date||r.time.slice(0,10)===date)&&((pupilName(r.pupilId)+' '+r.pupilId+' '+movementNames[r.type]).toLowerCase().includes(q)));
+ document.getElementById('recordTable').innerHTML=data.map(r=>{const p=pupil(r.pupilId);return '<tr><td>'+new Date(r.time).toLocaleString()+'</td><td>'+esc(pupilName(r.pupilId))+'</td><td>'+esc(p?p.className:'')+'</td><td>'+movementNames[r.type]+'</td><td>'+esc(r.note||'')+'</td></tr>'}).join('')||'<tr><td colspan="5" class="empty">No movement records found.</td></tr>';
+}
+function renderDashboard(){
+ const t=todayRecords(), total=pupils.length;
+ const at=pupils.filter(p=>latestToday(p.id,'arrived_school')&&!latestToday(p.id,'left_school')).length;
+ const arrived=pupils.filter(p=>latestToday(p.id,'arrived_school')).length;
+ const left=pupils.filter(p=>latestToday(p.id,'left_school')).length;
+ document.getElementById('totalPupils').textContent=total;
+ document.getElementById('atSchool').textContent=at;
+ document.getElementById('yetArrive').textContent=Math.max(0,total-arrived);
+ document.getElementById('leftSchool').textContent=left;
+ const lateA=t.filter(r=>r.type==='arrived_school'&&new Date(r.time).getHours()>8).length;
+ const lateD=t.filter(r=>r.type==='left_school'&&new Date(r.time).getHours()>=17).length;
+ document.getElementById('lateArrivals').textContent=lateA;
+ document.getElementById('lateDepartures').textContent=lateD;
+ document.getElementById('todaySummary').innerHTML='<div class="summary-grid"><div class="summary-item"><span>Recorded Events</span><b>'+t.length+'</b></div><div class="summary-item"><span>Arrived</span><b>'+arrived+'</b></div><div class="summary-item"><span>At School</span><b>'+at+'</b></div><div class="summary-item"><span>Departed</span><b>'+left+'</b></div></div>';
+}
+function renderReport(){
+ const rows=pupils.map(p=>{
+  const lh=latestToday(p.id,'left_home'), as=latestToday(p.id,'arrived_school'), ls=latestToday(p.id,'left_school'), ah=latestToday(p.id,'arrived_home');
+  return '<tr><td>'+esc(p.id)+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.className)+'</td><td>'+fmt(lh)+'</td><td>'+fmt(as)+'</td><td>'+fmt(ls)+'</td><td>'+fmt(ah)+'</td></tr>'
+ }).join('');
+ document.getElementById('reportArea').innerHTML='<p><b>Date:</b> '+new Date().toLocaleDateString()+'</p><div class="table-wrap"><table><thead><tr><th>ID</th><th>Pupil</th><th>Class</th><th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th></tr></thead><tbody>'+(rows||'<tr><td colspan="7" class="empty">No pupils.</td></tr>')+'</tbody></table></div>';
+}
+function fmt(r){return r?new Date(r.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'—'}
+function printReport(){const content=document.getElementById('reportArea').innerHTML;const w=window.open('','_blank');w.document.write('<html><head><title>Pupil Movement Report</title><style>body{font-family:Arial;padding:30px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #bbb;padding:8px;text-align:left}h1{text-align:center}</style></head><body><h1>Pupil Movement Report</h1>'+content+'</body></html>');w.document.close();w.print()}
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+</script>
+</body>
+</html>
