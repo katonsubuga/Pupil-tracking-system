@@ -1,161 +1,624 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Pupil Tracking System</title>
-<style>
-*{box-sizing:border-box}
-html,body{max-width:100%;overflow-x:hidden}
-body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f7fb;color:#172033;-webkit-text-size-adjust:100%}
-img,table{max-width:100%}
-.app{display:flex;min-height:100vh}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Smart Pupil Tracking System | International Standard</title>
+  <!-- Google Fonts & modern icon library -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* ---------- SIDEBAR ---------- */
-.sidebar{width:250px;background:#102a43;color:#fff;padding:22px 16px;position:fixed;inset:0 auto 0 0;overflow-y:auto;z-index:100;transition:width .2s ease}
-.brand{display:flex;gap:12px;align-items:center;margin-bottom:32px}
-.logo{width:42px;height:42px;border-radius:12px;background:#2f80ed;display:grid;place-items:center;font-weight:800;flex-shrink:0}
-.brand small{display:block;color:#b9c9dc;margin-top:3px}
-.sidebar nav{display:grid;gap:8px}
-.nav-btn{border:0;background:transparent;color:#dce8f5;text-align:left;padding:12px 14px;border-radius:9px;cursor:pointer;font-size:14px;width:100%;font-family:inherit}
-.nav-btn:hover,.nav-btn.active{background:#1d4f7a;color:#fff}
-.sidebar-footer{position:absolute;bottom:20px;color:#b9c9dc;font-size:12px;line-height:1.6}
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f4f7fc;
+      color: #1a2b3e;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* ---------- MAIN ---------- */
-.main{margin-left:250px;width:calc(100% - 250px);padding:26px;min-width:0}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:14px;flex-wrap:wrap}
-.topbar h1{margin:0;font-size:28px}
-.topbar p{margin:6px 0;color:#68778c}
-.admin-badge{background:#e9f2ff;color:#1d5fa7;padding:9px 14px;border-radius:20px;font-size:13px;font-weight:700;white-space:nowrap}
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
 
-/* ---------- SECTIONS ---------- */
-.section{display:none}
-.section.active{display:block}
+    /* ---------- SIDEBAR ---------- */
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #0b2b44 0%, #0d2e4a 100%);
+      color: #e5eef9;
+      padding: 24px 16px;
+      position: fixed;
+      inset: 0 auto 0 0;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+      z-index: 10;
+      transition: width 0.2s ease;
+    }
 
-/* ---------- STATS ---------- */
-.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:20px}
-.stat,.card{background:#fff;border:1px solid #e2e8f0;border-radius:13px;box-shadow:0 3px 12px rgba(15,23,42,.04)}
-.stat{padding:18px}
-.stat span{display:block;color:#66758a;font-size:12px}
-.stat strong{display:block;font-size:27px;margin-top:8px}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding-left: 6px;
+    }
 
-/* ---------- GRID / CARDS ---------- */
-.grid-two{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
-.card{padding:20px;margin-bottom:20px}
-.card-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:16px;flex-wrap:wrap}
-.card h2{font-size:18px;margin:0}
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2f80ed, #1c5bb8);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: white;
+      box-shadow: 0 8px 12px -6px rgba(0, 0, 0, 0.3);
+    }
 
-/* ---------- FORMS ---------- */
-.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.form-grid input,.form-grid select,.search,.filters input{border:1px solid #ccd6e2;border-radius:8px;padding:11px 12px;font-size:14px;background:#fff;width:100%;font-family:inherit}
-.primary,.secondary{border:0;border-radius:8px;padding:11px 15px;cursor:pointer;font-weight:700;font-family:inherit}
-.primary{background:#1769aa;color:#fff}
-.secondary{background:#edf5ff;color:#1769aa}
-.form-grid button{width:max-content}
+    .brand div {
+      line-height: 1.3;
+    }
 
-/* ---------- TABLES ---------- */
-.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;min-width:700px}
-th,td{text-align:left;padding:12px;border-bottom:1px solid #edf0f4;font-size:13px;white-space:nowrap}
-th{background:#f8fafc;color:#506176}
+    .brand b {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
 
-/* ---------- BADGES / MISC ---------- */
-.status{padding:5px 9px;border-radius:14px;font-size:11px;font-weight:700;display:inline-block}
-.status.school{background:#e7f8ee;color:#19733e}
-.status.home{background:#eef2f7;color:#59697c}
-.status.pending{background:#fff4d8;color:#8b6500}
-.workflow{line-height:2;padding-left:20px;color:#53647a}
-.notice{margin-top:18px;background:#fff8e6;border-left:4px solid #e0a400;padding:12px;font-size:13px;color:#6c5a27}
-.filters{display:flex;gap:8px;flex-wrap:wrap;width:100%;max-width:420px}
-.filters input{flex:1;min-width:130px}
-.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.summary-item{background:#f7f9fc;padding:14px;border-radius:9px}
-.summary-item b{display:block;font-size:20px}
-.empty{text-align:center;color:#77869a;padding:25px}
+    .brand small {
+      display: block;
+      color: #adc4db;
+      font-size: 11px;
+      font-weight: 500;
+      margin-top: 2px;
+      letter-spacing: 0.3px;
+    }
 
-/* ---------- RESPONSIVE: LAPTOP / SMALL DESKTOP ---------- */
-@media(max-width:1200px){
-  .stats{grid-template-columns:repeat(3,1fr)}
-  .grid-two{grid-template-columns:1fr}
-}
+    .sidebar nav {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
 
-/* ---------- RESPONSIVE: TABLET ---------- */
-@media(max-width:900px){
-  .sidebar{width:200px;padding:18px 12px}
-  .main{margin-left:200px;width:calc(100% - 200px);padding:20px}
-  .stats{grid-template-columns:repeat(3,1fr)}
-  .topbar h1{font-size:24px}
-}
+    .nav-btn {
+      border: 0;
+      background: transparent;
+      color: #cfddee;
+      text-align: left;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
 
-/* ---------- RESPONSIVE: SMALL TABLET / LARGE PHONE ---------- */
-@media(max-width:700px){
-  .sidebar{width:72px;padding:15px 8px}
-  .brand{justify-content:center;margin-bottom:24px}
-  .brand div:not(.logo),.sidebar-footer{display:none}
-  .nav-btn{font-size:0;text-align:center;padding:12px 6px}
-  .nav-btn:before{content:"•";font-size:24px;line-height:1}
-  .main{margin-left:72px;width:calc(100% - 72px);padding:15px}
-  .form-grid{grid-template-columns:1fr}
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .topbar{flex-direction:column;align-items:flex-start}
-  .topbar h1{font-size:22px}
-  .admin-badge{align-self:flex-start}
-  .summary-grid{grid-template-columns:repeat(2,1fr)}
-  .card{padding:16px}
-  .card-head{flex-direction:column;align-items:flex-start}
-  .filters{max-width:100%}
-  table{min-width:600px}
-}
+    .nav-btn i {
+      width: 20px;
+      font-size: 16px;
+      color: #8ba9c9;
+      transition: color 0.15s;
+    }
 
-/* ---------- RESPONSIVE: PHONE ---------- */
-@media(max-width:480px){
-  .main{padding:12px}
-  .topbar h1{font-size:20px}
-  .topbar p{font-size:13px}
-  .stat{padding:14px}
-  .stat strong{font-size:22px}
-  .stats{grid-template-columns:repeat(2,1fr);gap:10px}
-  .summary-grid{grid-template-columns:1fr 1fr}
-  .card{padding:14px;border-radius:11px}
-  .card h2{font-size:16px}
-  .workflow{padding-left:18px;font-size:14px}
-  .primary,.secondary{padding:10px 13px;font-size:13px}
-  .form-grid input,.form-grid select,.search,.filters input{padding:10px 11px;font-size:13px}
-  th,td{padding:10px;font-size:12px}
-  table{min-width:520px}
-}
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: white;
+    }
 
-/* ---------- VERY SMALL PHONE ---------- */
-@media(max-width:360px){
-  .stats{grid-template-columns:1fr}
-  .summary-grid{grid-template-columns:1fr}
-  .topbar h1{font-size:18px}
-}
-</style>
+    .nav-btn:hover i {
+      color: #9ac2ff;
+    }
+
+    .nav-btn.active {
+      background: #1e4b72;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 6px 12px -8px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-btn.active i {
+      color: #8ab9ff;
+    }
+
+    .sidebar-footer {
+      padding: 20px 12px 6px;
+      font-size: 12px;
+      color: #91aec9;
+      border-top: 1px solid #203f5c;
+      margin-top: 18px;
+    }
+
+    /* ---------- MAIN ---------- */
+    .main {
+      margin-left: 280px;
+      width: calc(100% - 280px);
+      padding: 28px 32px;
+      transition: margin 0.2s, width 0.2s;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .topbar h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0d2e4a;
+    }
+
+    .topbar p {
+      margin-top: 6px;
+      color: #54728d;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-badge {
+      background: #e9f2ff;
+      color: #1d5fa7;
+      padding: 10px 18px;
+      border-radius: 40px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(23, 105, 170, 0.1);
+    }
+
+    /* ---------- SECTIONS ---------- */
+    .section {
+      display: none;
+      animation: fade 0.2s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0.6; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------- STATS CARDS ---------- */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 18px;
+      padding: 18px 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+      border: 1px solid #e6edf6;
+      transition: all 0.2s;
+    }
+
+    .stat:hover {
+      border-color: #cbdbe9;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    .stat span {
+      display: block;
+      color: #5d738b;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 32px;
+      font-weight: 700;
+      margin-top: 6px;
+      color: #0b2b44;
+      line-height: 1.2;
+    }
+
+    /* ---------- GRID & CARDS ---------- */
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #e6edf6;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02);
+      padding: 22px 24px;
+      margin-bottom: 24px;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .card h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0d2e4a;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ---------- FORMS ---------- */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .form-grid input,
+    .form-grid select,
+    .search,
+    .filters input {
+      width: 100%;
+      border: 1px solid #cfddee;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 14px;
+      background: #ffffff;
+      transition: 0.15s;
+      font-family: inherit;
+      color: #1a2b3e;
+    }
+
+    .form-grid input:focus,
+    .form-grid select:focus,
+    .search:focus,
+    .filters input:focus {
+      outline: none;
+      border-color: #2f80ed;
+      box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.1);
+    }
+
+    .primary, .secondary {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 22px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.15s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .primary {
+      background: #1769aa;
+      color: white;
+      box-shadow: 0 4px 12px rgba(23, 105, 170, 0.2);
+    }
+
+    .primary:hover {
+      background: #0f528a;
+      box-shadow: 0 6px 16px rgba(23, 105, 170, 0.3);
+    }
+
+    .secondary {
+      background: #edf5ff;
+      color: #1769aa;
+    }
+
+    .secondary:hover {
+      background: #d9e8fe;
+    }
+
+    .form-grid button {
+      width: max-content;
+    }
+
+    /* ---------- TABLES ---------- */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid #eef3f9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 14px 16px;
+      border-bottom: 1px solid #eef3f9;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f9fcff;
+      color: #3d5a73;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* ---------- STATUS BADGES ---------- */
+    .status {
+      padding: 5px 12px;
+      border-radius: 30px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-block;
+      letter-spacing: 0.2px;
+    }
+
+    .status.school {
+      background: #e3f7eb;
+      color: #0e6b3e;
+    }
+
+    .status.home {
+      background: #eef2f7;
+      color: #4f657b;
+    }
+
+    .status.pending {
+      background: #fff2d7;
+      color: #8b6500;
+    }
+
+    /* ---------- WORKFLOW & NOTICE ---------- */
+    .workflow {
+      padding-left: 20px;
+      color: #4f657b;
+      font-size: 14px;
+      line-height: 2;
+    }
+
+    .workflow li {
+      margin-bottom: 2px;
+    }
+
+    .notice {
+      margin-top: 18px;
+      background: #fff9e8;
+      border-left: 5px solid #e6b422;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      color: #6c5a27;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .notice i {
+      color: #b88e1a;
+      font-size: 18px;
+      margin-top: 1px;
+    }
+
+    /* ---------- FILTERS ---------- */
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filters input {
+      width: auto;
+      min-width: 140px;
+    }
+
+    /* ---------- SUMMARY GRID ---------- */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .summary-item {
+      background: #f9fcff;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid #e6edf6;
+    }
+
+    .summary-item span {
+      font-size: 12px;
+      color: #5d738b;
+      font-weight: 500;
+    }
+
+    .summary-item b {
+      display: block;
+      font-size: 22px;
+      font-weight: 700;
+      color: #0b2b44;
+      margin-top: 6px;
+    }
+
+    /* ---------- EMPTY STATE ---------- */
+    .empty {
+      text-align: center;
+      color: #77869a;
+      padding: 40px 20px;
+      font-size: 14px;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1100px) {
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .sidebar {
+        width: 80px;
+        padding: 20px 8px;
+      }
+      .brand div:not(.logo) {
+        display: none;
+      }
+      .brand {
+        justify-content: center;
+        padding-left: 0;
+      }
+      .nav-btn span {
+        display: none;
+      }
+      .nav-btn i {
+        width: auto;
+        font-size: 22px;
+        margin: 0 auto;
+      }
+      .nav-btn {
+        justify-content: center;
+        padding: 14px 0;
+      }
+      .sidebar-footer {
+        display: none;
+      }
+      .main {
+        margin-left: 80px;
+        width: calc(100% - 80px);
+        padding: 20px 16px;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .topbar h1 {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .main {
+        padding: 16px 12px;
+      }
+      .card {
+        padding: 18px 16px;
+      }
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+      .filters {
+        flex-direction: column;
+        width: 100%;
+      }
+      .filters input {
+        width: 100%;
+      }
+      .card-head {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .stat strong {
+        font-size: 26px;
+      }
+    }
+
+    /* Print polish */
+    @media print {
+      .sidebar, .topbar, .nav-btn, .card-head button, .filters {
+        display: none;
+      }
+      .main {
+        margin: 0;
+        padding: 0;
+      }
+      .card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+      }
+    }
+  </style>
 </head>
 <body>
 <div class="app">
+  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="brand"><div class="logo">SP</div><div><b>Smart Pupil</b><small>Tracking System</small></div></div>
+    <div class="brand">
+      <div class="logo">SP</div>
+      <div>
+        <b>Smart Pupil</b>
+        <small>Tracking System</small>
+      </div>
+    </div>
     <nav>
-      <button class="nav-btn active" data-section="dashboard">Dashboard</button>
-      <button class="nav-btn" data-section="pupils">Pupils</button>
-      <button class="nav-btn" data-section="movement">Movement Tracking</button>
-      <button class="nav-btn" data-section="records">Movement Records</button>
-      <button class="nav-btn" data-section="reports">Reports</button>
+      <button class="nav-btn active" data-section="dashboard"><i class="fas fa-chart-pie"></i><span>Dashboard</span></button>
+      <button class="nav-btn" data-section="pupils"><i class="fas fa-user-graduate"></i><span>Pupils</span></button>
+      <button class="nav-btn" data-section="movement"><i class="fas fa-exchange-alt"></i><span>Movement Tracking</span></button>
+      <button class="nav-btn" data-section="records"><i class="fas fa-history"></i><span>Movement Records</span></button>
+      <button class="nav-btn" data-section="reports"><i class="fas fa-file-alt"></i><span>Reports</span></button>
     </nav>
-    <div class="sidebar-footer">School Administration<br><span>v1.0</span></div>
+    <div class="sidebar-footer">
+      <i class="fas fa-shield-alt" style="margin-right: 6px;"></i> School Administration<br>
+      <span style="opacity:0.7;">v1.0 · International</span>
+    </div>
   </aside>
 
+  <!-- MAIN CONTENT -->
   <main class="main">
     <header class="topbar">
       <div>
         <h1 id="pageTitle">Dashboard</h1>
-        <p id="today"></p>
+        <p><i class="far fa-calendar-alt" style="opacity:0.7;"></i> <span id="today"></span></p>
       </div>
-      <div class="admin-badge">Administrator</div>
+      <div class="admin-badge"><i class="fas fa-user-shield"></i> Administrator</div>
     </header>
 
+    <!-- DASHBOARD -->
     <section id="dashboard" class="section active">
       <div class="stats">
         <div class="stat"><span>Total Pupils</span><strong id="totalPupils">0</strong></div>
@@ -167,11 +630,11 @@ th{background:#f8fafc;color:#506176}
       </div>
       <div class="grid-two">
         <div class="card">
-          <div class="card-head"><h2>Today's Movement</h2><button class="secondary" onclick="showSection('movement')">Record Movement</button></div>
+          <div class="card-head"><h2><i class="fas fa-clock" style="color:#1769aa;"></i> Today's Movement</h2><button class="secondary" onclick="showSection('movement')"><i class="fas fa-plus-circle"></i> Record Movement</button></div>
           <div id="todaySummary"></div>
         </div>
         <div class="card">
-          <h2>System Workflow</h2>
+          <h2><i class="fas fa-sitemap" style="color:#1769aa;"></i> System Workflow</h2>
           <ol class="workflow">
             <li>Register pupil and guardian details.</li>
             <li>Record time pupil leaves home.</li>
@@ -184,9 +647,10 @@ th{background:#f8fafc;color:#506176}
       </div>
     </section>
 
+    <!-- PUPILS -->
     <section id="pupils" class="section">
       <div class="card">
-        <div class="card-head"><h2>Register Pupil</h2></div>
+        <div class="card-head"><h2><i class="fas fa-user-plus" style="color:#1769aa;"></i> Register Pupil</h2></div>
         <form id="pupilForm" class="form-grid">
           <input id="pupilId" placeholder="Pupil ID" required>
           <input id="pupilName" placeholder="Full name" required>
@@ -194,18 +658,19 @@ th{background:#f8fafc;color:#506176}
           <input id="guardian" placeholder="Parent/Guardian name" required>
           <input id="phone" placeholder="Guardian phone" required>
           <input id="address" placeholder="Home area/address" required>
-          <button class="primary" type="submit">Register Pupil</button>
+          <button class="primary" type="submit"><i class="fas fa-save"></i> Register Pupil</button>
         </form>
       </div>
       <div class="card">
-        <div class="card-head"><h2>Registered Pupils</h2><input id="pupilSearch" class="search" placeholder="Search pupils..."></div>
+        <div class="card-head"><h2><i class="fas fa-users" style="color:#1769aa;"></i> Registered Pupils</h2><input id="pupilSearch" class="search" placeholder="Search pupils..."></div>
         <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Status</th></tr></thead><tbody id="pupilTable"></tbody></table></div>
       </div>
     </section>
 
+    <!-- MOVEMENT -->
     <section id="movement" class="section">
       <div class="card">
-        <div class="card-head"><h2>Record Pupil Movement</h2></div>
+        <div class="card-head"><h2><i class="fas fa-route" style="color:#1769aa;"></i> Record Pupil Movement</h2></div>
         <form id="movementForm" class="form-grid">
           <select id="movementPupil" required><option value="">Select pupil</option></select>
           <select id="movementType" required>
@@ -217,25 +682,33 @@ th{background:#f8fafc;color:#506176}
           </select>
           <input id="movementTime" type="datetime-local" required>
           <input id="movementNote" placeholder="Optional note">
-          <button class="primary" type="submit">Save Movement</button>
+          <button class="primary" type="submit"><i class="fas fa-check-circle"></i> Save Movement</button>
         </form>
-        <div class="notice">For a real deployment, movement events should preferably be verified using QR/RFID, staff confirmation, or another approved method rather than relying only on manual entry.</div>
+        <div class="notice">
+          <i class="fas fa-info-circle"></i>
+          <span>For a real deployment, movement events should preferably be verified using QR/RFID, staff confirmation, or another approved method rather than relying only on manual entry.</span>
+        </div>
       </div>
     </section>
 
+    <!-- RECORDS -->
     <section id="records" class="section">
       <div class="card">
         <div class="card-head">
-          <h2>Movement Records</h2>
-          <div class="filters"><input id="recordSearch" class="search" placeholder="Search pupil..."><input id="recordDate" type="date"></div>
+          <h2><i class="fas fa-list-ul" style="color:#1769aa;"></i> Movement Records</h2>
+          <div class="filters">
+            <input id="recordSearch" class="search" placeholder="Search pupil...">
+            <input id="recordDate" type="date">
+          </div>
         </div>
         <div class="table-wrap"><table><thead><tr><th>Date/Time</th><th>Pupil</th><th>Class</th><th>Movement</th><th>Note</th></tr></thead><tbody id="recordTable"></tbody></table></div>
       </div>
     </section>
 
+    <!-- REPORTS -->
     <section id="reports" class="section">
       <div class="card">
-        <div class="card-head"><h2>Daily Movement Report</h2><button class="primary" onclick="printReport()">Print Report</button></div>
+        <div class="card-head"><h2><i class="fas fa-print" style="color:#1769aa;"></i> Daily Movement Report</h2><button class="primary" onclick="printReport()"><i class="fas fa-print"></i> Print Report</button></div>
         <div id="reportArea"></div>
       </div>
     </section>
@@ -243,93 +716,277 @@ th{background:#f8fafc;color:#506176}
 </div>
 
 <script>
-const KEY_P='spms_pupils', KEY_R='spms_records';
-let pupils=JSON.parse(localStorage.getItem(KEY_P)||'[]');
-let records=JSON.parse(localStorage.getItem(KEY_R)||'[]');
-const movementNames={left_home:'Left Home',arrived_school:'Arrived at School',left_school:'Left School',arrived_home:'Arrived Home'};
+  // ---------- STORAGE & STATE ----------
+  const KEY_P = 'spms_pupils_v2';
+  const KEY_R = 'spms_records_v2';
+  let pupils = JSON.parse(localStorage.getItem(KEY_P) || '[]');
+  let records = JSON.parse(localStorage.getItem(KEY_R) || '[]');
 
-document.addEventListener('DOMContentLoaded',()=>{
-  document.getElementById('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  document.getElementById('movementTime').value=localDateTime();
-  document.querySelectorAll('.nav-btn').forEach(b=>b.onclick=()=>showSection(b.dataset.section));
-  document.getElementById('pupilForm').onsubmit=registerPupil;
-  document.getElementById('movementForm').onsubmit=recordMovement;
-  document.getElementById('pupilSearch').oninput=renderPupils;
-  document.getElementById('recordSearch').oninput=renderRecords;
-  document.getElementById('recordDate').oninput=renderRecords;
-  renderAll();
-});
-function localDateTime(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
-function save(){localStorage.setItem(KEY_P,JSON.stringify(pupils));localStorage.setItem(KEY_R,JSON.stringify(records))}
-function showSection(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.section===id));
-  document.getElementById('pageTitle').textContent=document.querySelector('[data-section="'+id+'"]').textContent;
-  if(id==='reports')renderReport();
-}
-function registerPupil(e){
-  e.preventDefault();
-  const id=document.getElementById('pupilId').value.trim();
-  if(pupils.some(p=>p.id.toLowerCase()===id.toLowerCase())) return alert('Pupil ID already exists.');
-  pupils.push({id,name:document.getElementById('pupilName').value.trim(),className:document.getElementById('pupilClass').value.trim(),guardian:document.getElementById('guardian').value.trim(),phone:document.getElementById('phone').value.trim(),address:document.getElementById('address').value.trim()});
-  save();e.target.reset();alert('Pupil registered successfully.');renderAll();
-}
-function recordMovement(e){
-  e.preventDefault();
-  const pupilId=document.getElementById('movementPupil').value;
-  const type=document.getElementById('movementType').value;
-  const time=document.getElementById('movementTime').value;
-  if(!pupilId||!type||!time)return;
-  records.push({id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())),pupilId,type,time,note:document.getElementById('movementNote').value.trim()});
-  records.sort((a,b)=>new Date(b.time)-new Date(a.time));save();alert('Movement saved successfully.');e.target.reset();document.getElementById('movementTime').value=localDateTime();renderAll();
-}
-function pupilName(id){const p=pupils.find(x=>x.id===id);return p?p.name:'Unknown pupil'}
-function pupil(id){return pupils.find(p=>p.id===id)}
-function todayRecords(){const d=new Date().toISOString().slice(0,10);return records.filter(r=>r.time.slice(0,10)===d)}
-function latestToday(id,type){return todayRecords().filter(r=>r.pupilId===id&&r.type===type).sort((a,b)=>new Date(b.time)-new Date(a.time))[0]}
-function renderAll(){renderPupilSelect();renderPupils();renderRecords();renderDashboard();renderReport()}
-function renderPupilSelect(){const s=document.getElementById('movementPupil');s.innerHTML='<option value="">Select pupil</option>'+pupils.map(p=>'<option value="'+esc(p.id)+'">'+esc(p.name)+' — '+esc(p.className)+'</option>').join('')}
-function renderPupils(){
- const q=(document.getElementById('pupilSearch').value||'').toLowerCase();
- const rows=pupils.filter(p=>(p.id+' '+p.name+' '+p.className+' '+p.guardian).toLowerCase().includes(q)).map(p=>{
-   const arr=latestToday(p.id,'arrived_school'), left=latestToday(p.id,'left_school');
-   const status=arr&&!left?'At School':left?'Left School':'Pending';
-   const cls=status==='At School'?'school':status==='Left School'?'home':'pending';
-   return '<tr><td>'+esc(p.id)+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.className)+'</td><td>'+esc(p.guardian)+'</td><td>'+esc(p.phone)+'</td><td><span class="status '+cls+'">'+status+'</span></td></tr>'
- }).join('');
- document.getElementById('pupilTable').innerHTML=rows||'<tr><td colspan="6" class="empty">No pupils registered.</td></tr>';
-}
-function renderRecords(){
- const q=(document.getElementById('recordSearch').value||'').toLowerCase(), date=document.getElementById('recordDate').value;
- const data=records.filter(r=>(!date||r.time.slice(0,10)===date)&&((pupilName(r.pupilId)+' '+r.pupilId+' '+movementNames[r.type]).toLowerCase().includes(q)));
- document.getElementById('recordTable').innerHTML=data.map(r=>{const p=pupil(r.pupilId);return '<tr><td>'+new Date(r.time).toLocaleString()+'</td><td>'+esc(pupilName(r.pupilId))+'</td><td>'+esc(p?p.className:'')+'</td><td>'+movementNames[r.type]+'</td><td>'+esc(r.note||'')+'</td></tr>'}).join('')||'<tr><td colspan="5" class="empty">No movement records found.</td></tr>';
-}
-function renderDashboard(){
- const t=todayRecords(), total=pupils.length;
- const at=pupils.filter(p=>latestToday(p.id,'arrived_school')&&!latestToday(p.id,'left_school')).length;
- const arrived=pupils.filter(p=>latestToday(p.id,'arrived_school')).length;
- const left=pupils.filter(p=>latestToday(p.id,'left_school')).length;
- document.getElementById('totalPupils').textContent=total;
- document.getElementById('atSchool').textContent=at;
- document.getElementById('yetArrive').textContent=Math.max(0,total-arrived);
- document.getElementById('leftSchool').textContent=left;
- const lateA=t.filter(r=>r.type==='arrived_school'&&new Date(r.time).getHours()>8).length;
- const lateD=t.filter(r=>r.type==='left_school'&&new Date(r.time).getHours()>=17).length;
- document.getElementById('lateArrivals').textContent=lateA;
- document.getElementById('lateDepartures').textContent=lateD;
- document.getElementById('todaySummary').innerHTML='<div class="summary-grid"><div class="summary-item"><span>Recorded Events</span><b>'+t.length+'</b></div><div class="summary-item"><span>Arrived</span><b>'+arrived+'</b></div><div class="summary-item"><span>At School</span><b>'+at+'</b></div><div class="summary-item"><span>Departed</span><b>'+left+'</b></div></div>';
-}
-function renderReport(){
- const rows=pupils.map(p=>{
-  const lh=latestToday(p.id,'left_home'), as=latestToday(p.id,'arrived_school'), ls=latestToday(p.id,'left_school'), ah=latestToday(p.id,'arrived_home');
-  return '<tr><td>'+esc(p.id)+'</td><td>'+esc(p.name)+'</td><td>'+esc(p.className)+'</td><td>'+fmt(lh)+'</td><td>'+fmt(as)+'</td><td>'+fmt(ls)+'</td><td>'+fmt(ah)+'</td></tr>'
- }).join('');
- document.getElementById('reportArea').innerHTML='<p><b>Date:</b> '+new Date().toLocaleDateString()+'</p><div class="table-wrap"><table><thead><tr><th>ID</th><th>Pupil</th><th>Class</th><th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th></tr></thead><tbody>'+(rows||'<tr><td colspan="7" class="empty">No pupils.</td></tr>')+'</tbody></table></div>';
-}
-function fmt(r){return r?new Date(r.time).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):'—'}
-function printReport(){const content=document.getElementById('reportArea').innerHTML;const w=window.open('','_blank');w.document.write('<html><head><title>Pupil Movement Report</title><style>body{font-family:Arial;padding:30px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #bbb;padding:8px;text-align:left}h1{text-align:center}</style></head><body><h1>Pupil Movement Report</h1>'+content+'</body></html>');w.document.close();w.print()}
-function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+  const movementNames = {
+    left_home: 'Left Home',
+    arrived_school: 'Arrived at School',
+    left_school: 'Left School',
+    arrived_home: 'Arrived Home'
+  };
+
+  // ---------- INIT ----------
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('today').textContent = new Date().toLocaleDateString(undefined, {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+    document.getElementById('movementTime').value = localDateTime();
+
+    document.querySelectorAll('.nav-btn').forEach(b => b.onclick = () => showSection(b.dataset.section));
+    document.getElementById('pupilForm').onsubmit = registerPupil;
+    document.getElementById('movementForm').onsubmit = recordMovement;
+    document.getElementById('pupilSearch').oninput = renderPupils;
+    document.getElementById('recordSearch').oninput = renderRecords;
+    document.getElementById('recordDate').oninput = renderRecords;
+
+    renderAll();
+  });
+
+  // ---------- UTILS ----------
+  function localDateTime() {
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 16);
+  }
+
+  function save() {
+    localStorage.setItem(KEY_P, JSON.stringify(pupils));
+    localStorage.setItem(KEY_R, JSON.stringify(records));
+  }
+
+  function esc(v) {
+    return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[c]));
+  }
+
+  function pupilName(id) {
+    const p = pupils.find(x => x.id === id);
+    return p ? p.name : 'Unknown pupil';
+  }
+
+  function pupil(id) {
+    return pupils.find(p => p.id === id);
+  }
+
+  function todayRecords() {
+    const d = new Date().toISOString().slice(0, 10);
+    return records.filter(r => r.time.slice(0, 10) === d);
+  }
+
+  function latestToday(id, type) {
+    return todayRecords()
+      .filter(r => r.pupilId === id && r.type === type)
+      .sort((a, b) => new Date(b.time) - new Date(a.time))[0];
+  }
+
+  // ---------- NAVIGATION ----------
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.section === id);
+    });
+
+    const btn = document.querySelector(`.nav-btn[data-section="${id}"]`);
+    if (btn) {
+      const span = btn.querySelector('span');
+      document.getElementById('pageTitle').textContent = span ? span.textContent : btn.textContent.trim();
+    }
+
+    if (id === 'reports') renderReport();
+  }
+
+  // ---------- REGISTER PUPIL ----------
+  function registerPupil(e) {
+    e.preventDefault();
+    const id = document.getElementById('pupilId').value.trim();
+    if (pupils.some(p => p.id.toLowerCase() === id.toLowerCase())) {
+      return alert('Pupil ID already exists.');
+    }
+    pupils.push({
+      id,
+      name: document.getElementById('pupilName').value.trim(),
+      className: document.getElementById('pupilClass').value.trim(),
+      guardian: document.getElementById('guardian').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      address: document.getElementById('address').value.trim()
+    });
+    save();
+    e.target.reset();
+    alert('Pupil registered successfully.');
+    renderAll();
+  }
+
+  // ---------- RECORD MOVEMENT ----------
+  function recordMovement(e) {
+    e.preventDefault();
+    const pupilId = document.getElementById('movementPupil').value;
+    const type = document.getElementById('movementType').value;
+    const time = document.getElementById('movementTime').value;
+    if (!pupilId || !type || !time) return;
+
+    records.push({
+      id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+      pupilId,
+      type,
+      time,
+      note: document.getElementById('movementNote').value.trim()
+    });
+    records.sort((a, b) => new Date(b.time) - new Date(a.time));
+    save();
+    alert('Movement saved successfully.');
+    e.target.reset();
+    document.getElementById('movementTime').value = localDateTime();
+    renderAll();
+  }
+
+  // ---------- RENDER ALL ----------
+  function renderAll() {
+    renderPupilSelect();
+    renderPupils();
+    renderRecords();
+    renderDashboard();
+    renderReport();
+  }
+
+  function renderPupilSelect() {
+    const s = document.getElementById('movementPupil');
+    s.innerHTML = '<option value="">Select pupil</option>' +
+      pupils.map(p => `<option value="${esc(p.id)}">${esc(p.name)} — ${esc(p.className)}</option>`).join('');
+  }
+
+  function renderPupils() {
+    const q = (document.getElementById('pupilSearch').value || '').toLowerCase();
+    const rows = pupils
+      .filter(p => (p.id + ' ' + p.name + ' ' + p.className + ' ' + p.guardian).toLowerCase().includes(q))
+      .map(p => {
+        const arr = latestToday(p.id, 'arrived_school');
+        const left = latestToday(p.id, 'left_school');
+        const status = arr && !left ? 'At School' : left ? 'Left School' : 'Pending';
+        const cls = status === 'At School' ? 'school' : status === 'Left School' ? 'home' : 'pending';
+        return `<tr>
+          <td>${esc(p.id)}</td>
+          <td>${esc(p.name)}</td>
+          <td>${esc(p.className)}</td>
+          <td>${esc(p.guardian)}</td>
+          <td>${esc(p.phone)}</td>
+          <td><span class="status ${cls}">${status}</span></td>
+        </tr>`;
+      }).join('');
+    document.getElementById('pupilTable').innerHTML = rows ||
+      '<tr><td colspan="6" class="empty"><i class="fas fa-user-slash" style="margin-right:8px;"></i>No pupils registered.</td></tr>';
+  }
+
+  function renderRecords() {
+    const q = (document.getElementById('recordSearch').value || '').toLowerCase();
+    const date = document.getElementById('recordDate').value;
+    const data = records.filter(r => {
+      const matchDate = !date || r.time.slice(0, 10) === date;
+      const matchSearch = (pupilName(r.pupilId) + ' ' + r.pupilId + ' ' + movementNames[r.type]).toLowerCase().includes(q);
+      return matchDate && matchSearch;
+    });
+
+    document.getElementById('recordTable').innerHTML = data.map(r => {
+      const p = pupil(r.pupilId);
+      return `<tr>
+        <td>${new Date(r.time).toLocaleString()}</td>
+        <td>${esc(pupilName(r.pupilId))}</td>
+        <td>${esc(p ? p.className : '')}</td>
+        <td>${movementNames[r.type] || r.type}</td>
+        <td>${esc(r.note || '')}</td>
+      </tr>`;
+    }).join('') || '<tr><td colspan="5" class="empty"><i class="fas fa-inbox" style="margin-right:8px;"></i>No movement records found.</td></tr>';
+  }
+
+  function renderDashboard() {
+    const t = todayRecords();
+    const total = pupils.length;
+
+    const at = pupils.filter(p => latestToday(p.id, 'arrived_school') && !latestToday(p.id, 'left_school')).length;
+    const arrived = pupils.filter(p => latestToday(p.id, 'arrived_school')).length;
+    const left = pupils.filter(p => latestToday(p.id, 'left_school')).length;
+
+    document.getElementById('totalPupils').textContent = total;
+    document.getElementById('atSchool').textContent = at;
+    document.getElementById('yetArrive').textContent = Math.max(0, total - arrived);
+    document.getElementById('leftSchool').textContent = left;
+
+    const lateA = t.filter(r => r.type === 'arrived_school' && new Date(r.time).getHours() > 8).length;
+    const lateD = t.filter(r => r.type === 'left_school' && new Date(r.time).getHours() >= 17).length;
+    document.getElementById('lateArrivals').textContent = lateA;
+    document.getElementById('lateDepartures').textContent = lateD;
+
+    document.getElementById('todaySummary').innerHTML =
+      `<div class="summary-grid">
+        <div class="summary-item"><span>Recorded Events</span><b>${t.length}</b></div>
+        <div class="summary-item"><span>Arrived</span><b>${arrived}</b></div>
+        <div class="summary-item"><span>At School</span><b>${at}</b></div>
+        <div class="summary-item"><span>Departed</span><b>${left}</b></div>
+      </div>`;
+  }
+
+  function renderReport() {
+    const rows = pupils.map(p => {
+      const lh = latestToday(p.id, 'left_home');
+      const as = latestToday(p.id, 'arrived_school');
+      const ls = latestToday(p.id, 'left_school');
+      const ah = latestToday(p.id, 'arrived_home');
+      return `<tr>
+        <td>${esc(p.id)}</td>
+        <td>${esc(p.name)}</td>
+        <td>${esc(p.className)}</td>
+        <td>${fmt(lh)}</td>
+        <td>${fmt(as)}</td>
+        <td>${fmt(ls)}</td>
+        <td>${fmt(ah)}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('reportArea').innerHTML =
+      `<p style="margin-bottom:16px; font-weight:600; color:#0d2e4a;"><i class="far fa-calendar-alt" style="margin-right:8px;"></i> Date: ${new Date().toLocaleDateString()}</p>
+      <div class="table-wrap"><table><thead><tr>
+        <th>ID</th><th>Pupil</th><th>Class</th>
+        <th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th>
+      </tr></thead><tbody>${rows || '<tr><td colspan="7" class="empty">No pupils.</td></tr>'}</tbody></table></div>`;
+  }
+
+  function fmt(r) {
+    return r ? new Date(r.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '—';
+  }
+
+  function printReport() {
+    const content = document.getElementById('reportArea').innerHTML;
+    const w = window.open('', '_blank');
+    w.document.write(`
+      <html>
+        <head><title>Pupil Movement Report</title>
+        <style>
+          body{font-family:Inter,Arial,sans-serif;padding:30px;color:#1a2b3e}
+          table{width:100%;border-collapse:collapse;margin-top:16px}
+          th,td{border:1px solid #ccc;padding:10px;text-align:left;font-size:12px}
+          th{background:#f0f6fc;font-weight:600}
+          h1{text-align:center;font-size:20px;margin-bottom:10px}
+          .footer{margin-top:24px;text-align:center;font-size:11px;color:#5d738b}
+          .table-wrap{overflow-x:auto}
+        </style>
+        </head>
+        <body>
+          <h1>Pupil Movement Report</h1>
+          <p style="text-align:center;margin-bottom:20px;">Smart Pupil Tracking System — ${new Date().toLocaleDateString()}</p>
+          ${content}
+          <div class="footer">Generated by Smart Pupil Tracking System (v1.0 International)</div>
+        </body>
+      </html>
+    `);
+    w.document.close();
+    w.print();
+  }
 </script>
 </body>
 </html>
