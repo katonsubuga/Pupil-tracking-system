@@ -3,27 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <title>Smart Pupil Tracking System | International Standard</title>
-  <!-- Google Fonts & modern icon library -->
+  <meta name="theme-color" content="#0b2b44">
+  <title>Smart Pupil Tracking System | Enterprise Grade</title>
+  <!-- Google Fonts & Font Awesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Chart.js for advanced analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
+    /* ---------- GLOBAL & THEME ---------- */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      background: #f4f7fc;
-      color: #1a2b3e;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+    :root {
+      --primary: #0b2b44;
+      --primary-light: #1c4b72;
+      --accent: #2f80ed;
+      --accent-soft: #e9f2ff;
+      --success: #0e6b3e;
+      --warning: #b88e1a;
+      --danger: #b33a3a;
+      --surface: #ffffff;
+      --bg: #f4f7fc;
+      --border: #e6edf6;
+      --text-main: #1a2b3e;
+      --text-muted: #5d738b;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.06);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --transition: all 0.2s ease;
     }
 
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ---------- APP LAYOUT ---------- */
     .app {
       display: flex;
       min-height: 100vh;
@@ -39,30 +67,31 @@
       inset: 0 auto 0 0;
       display: flex;
       flex-direction: column;
-      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
-      z-index: 10;
-      transition: width 0.2s ease;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+      z-index: 100;
+      transition: width 0.25s ease, transform 0.25s ease;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 32px;
-      padding-left: 6px;
+      margin-bottom: 28px;
+      padding-left: 4px;
     }
 
     .logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
       background: linear-gradient(135deg, #2f80ed, #1c5bb8);
       display: grid;
       place-items: center;
       font-weight: 800;
       font-size: 20px;
       color: white;
-      box-shadow: 0 8px 12px -6px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.4);
+      flex-shrink: 0;
     }
 
     .brand div {
@@ -73,6 +102,7 @@
       font-size: 16px;
       font-weight: 700;
       letter-spacing: -0.01em;
+      color: #fff;
     }
 
     .brand small {
@@ -81,7 +111,7 @@
       font-size: 11px;
       font-weight: 500;
       margin-top: 2px;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
     }
 
     .sidebar nav {
@@ -104,20 +134,20 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      transition: all 0.15s;
+      transition: var(--transition);
       font-family: inherit;
     }
 
     .nav-btn i {
-      width: 20px;
-      font-size: 16px;
+      width: 22px;
+      font-size: 17px;
       color: #8ba9c9;
       transition: color 0.15s;
     }
 
     .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.06);
-      color: white;
+      background: rgba(255, 255, 255, 0.07);
+      color: #fff;
     }
 
     .nav-btn:hover i {
@@ -126,9 +156,9 @@
 
     .nav-btn.active {
       background: #1e4b72;
-      color: white;
+      color: #fff;
       font-weight: 600;
-      box-shadow: 0 6px 12px -8px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.5);
     }
 
     .nav-btn.active i {
@@ -140,7 +170,7 @@
       font-size: 12px;
       color: #91aec9;
       border-top: 1px solid #203f5c;
-      margin-top: 18px;
+      margin-top: 16px;
     }
 
     /* ---------- MAIN ---------- */
@@ -148,7 +178,7 @@
       margin-left: 280px;
       width: calc(100% - 280px);
       padding: 28px 32px;
-      transition: margin 0.2s, width 0.2s;
+      transition: var(--transition);
     }
 
     .topbar {
@@ -164,12 +194,12 @@
       font-size: 28px;
       font-weight: 700;
       letter-spacing: -0.02em;
-      color: #0d2e4a;
+      color: var(--primary);
     }
 
     .topbar p {
       margin-top: 6px;
-      color: #54728d;
+      color: var(--text-muted);
       font-size: 14px;
       display: flex;
       align-items: center;
@@ -177,70 +207,85 @@
     }
 
     .admin-badge {
-      background: #e9f2ff;
+      background: var(--accent-soft);
       color: #1d5fa7;
-      padding: 10px 18px;
+      padding: 10px 20px;
       border-radius: 40px;
       font-size: 13px;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 2px 8px rgba(23, 105, 170, 0.1);
+      box-shadow: 0 4px 12px rgba(23, 105, 170, 0.08);
+      white-space: nowrap;
     }
 
     /* ---------- SECTIONS ---------- */
     .section {
       display: none;
-      animation: fade 0.2s ease;
+      animation: fadeSlide 0.25s ease;
     }
 
     .section.active {
       display: block;
     }
 
-    @keyframes fade {
-      from { opacity: 0.6; transform: translateY(4px); }
+    @keyframes fadeSlide {
+      from { opacity: 0.5; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     /* ---------- STATS CARDS ---------- */
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 16px;
       margin-bottom: 28px;
     }
 
     .stat {
-      background: white;
-      border-radius: 18px;
-      padding: 18px 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
-      border: 1px solid #e6edf6;
-      transition: all 0.2s;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 20px 18px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+      opacity: 0.7;
     }
 
     .stat:hover {
       border-color: #cbdbe9;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
 
     .stat span {
       display: block;
-      color: #5d738b;
+      color: var(--text-muted);
       font-size: 12px;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.4px;
     }
 
     .stat strong {
       display: block;
       font-size: 32px;
-      font-weight: 700;
+      font-weight: 800;
       margin-top: 6px;
-      color: #0b2b44;
+      color: var(--primary);
       line-height: 1.2;
     }
 
@@ -252,12 +297,17 @@
     }
 
     .card {
-      background: white;
-      border-radius: 20px;
-      border: 1px solid #e6edf6;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02);
-      padding: 22px 24px;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 24px 26px;
       margin-bottom: 24px;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
     }
 
     .card-head {
@@ -266,17 +316,22 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .card h2 {
       font-size: 18px;
-      font-weight: 600;
-      color: #0d2e4a;
+      font-weight: 700;
+      color: var(--primary);
       letter-spacing: -0.01em;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+    }
+
+    .card h2 i {
+      color: var(--accent);
+      font-size: 18px;
     }
 
     /* ---------- FORMS ---------- */
@@ -292,13 +347,13 @@
     .filters input {
       width: 100%;
       border: 1px solid #cfddee;
-      border-radius: 12px;
-      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
       font-size: 14px;
       background: #ffffff;
-      transition: 0.15s;
+      transition: var(--transition);
       font-family: inherit;
-      color: #1a2b3e;
+      color: var(--text-main);
     }
 
     .form-grid input:focus,
@@ -306,43 +361,46 @@
     .search:focus,
     .filters input:focus {
       outline: none;
-      border-color: #2f80ed;
-      box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.1);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(47, 128, 237, 0.1);
     }
 
     .primary, .secondary {
       border: 0;
-      border-radius: 12px;
-      padding: 12px 22px;
+      border-radius: var(--radius-sm);
+      padding: 12px 24px;
       cursor: pointer;
       font-weight: 600;
       font-size: 14px;
-      transition: all 0.15s;
+      transition: var(--transition);
       font-family: inherit;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      white-space: nowrap;
     }
 
     .primary {
-      background: #1769aa;
+      background: var(--accent);
       color: white;
-      box-shadow: 0 4px 12px rgba(23, 105, 170, 0.2);
+      box-shadow: 0 4px 14px rgba(47, 128, 237, 0.25);
     }
 
     .primary:hover {
-      background: #0f528a;
-      box-shadow: 0 6px 16px rgba(23, 105, 170, 0.3);
+      background: #1a6ad4;
+      box-shadow: 0 8px 20px rgba(47, 128, 237, 0.35);
+      transform: translateY(-1px);
     }
 
     .secondary {
-      background: #edf5ff;
+      background: var(--accent-soft);
       color: #1769aa;
     }
 
     .secondary:hover {
       background: #d9e8fe;
+      transform: translateY(-1px);
     }
 
     .form-grid button {
@@ -352,8 +410,9 @@
     /* ---------- TABLES ---------- */
     .table-wrap {
       overflow-x: auto;
-      border-radius: 14px;
+      border-radius: var(--radius-md);
       border: 1px solid #eef3f9;
+      background: white;
     }
 
     table {
@@ -364,7 +423,7 @@
 
     th, td {
       text-align: left;
-      padding: 14px 16px;
+      padding: 14px 18px;
       border-bottom: 1px solid #eef3f9;
       font-size: 13px;
     }
@@ -372,8 +431,8 @@
     th {
       background: #f9fcff;
       color: #3d5a73;
-      font-weight: 600;
-      letter-spacing: 0.2px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
       text-transform: uppercase;
       font-size: 11px;
     }
@@ -382,14 +441,19 @@
       border-bottom: none;
     }
 
+    tr:hover td {
+      background: #fafdff;
+    }
+
     /* ---------- STATUS BADGES ---------- */
     .status {
-      padding: 5px 12px;
+      padding: 6px 14px;
       border-radius: 30px;
       font-size: 11px;
       font-weight: 700;
       display: inline-block;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
     }
 
     .status.school {
@@ -410,9 +474,9 @@
     /* ---------- WORKFLOW & NOTICE ---------- */
     .workflow {
       padding-left: 20px;
-      color: #4f657b;
+      color: var(--text-muted);
       font-size: 14px;
-      line-height: 2;
+      line-height: 2.1;
     }
 
     .workflow li {
@@ -423,12 +487,12 @@
       margin-top: 18px;
       background: #fff9e8;
       border-left: 5px solid #e6b422;
-      padding: 14px 18px;
-      border-radius: 12px;
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
       font-size: 13px;
       color: #6c5a27;
       display: flex;
-      gap: 12px;
+      gap: 14px;
       align-items: flex-start;
     }
 
@@ -436,6 +500,7 @@
       color: #b88e1a;
       font-size: 18px;
       margin-top: 1px;
+      flex-shrink: 0;
     }
 
     /* ---------- FILTERS ---------- */
@@ -447,7 +512,7 @@
 
     .filters input {
       width: auto;
-      min-width: 140px;
+      min-width: 160px;
     }
 
     /* ---------- SUMMARY GRID ---------- */
@@ -459,31 +524,107 @@
 
     .summary-item {
       background: #f9fcff;
-      padding: 16px;
-      border-radius: 16px;
-      border: 1px solid #e6edf6;
+      padding: 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .summary-item:hover {
+      background: #f0f7ff;
     }
 
     .summary-item span {
       font-size: 12px;
-      color: #5d738b;
-      font-weight: 500;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
 
     .summary-item b {
       display: block;
-      font-size: 22px;
-      font-weight: 700;
-      color: #0b2b44;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
       margin-top: 6px;
+    }
+
+    /* ---------- CHART CONTAINER ---------- */
+    .chart-container {
+      position: relative;
+      height: 260px;
+      width: 100%;
     }
 
     /* ---------- EMPTY STATE ---------- */
     .empty {
       text-align: center;
       color: #77869a;
-      padding: 40px 20px;
+      padding: 48px 20px;
       font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .empty i {
+      font-size: 40px;
+      color: #b9c9dc;
+    }
+
+    /* ---------- TOAST NOTIFICATION ---------- */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: #0b2b44;
+      color: white;
+      padding: 14px 22px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      animation: slideIn 0.3s ease;
+      border-left: 4px solid var(--accent);
+      max-width: 380px;
+    }
+
+    .toast.success { border-left-color: #0e6b3e; }
+    .toast.error { border-left-color: #b33a3a; }
+    .toast.info { border-left-color: var(--accent); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ---------- PROGRESS BAR ---------- */
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e6edf6;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2f80ed, #1c5bb8);
+      border-radius: 10px;
+      transition: width 0.6s ease;
     }
 
     /* ---------- RESPONSIVE ---------- */
@@ -566,20 +707,32 @@
       .stat strong {
         font-size: 26px;
       }
+      .toast-container {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+      }
+      .toast {
+        max-width: 100%;
+      }
     }
 
     /* Print polish */
     @media print {
-      .sidebar, .topbar, .nav-btn, .card-head button, .filters {
-        display: none;
+      .sidebar, .topbar, .nav-btn, .card-head button, .filters, .toast-container {
+        display: none !important;
       }
       .main {
-        margin: 0;
-        padding: 0;
+        margin: 0 !important;
+        padding: 0 !important;
       }
       .card {
         box-shadow: none;
         border: 1px solid #ccc;
+        break-inside: avoid;
+      }
+      body {
+        background: white;
       }
     }
   </style>
@@ -600,11 +753,12 @@
       <button class="nav-btn" data-section="pupils"><i class="fas fa-user-graduate"></i><span>Pupils</span></button>
       <button class="nav-btn" data-section="movement"><i class="fas fa-exchange-alt"></i><span>Movement Tracking</span></button>
       <button class="nav-btn" data-section="records"><i class="fas fa-history"></i><span>Movement Records</span></button>
+      <button class="nav-btn" data-section="analytics"><i class="fas fa-chart-line"></i><span>Analytics</span></button>
       <button class="nav-btn" data-section="reports"><i class="fas fa-file-alt"></i><span>Reports</span></button>
     </nav>
     <div class="sidebar-footer">
       <i class="fas fa-shield-alt" style="margin-right: 6px;"></i> School Administration<br>
-      <span style="opacity:0.7;">v1.0 · International</span>
+      <span style="opacity:0.7;">v2.0 · Enterprise</span>
     </div>
   </aside>
 
@@ -630,11 +784,18 @@
       </div>
       <div class="grid-two">
         <div class="card">
-          <div class="card-head"><h2><i class="fas fa-clock" style="color:#1769aa;"></i> Today's Movement</h2><button class="secondary" onclick="showSection('movement')"><i class="fas fa-plus-circle"></i> Record Movement</button></div>
+          <div class="card-head"><h2><i class="fas fa-clock"></i> Today's Movement</h2><button class="secondary" onclick="showSection('movement')"><i class="fas fa-plus-circle"></i> Record Movement</button></div>
           <div id="todaySummary"></div>
+          <div style="margin-top: 20px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 6px;">
+              <span>Attendance Progress</span>
+              <span id="attendancePercent">0%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" id="attendanceBar" style="width: 0%;"></div></div>
+          </div>
         </div>
         <div class="card">
-          <h2><i class="fas fa-sitemap" style="color:#1769aa;"></i> System Workflow</h2>
+          <h2><i class="fas fa-sitemap"></i> System Workflow</h2>
           <ol class="workflow">
             <li>Register pupil and guardian details.</li>
             <li>Record time pupil leaves home.</li>
@@ -650,7 +811,7 @@
     <!-- PUPILS -->
     <section id="pupils" class="section">
       <div class="card">
-        <div class="card-head"><h2><i class="fas fa-user-plus" style="color:#1769aa;"></i> Register Pupil</h2></div>
+        <div class="card-head"><h2><i class="fas fa-user-plus"></i> Register Pupil</h2></div>
         <form id="pupilForm" class="form-grid">
           <input id="pupilId" placeholder="Pupil ID" required>
           <input id="pupilName" placeholder="Full name" required>
@@ -662,7 +823,7 @@
         </form>
       </div>
       <div class="card">
-        <div class="card-head"><h2><i class="fas fa-users" style="color:#1769aa;"></i> Registered Pupils</h2><input id="pupilSearch" class="search" placeholder="Search pupils..."></div>
+        <div class="card-head"><h2><i class="fas fa-users"></i> Registered Pupils</h2><input id="pupilSearch" class="search" placeholder="Search pupils..."></div>
         <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Status</th></tr></thead><tbody id="pupilTable"></tbody></table></div>
       </div>
     </section>
@@ -670,7 +831,7 @@
     <!-- MOVEMENT -->
     <section id="movement" class="section">
       <div class="card">
-        <div class="card-head"><h2><i class="fas fa-route" style="color:#1769aa;"></i> Record Pupil Movement</h2></div>
+        <div class="card-head"><h2><i class="fas fa-route"></i> Record Pupil Movement</h2></div>
         <form id="movementForm" class="form-grid">
           <select id="movementPupil" required><option value="">Select pupil</option></select>
           <select id="movementType" required>
@@ -695,7 +856,7 @@
     <section id="records" class="section">
       <div class="card">
         <div class="card-head">
-          <h2><i class="fas fa-list-ul" style="color:#1769aa;"></i> Movement Records</h2>
+          <h2><i class="fas fa-list-ul"></i> Movement Records</h2>
           <div class="filters">
             <input id="recordSearch" class="search" placeholder="Search pupil...">
             <input id="recordDate" type="date">
@@ -705,22 +866,45 @@
       </div>
     </section>
 
+    <!-- ANALYTICS -->
+    <section id="analytics" class="section">
+      <div class="grid-two">
+        <div class="card">
+          <div class="card-head"><h2><i class="fas fa-chart-bar"></i> Weekly Movement Trends</h2></div>
+          <div class="chart-container"><canvas id="weeklyChart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2><i class="fas fa-chart-pie"></i> Status Distribution</h2></div>
+          <div class="chart-container"><canvas id="statusChart"></canvas></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2><i class="fas fa-clock"></i> Average Arrival & Departure Times</h2></div>
+        <div id="timeAnalytics" class="summary-grid" style="grid-template-columns: repeat(3,1fr);"></div>
+      </div>
+    </section>
+
     <!-- REPORTS -->
     <section id="reports" class="section">
       <div class="card">
-        <div class="card-head"><h2><i class="fas fa-print" style="color:#1769aa;"></i> Daily Movement Report</h2><button class="primary" onclick="printReport()"><i class="fas fa-print"></i> Print Report</button></div>
+        <div class="card-head"><h2><i class="fas fa-print"></i> Daily Movement Report</h2><button class="primary" onclick="printReport()"><i class="fas fa-print"></i> Print Report</button></div>
         <div id="reportArea"></div>
       </div>
     </section>
   </main>
 </div>
 
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
 <script>
   // ---------- STORAGE & STATE ----------
-  const KEY_P = 'spms_pupils_v2';
-  const KEY_R = 'spms_records_v2';
+  const KEY_P = 'spms_pupils_v3';
+  const KEY_R = 'spms_records_v3';
   let pupils = JSON.parse(localStorage.getItem(KEY_P) || '[]');
   let records = JSON.parse(localStorage.getItem(KEY_R) || '[]');
+  let weeklyChart = null;
+  let statusChart = null;
 
   const movementNames = {
     left_home: 'Left Home',
@@ -744,6 +928,11 @@
     document.getElementById('recordDate').oninput = renderRecords;
 
     renderAll();
+
+    // Seed demo data if empty (for first-time presentation)
+    if (pupils.length === 0 && records.length === 0) {
+      seedDemoData();
+    }
   });
 
   // ---------- UTILS ----------
@@ -784,6 +973,22 @@
       .sort((a, b) => new Date(b.time) - new Date(a.time))[0];
   }
 
+  // ---------- TOAST NOTIFICATIONS ----------
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+    toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> ${message}`;
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(60px)';
+      toast.style.transition = 'all 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
   // ---------- NAVIGATION ----------
   function showSection(id) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -800,6 +1005,7 @@
     }
 
     if (id === 'reports') renderReport();
+    if (id === 'analytics') renderAnalytics();
   }
 
   // ---------- REGISTER PUPIL ----------
@@ -807,7 +1013,8 @@
     e.preventDefault();
     const id = document.getElementById('pupilId').value.trim();
     if (pupils.some(p => p.id.toLowerCase() === id.toLowerCase())) {
-      return alert('Pupil ID already exists.');
+      showToast('Pupil ID already exists.', 'error');
+      return;
     }
     pupils.push({
       id,
@@ -819,7 +1026,7 @@
     });
     save();
     e.target.reset();
-    alert('Pupil registered successfully.');
+    showToast('Pupil registered successfully.', 'success');
     renderAll();
   }
 
@@ -840,7 +1047,7 @@
     });
     records.sort((a, b) => new Date(b.time) - new Date(a.time));
     save();
-    alert('Movement saved successfully.');
+    showToast('Movement saved successfully.', 'success');
     e.target.reset();
     document.getElementById('movementTime').value = localDateTime();
     renderAll();
@@ -853,6 +1060,9 @@
     renderRecords();
     renderDashboard();
     renderReport();
+    if (document.getElementById('analytics').classList.contains('active')) {
+      renderAnalytics();
+    }
   }
 
   function renderPupilSelect() {
@@ -871,7 +1081,7 @@
         const status = arr && !left ? 'At School' : left ? 'Left School' : 'Pending';
         const cls = status === 'At School' ? 'school' : status === 'Left School' ? 'home' : 'pending';
         return `<tr>
-          <td>${esc(p.id)}</td>
+          <td><strong>${esc(p.id)}</strong></td>
           <td>${esc(p.name)}</td>
           <td>${esc(p.className)}</td>
           <td>${esc(p.guardian)}</td>
@@ -880,7 +1090,7 @@
         </tr>`;
       }).join('');
     document.getElementById('pupilTable').innerHTML = rows ||
-      '<tr><td colspan="6" class="empty"><i class="fas fa-user-slash" style="margin-right:8px;"></i>No pupils registered.</td></tr>';
+      '<tr><td colspan="6" class="empty"><i class="fas fa-user-slash"></i>No pupils registered.</td></tr>';
   }
 
   function renderRecords() {
@@ -898,10 +1108,20 @@
         <td>${new Date(r.time).toLocaleString()}</td>
         <td>${esc(pupilName(r.pupilId))}</td>
         <td>${esc(p ? p.className : '')}</td>
-        <td>${movementNames[r.type] || r.type}</td>
+        <td><i class="fas ${movementIcon(r.type)}" style="color:var(--accent);margin-right:6px;"></i>${movementNames[r.type] || r.type}</td>
         <td>${esc(r.note || '')}</td>
       </tr>`;
-    }).join('') || '<tr><td colspan="5" class="empty"><i class="fas fa-inbox" style="margin-right:8px;"></i>No movement records found.</td></tr>';
+    }).join('') || '<tr><td colspan="5" class="empty"><i class="fas fa-inbox"></i>No movement records found.</td></tr>';
+  }
+
+  function movementIcon(type) {
+    const icons = {
+      left_home: 'fa-home',
+      arrived_school: 'fa-school',
+      left_school: 'fa-door-open',
+      arrived_home: 'fa-house-user'
+    };
+    return icons[type] || 'fa-circle';
   }
 
   function renderDashboard() {
@@ -929,6 +1149,126 @@
         <div class="summary-item"><span>At School</span><b>${at}</b></div>
         <div class="summary-item"><span>Departed</span><b>${left}</b></div>
       </div>`;
+
+    // Attendance progress
+    const percent = total > 0 ? Math.round((arrived / total) * 100) : 0;
+    document.getElementById('attendancePercent').textContent = percent + '%';
+    document.getElementById('attendanceBar').style.width = percent + '%';
+  }
+
+  // ---------- ANALYTICS ----------
+  function renderAnalytics() {
+    renderWeeklyChart();
+    renderStatusChart();
+    renderTimeAnalytics();
+  }
+
+  function renderWeeklyChart() {
+    const ctx = document.getElementById('weeklyChart');
+    if (!ctx) return;
+
+    // Get last 7 days labels and counts
+    const days = [];
+    const arrivedData = [];
+    const departedData = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().slice(0, 10);
+      days.push(d.toLocaleDateString(undefined, { weekday: 'short' }));
+      const dayRecs = records.filter(r => r.time.slice(0, 10) === dateStr);
+      arrivedData.push(dayRecs.filter(r => r.type === 'arrived_school').length);
+      departedData.push(dayRecs.filter(r => r.type === 'left_school').length);
+    }
+
+    if (weeklyChart) weeklyChart.destroy();
+    weeklyChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: days,
+        datasets: [
+          {
+            label: 'Arrivals',
+            data: arrivedData,
+            backgroundColor: 'rgba(47, 128, 237, 0.7)',
+            borderRadius: 8,
+            borderSkipped: false
+          },
+          {
+            label: 'Departures',
+            data: departedData,
+            backgroundColor: 'rgba(14, 107, 62, 0.6)',
+            borderRadius: 8,
+            borderSkipped: false
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, padding: 16, font: { size: 12, weight: '600' } } }
+        },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#eef3f9' }, ticks: { stepSize: 1 } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  }
+
+  function renderStatusChart() {
+    const ctx = document.getElementById('statusChart');
+    if (!ctx) return;
+
+    const total = pupils.length;
+    const atSchool = pupils.filter(p => latestToday(p.id, 'arrived_school') && !latestToday(p.id, 'left_school')).length;
+    const leftSchool = pupils.filter(p => latestToday(p.id, 'left_school')).length;
+    const pending = Math.max(0, total - atSchool - leftSchool);
+
+    if (statusChart) statusChart.destroy();
+    statusChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['At School', 'Left School', 'Pending'],
+        datasets: [{
+          data: [atSchool, leftSchool, pending],
+          backgroundColor: ['#2f80ed', '#0e6b3e', '#e6b422'],
+          borderWidth: 0,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 16, font: { size: 12, weight: '600' } } }
+        }
+      }
+    });
+  }
+
+  function renderTimeAnalytics() {
+    const arrivedTimes = records.filter(r => r.type === 'arrived_school').map(r => new Date(r.time).getHours() + new Date(r.time).getMinutes() / 60);
+    const leftTimes = records.filter(r => r.type === 'left_school').map(r => new Date(r.time).getHours() + new Date(r.time).getMinutes() / 60);
+
+    const avgArrival = arrivedTimes.length ? arrivedTimes.reduce((a, b) => a + b, 0) / arrivedTimes.length : 0;
+    const avgDeparture = leftTimes.length ? leftTimes.reduce((a, b) => a + b, 0) / leftTimes.length : 0;
+
+    const fmtTime = (h) => {
+      const hours = Math.floor(h);
+      const mins = Math.round((h - hours) * 60);
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const h12 = hours % 12 || 12;
+      return `${h12}:${String(mins).padStart(2, '0')} ${ampm}`;
+    };
+
+    document.getElementById('timeAnalytics').innerHTML = `
+      <div class="summary-item"><span>Average Arrival</span><b>${arrivedTimes.length ? fmtTime(avgArrival) : '—'}</b></div>
+      <div class="summary-item"><span>Average Departure</span><b>${leftTimes.length ? fmtTime(avgDeparture) : '—'}</b></div>
+      <div class="summary-item"><span>Total Records</span><b>${records.length}</b></div>
+    `;
   }
 
   function renderReport() {
@@ -938,7 +1278,7 @@
       const ls = latestToday(p.id, 'left_school');
       const ah = latestToday(p.id, 'arrived_home');
       return `<tr>
-        <td>${esc(p.id)}</td>
+        <td><strong>${esc(p.id)}</strong></td>
         <td>${esc(p.name)}</td>
         <td>${esc(p.className)}</td>
         <td>${fmt(lh)}</td>
@@ -953,7 +1293,7 @@
       <div class="table-wrap"><table><thead><tr>
         <th>ID</th><th>Pupil</th><th>Class</th>
         <th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th>
-      </tr></thead><tbody>${rows || '<tr><td colspan="7" class="empty">No pupils.</td></tr>'}</tbody></table></div>`;
+      </tr></thead><tbody>${rows || '<tr><td colspan="7" class="empty"><i class="fas fa-users"></i>No pupils registered.</td></tr>'}</tbody></table></div>`;
   }
 
   function fmt(r) {
@@ -967,25 +1307,63 @@
       <html>
         <head><title>Pupil Movement Report</title>
         <style>
-          body{font-family:Inter,Arial,sans-serif;padding:30px;color:#1a2b3e}
-          table{width:100%;border-collapse:collapse;margin-top:16px}
+          body{font-family:Inter,Arial,sans-serif;padding:40px;color:#1a2b3e}
+          table{width:100%;border-collapse:collapse;margin-top:20px}
           th,td{border:1px solid #ccc;padding:10px;text-align:left;font-size:12px}
-          th{background:#f0f6fc;font-weight:600}
-          h1{text-align:center;font-size:20px;margin-bottom:10px}
-          .footer{margin-top:24px;text-align:center;font-size:11px;color:#5d738b}
+          th{background:#f0f6fc;font-weight:700}
+          h1{text-align:center;font-size:22px;margin-bottom:6px}
+          .sub{text-align:center;color:#5d738b;font-size:12px;margin-bottom:24px}
+          .footer{margin-top:32px;text-align:center;font-size:11px;color:#5d738b;border-top:1px solid #eef3f9;padding-top:16px}
           .table-wrap{overflow-x:auto}
         </style>
         </head>
         <body>
           <h1>Pupil Movement Report</h1>
-          <p style="text-align:center;margin-bottom:20px;">Smart Pupil Tracking System — ${new Date().toLocaleDateString()}</p>
+          <div class="sub">Smart Pupil Tracking System — ${new Date().toLocaleDateString()}</div>
           ${content}
-          <div class="footer">Generated by Smart Pupil Tracking System (v1.0 International)</div>
+          <div class="footer">Generated by Smart Pupil Tracking System (v2.0 Enterprise) · International Standards</div>
         </body>
       </html>
     `);
     w.document.close();
     w.print();
+  }
+
+  // ---------- SEED DEMO DATA (first-run only) ----------
+  function seedDemoData() {
+    pupils = [
+      { id: 'P001', name: 'Alice Johnson', className: 'P.5', guardian: 'Mary Johnson', phone: '+256 700 123456', address: 'Kampala Central' },
+      { id: 'P002', name: 'Brian Ochieng', className: 'P.6', guardian: 'Peter Ochieng', phone: '+256 701 234567', address: 'Nakawa' },
+      { id: 'P003', name: 'Catherine Mbabazi', className: 'P.4', guardian: 'Grace Mbabazi', phone: '+256 702 345678', address: 'Kawempe' },
+      { id: 'P004', name: 'David Ssemakula', className: 'P.7', guardian: 'John Ssemakula', phone: '+256 703 456789', address: 'Makindye' },
+      { id: 'P005', name: 'Esther Nakato', className: 'P.5', guardian: 'Sarah Nakato', phone: '+256 704 567890', address: 'Rubaga' }
+    ];
+
+    const today = new Date().toISOString().slice(0, 10);
+    records = [
+      { id: 'r1', pupilId: 'P001', type: 'left_home', time: `${today}T06:45`, note: '' },
+      { id: 'r2', pupilId: 'P001', type: 'arrived_school', time: `${today}T07:30`, note: '' },
+      { id: 'r3', pupilId: 'P002', type: 'left_home', time: `${today}T06:50`, note: '' },
+      { id: 'r4', pupilId: 'P002', type: 'arrived_school', time: `${today}T08:15`, note: 'Traffic delay' },
+      { id: 'r5', pupilId: 'P003', type: 'left_home', time: `${today}T07:00`, note: '' },
+      { id: 'r6', pupilId: 'P003', type: 'arrived_school', time: `${today}T07:45`, note: '' },
+      { id: 'r7', pupilId: 'P001', type: 'left_school', time: `${today}T16:30`, note: '' },
+      { id: 'r8', pupilId: 'P002', type: 'left_school', time: `${today}T17:10`, note: '' }
+    ];
+
+    // Add some historical data for the weekly chart
+    for (let i = 1; i <= 6; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dayStr = d.toISOString().slice(0, 10);
+      pupils.forEach(p => {
+        records.push({ id: `h${i}${p.id}a`, pupilId: p.id, type: 'arrived_school', time: `${dayStr}T07:30`, note: '' });
+        records.push({ id: `h${i}${p.id}b`, pupilId: p.id, type: 'left_school', time: `${dayStr}T16:30`, note: '' });
+      });
+    }
+
+    save();
+    renderAll();
   }
 </script>
 </body>
