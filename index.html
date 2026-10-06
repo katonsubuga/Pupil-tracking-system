@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
   <meta name="theme-color" content="#0b2b44">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="description" content="Ultimate Enterprise Smart Pupil Tracking System with AI-powered insights and Live GPS Geofencing">
   <title>Smart Pupil Tracking System | Ultimate Enterprise + GPS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +19,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     :root {
       --primary: #0b2b44; --primary-light: #1c4b72; --accent: #2f80ed; --accent-soft: #e9f2ff;
       --success: #0e6b3e; --success-soft: #e3f7eb; --warning: #b88e1a; --warning-soft: #fff9e8;
@@ -27,6 +30,10 @@
       --shadow-lg: 0 16px 40px rgba(0,0,0,0.06); --shadow-xl: 0 24px 60px rgba(0,0,0,0.12);
       --radius-lg: 20px; --radius-md: 14px; --radius-sm: 10px; --transition: all 0.2s ease;
       --sidebar-w: 280px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
     }
     [data-theme="dark"] {
       --surface: #1a2332; --bg: #0f1724; --border: #2a3748; --text-main: #e5eef9; --text-muted: #8ba9c9;
@@ -46,25 +53,48 @@
     [data-theme="dark"] .upload-zone { background: #1e2b3d; border-color: #2a3748; }
     [data-theme="dark"] .timeline::before { background: linear-gradient(180deg, var(--accent), #2a3748); }
     [data-theme="dark"] .timeline-item::before { background: var(--surface); }
-    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text-main); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg); color: var(--text-main); line-height: 1.5;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+      min-height: 100vh; min-height: 100dvh;
+    }
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #eef3f9; border-radius: 10px; }
     [data-theme="dark"] ::-webkit-scrollbar-track { background: #1e2b3d; }
     ::-webkit-scrollbar-thumb { background: #b9c9dc; border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: #8ba9c9; }
-    .app { display: flex; min-height: 100vh; }
-    .sidebar { width: var(--sidebar-w); background: linear-gradient(180deg, #0b2b44 0%, #0d2e4a 100%); color: #e5eef9; padding: 20px 14px; position: fixed; inset: 0 auto 0 0; display: flex; flex-direction: column; box-shadow: 4px 0 24px rgba(0,0,0,0.08); z-index: 100; transition: width 0.25s ease, transform 0.25s ease; overflow-y: auto; }
+    .app { display: flex; min-height: 100vh; min-height: 100dvh; }
+    .sidebar {
+      width: var(--sidebar-w);
+      background: linear-gradient(180deg, #0b2b44 0%, #0d2e4a 100%);
+      color: #e5eef9; padding: 20px 14px;
+      position: fixed; inset: 0 auto 0 0;
+      display: flex; flex-direction: column;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.08);
+      z-index: 100; transition: width 0.25s ease, transform 0.25s ease;
+      overflow-y: auto; overflow-x: hidden;
+      padding-top: calc(20px + var(--safe-top));
+      padding-bottom: calc(20px + var(--safe-bottom));
+      padding-left: calc(14px + var(--safe-left));
+    }
     .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-left: 4px; }
     .logo { width: 46px; height: 46px; border-radius: 16px; background: linear-gradient(135deg, #2f80ed, #1c5bb8); display: grid; place-items: center; font-weight: 800; font-size: 20px; color: white; box-shadow: 0 8px 16px -6px rgba(0,0,0,0.4); flex-shrink: 0; position: relative; }
     .logo::after { content: ''; position: absolute; bottom: -2px; right: -2px; width: 12px; height: 12px; background: #0e6b3e; border: 2px solid #0b2b44; border-radius: 50%; animation: pulse 2s infinite; }
-    .brand div { line-height: 1.3; }
+    .brand div { line-height: 1.3; min-width: 0; }
     .brand b { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; color: #fff; }
     .brand small { display: block; color: #adc4db; font-size: 10px; font-weight: 500; margin-top: 2px; letter-spacing: 0.4px; }
+    .user-info { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; font-size: 12px; border: 1px solid rgba(255,255,255,0.08); }
+    .user-info .uname { color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 12.5px; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .user-info .urole { color: #9ac2ff; font-size: 10.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+    .user-info .urole i { margin-right: 4px; }
     .live-clock { background: rgba(255,255,255,0.06); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: #9ac2ff; }
     .sidebar nav { display: flex; flex-direction: column; gap: 3px; flex: 1; }
     .nav-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #6c8aa8; padding: 12px 16px 4px; }
-    .nav-btn { border: 0; background: transparent; color: #cfddee; text-align: left; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 11px; transition: var(--transition); font-family: inherit; position: relative; }
-    .nav-btn i { width: 20px; font-size: 15px; color: #8ba9c9; transition: color 0.15s; text-align: center; }
+    .nav-btn { border: 0; background: transparent; color: #cfddee; text-align: left; padding: 10px 14px; border-radius: 12px; cursor: pointer; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 11px; transition: var(--transition); font-family: inherit; position: relative; width: 100%; }
+    .nav-btn i { width: 20px; font-size: 15px; color: #8ba9c9; transition: color 0.15s; text-align: center; flex-shrink: 0; }
     .nav-btn:hover { background: rgba(255,255,255,0.07); color: #fff; }
     .nav-btn:hover i { color: #9ac2ff; }
     .nav-btn.active { background: #1e4b72; color: #fff; font-weight: 600; box-shadow: 0 6px 14px -8px rgba(0,0,0,0.5); }
@@ -73,19 +103,21 @@
     .nav-badge.warn { background: #b88e1a; }
     .nav-badge.danger { background: #b33a3a; }
     .nav-badge.pulse { animation: pulse 2s infinite; }
-    .sidebar-footer { padding: 14px 12px 6px; font-size: 11px; color: #91aec9; border-top: 1px solid #203f5c; margin-top: 14px; }
-    .logout-btn { background: rgba(179,58,58,0.15); color: #ffb3b3; border: 1px solid rgba(179,58,58,0.3); border-radius: 10px; padding: 8px 12px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 8px; width: 100%; justify-content: center; margin-top: 8px; transition: var(--transition); }
+    .logout-btn { background: rgba(179,58,58,0.15); color: #ffb3b3; border: 1px solid rgba(179,58,58,0.3); border-radius: 10px; padding: 10px 12px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 8px; width: 100%; justify-content: center; margin-top: 8px; transition: var(--transition); }
     .logout-btn:hover { background: rgba(179,58,58,0.25); color: #fff; }
-    .main { margin-left: var(--sidebar-w); width: calc(100% - var(--sidebar-w)); padding: 22px 26px; transition: var(--transition); }
+    .sidebar-footer { padding: 14px 12px 6px; font-size: 11px; color: #91aec9; border-top: 1px solid #203f5c; margin-top: 14px; }
+    .mobile-menu-btn { display: none; }
+    .main { margin-left: var(--sidebar-w); width: calc(100% - var(--sidebar-w)); padding: 22px 26px; transition: var(--transition); padding-left: calc(26px + var(--safe-left)); padding-right: calc(26px + var(--safe-right)); }
     .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 14px; background: var(--surface); padding: 16px 22px; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+    .topbar-left { min-width: 0; flex: 1; }
     .topbar-left h1 { font-size: 23px; font-weight: 700; letter-spacing: -0.02em; color: var(--primary); }
-    .topbar-left p { margin-top: 4px; color: var(--text-muted); font-size: 12.5px; display: flex; align-items: center; gap: 6px; }
+    .topbar-left p { margin-top: 4px; color: var(--text-muted); font-size: 12.5px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .search-global { position: relative; display: flex; align-items: center; }
-    .search-global i { position: absolute; left: 14px; color: #8ba9c9; font-size: 13px; }
+    .search-global i { position: absolute; left: 14px; color: #8ba9c9; font-size: 13px; pointer-events: none; }
     .search-global input { padding: 10px 14px 10px 38px; border: 1px solid #cfddee; border-radius: 30px; font-size: 13px; width: 240px; transition: var(--transition); font-family: inherit; background: #f9fcff; }
     .search-global input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(47,128,237,0.1); width: 280px; background: white; }
-    .icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; display: grid; place-items: center; transition: var(--transition); position: relative; font-size: 15px; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; display: grid; place-items: center; transition: var(--transition); position: relative; font-size: 15px; flex-shrink: 0; }
     .icon-btn:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); transform: translateY(-1px); }
     .icon-btn .dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #b33a3a; border-radius: 50%; border: 2px solid var(--surface); }
     .admin-badge { background: var(--accent-soft); color: #1d5fa7; padding: 10px 18px; border-radius: 40px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(23,105,170,0.08); white-space: nowrap; cursor: pointer; transition: var(--transition); position: relative; }
@@ -154,17 +186,17 @@
     .form-grid input:focus, .form-grid select:focus, .form-grid textarea:focus, .search:focus, .filters input:focus, .filters select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(47,128,237,0.1); }
     .form-grid button { width: max-content; }
     .form-label { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; display: block; text-transform: uppercase; letter-spacing: 0.3px; }
-    .table-wrap { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid #eef3f9; background: var(--surface); }
+    .table-wrap { overflow-x: auto; border-radius: var(--radius-md); border: 1px solid #eef3f9; background: var(--surface); -webkit-overflow-scrolling: touch; }
     table { width: 100%; border-collapse: collapse; min-width: 700px; }
     th, td { text-align: left; padding: 12px 15px; border-bottom: 1px solid #eef3f9; font-size: 12.5px; vertical-align: middle; }
     th { background: #f9fcff; color: #3d5a73; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; font-size: 10px; position: sticky; top: 0; z-index: 1; }
     tr:last-child td { border-bottom: none; }
     tr:hover td { background: #fafdff; }
-    .table-actions { display: flex; gap: 4px; }
+    .table-actions { display: flex; gap: 4px; flex-wrap: wrap; }
     .table-actions button { width: 28px; height: 28px; border-radius: 7px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; font-size: 11px; transition: var(--transition); display: grid; place-items: center; }
     .table-actions button:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
     .table-actions button.del:hover { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
-    .status { padding: 4px 11px; border-radius: 30px; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; letter-spacing: 0.3px; text-transform: uppercase; }
+    .status { padding: 4px 11px; border-radius: 30px; font-size: 10px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; letter-spacing: 0.3px; text-transform: uppercase; white-space: nowrap; }
     .status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
     .status.school { background: var(--success-soft); color: var(--success); }
     .status.home { background: #eef2f7; color: #4f657b; }
@@ -189,8 +221,8 @@
     .empty { text-align: center; color: var(--text-muted); padding: 40px 20px; font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .empty i { font-size: 40px; color: #b9c9dc; }
     .empty b { font-size: 14px; color: var(--text-muted); font-weight: 600; }
-    .toast-container { position: fixed; bottom: 22px; right: 22px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-    .toast { background: #0b2b44; color: white; padding: 13px 18px; border-radius: var(--radius-md); box-shadow: var(--shadow-xl); display: flex; align-items: center; gap: 11px; font-size: 13px; font-weight: 500; animation: slideIn 0.35s cubic-bezier(0.4,0,0.2,1); border-left: 4px solid var(--accent); max-width: 400px; min-width: 260px; }
+    .toast-container { position: fixed; bottom: calc(22px + var(--safe-bottom)); right: calc(22px + var(--safe-right)); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; max-width: calc(100vw - 44px); }
+    .toast { background: #0b2b44; color: white; padding: 13px 18px; border-radius: var(--radius-md); box-shadow: var(--shadow-xl); display: flex; align-items: center; gap: 11px; font-size: 13px; font-weight: 500; animation: slideIn 0.35s cubic-bezier(0.4,0,0.2,1); border-left: 4px solid var(--accent); max-width: 400px; min-width: 260px; pointer-events: auto; }
     .toast.success { border-left-color: var(--success); }
     .toast.error { border-left-color: var(--danger); }
     .toast.warning { border-left-color: var(--warning); }
@@ -199,18 +231,18 @@
     .progress-fill.green { background: linear-gradient(90deg, #0e6b3e, #17a45c); }
     .progress-fill.orange { background: linear-gradient(90deg, #b88e1a, #d4a72c); }
     .progress-fill.red { background: linear-gradient(90deg, #b33a3a, #d94848); }
-    .modal-overlay { position: fixed; inset: 0; background: rgba(11,43,68,0.6); backdrop-filter: blur(4px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(11,43,68,0.6); backdrop-filter: blur(4px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease; overflow-y: auto; }
     .modal-overlay.active { display: flex; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .modal { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .modal { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; animation: modalIn 0.3s cubic-bezier(0.4,0,0.2,1); margin: auto; }
     .modal.lg { max-width: 900px; } .modal.xl { max-width: 1100px; }
     @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
     .modal-head { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: var(--surface); z-index: 5; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
     .modal-head h3 { font-size: 16px; font-weight: 700; color: var(--primary); }
-    .modal-head button { width: 30px; height: 30px; border-radius: 50%; border: 0; background: #f0f4f9; color: var(--text-muted); cursor: pointer; display: grid; place-items: center; transition: var(--transition); }
+    .modal-head button { width: 30px; height: 30px; border-radius: 50%; border: 0; background: #f0f4f9; color: var(--text-muted); cursor: pointer; display: grid; place-items: center; transition: var(--transition); flex-shrink: 0; }
     .modal-head button:hover { background: var(--danger-soft); color: var(--danger); }
     .modal-body { padding: 22px; }
-    .modal-foot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; position: sticky; bottom: 0; background: var(--surface); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+    .modal-foot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; position: sticky; bottom: 0; background: var(--surface); border-radius: 0 0 var(--radius-lg) var(--radius-lg); flex-wrap: wrap; }
     .qr-container { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 18px; background: #f9fcff; border-radius: var(--radius-md); border: 1px dashed #cfddee; }
     .timeline { position: relative; padding-left: 30px; }
     .timeline::before { content: ''; position: absolute; left: 10px; top: 6px; bottom: 6px; width: 2px; background: linear-gradient(180deg, var(--accent), #e6edf6); border-radius: 2px; }
@@ -221,7 +253,7 @@
     .timeline-time { font-size: 10.5px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
     .timeline-label { font-size: 13px; font-weight: 600; color: var(--primary); margin-top: 2px; }
     .timeline-note { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
-    .notif-panel { position: fixed; top: 76px; right: 22px; width: 380px; max-height: 520px; background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); border: 1px solid var(--border); z-index: 400; overflow: hidden; display: none; animation: slideIn 0.3s ease; }
+    .notif-panel { position: fixed; top: calc(76px + var(--safe-top)); right: calc(22px + var(--safe-right)); width: 380px; max-width: calc(100vw - 44px); max-height: 520px; background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); border: 1px solid var(--border); z-index: 400; overflow: hidden; display: none; animation: slideIn 0.3s ease; }
     .notif-panel.active { display: block; }
     .notif-head { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
     .notif-head h4 { font-size: 13.5px; font-weight: 700; color: var(--primary); }
@@ -233,15 +265,15 @@
     .notif-icon.warn { background: var(--warning-soft); color: var(--warning); }
     .notif-icon.danger { background: var(--danger-soft); color: var(--danger); }
     .notif-icon.success { background: var(--success-soft); color: var(--success); }
-    .notif-content { flex: 1; }
-    .notif-content p { font-size: 12.5px; color: var(--text-main); font-weight: 500; }
+    .notif-content { flex: 1; min-width: 0; }
+    .notif-content p { font-size: 12.5px; color: var(--text-main); font-weight: 500; word-break: break-word; }
     .notif-content small { font-size: 10.5px; color: var(--text-muted); margin-top: 2px; display: block; }
-    .upload-zone { border: 2px dashed #cfddee; border-radius: var(--radius-md); padding: 28px; text-align: center; transition: var(--transition); cursor: pointer; background: #f9fcff; }
+    .upload-zone { border: 2px dashed #cfddee; border-radius: var(--radius-md); padding: 28px 20px; text-align: center; transition: var(--transition); cursor: pointer; background: #f9fcff; }
     .upload-zone:hover, .upload-zone.dragover { border-color: var(--accent); background: var(--accent-soft); }
     .upload-zone i { font-size: 34px; color: var(--accent); margin-bottom: 8px; }
     .upload-zone p { font-size: 13px; color: var(--text-main); font-weight: 600; }
     .upload-zone small { font-size: 11.5px; color: var(--text-muted); display: block; margin-top: 4px; }
-    .chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 30px; font-size: 11px; font-weight: 600; background: #f0f4f9; color: var(--text-muted); }
+    .chip { display: inline-flex; align-items: center; gap: 5px; padding: 4px 11px; border-radius: 30px; font-size: 11px; font-weight: 600; background: #f0f4f9; color: var(--text-muted); white-space: nowrap; }
     .chip i { font-size: 10px; }
     .chip.accent { background: var(--accent-soft); color: var(--accent); }
     .chip.success { background: var(--success-soft); color: var(--success); }
@@ -259,8 +291,8 @@
     .ai-insight b { display: block; font-weight: 700; margin-bottom: 2px; }
     .geofence-map-real { height: 420px; border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; z-index: 1; box-shadow: var(--shadow-sm); }
     #leafletMap { width: 100%; height: 100%; background: #d4e4f7; }
-    .gps-telemetry-panel { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 16px; background: #f9fcff; border-radius: var(--radius-md); padding: 16px 18px; border: 1px solid var(--border); }
-    .gps-metric { flex: 1 1 140px; background: white; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.02); border: 1px solid #eef3f9; }
+    .gps-telemetry-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-top: 16px; background: #f9fcff; border-radius: var(--radius-md); padding: 16px 18px; border: 1px solid var(--border); }
+    .gps-metric { background: white; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.02); border: 1px solid #eef3f9; }
     .gps-metric .label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.3px; }
     .gps-metric .value { font-size: 18px; font-weight: 800; color: var(--primary); margin-top: 4px; }
     .gps-metric .sub { font-size: 11px; color: var(--text-muted); }
@@ -269,20 +301,20 @@
     .marker-transit { background: #b88e1a; }
     .marker-home { background: #2f80ed; }
     .marker-pending { background: #b9c9dc; color: #4a5f7a; }
-    .role-info { background: linear-gradient(135deg, var(--accent-soft), #f0f7ff); border-radius: var(--radius-md); padding: 14px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 18px; border: 1px solid var(--border); }
-    .role-info-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--accent); color: white; display: grid; place-items: center; font-size: 17px; }
-    .role-info-content { flex: 1; }
+    .role-info { background: linear-gradient(135deg, var(--accent-soft), #f0f7ff); border-radius: var(--radius-md); padding: 14px 16px; display: flex; align-items: center; gap: 12px; margin-bottom: 18px; border: 1px solid var(--border); flex-wrap: wrap; }
+    .role-info-icon { width: 40px; height: 40px; border-radius: 12px; background: var(--accent); color: white; display: grid; place-items: center; font-size: 17px; flex-shrink: 0; }
+    .role-info-content { flex: 1; min-width: 0; }
     .role-info-content b { font-size: 13.5px; font-weight: 700; color: var(--primary); display: block; }
     .role-info-content small { font-size: 11.5px; color: var(--text-muted); }
 
     /* ============================================================
-       AUTH SCREENS (LOGIN / SIGNUP)
+       AUTH SCREENS
     ============================================================ */
     .auth-screen {
       position: fixed; inset: 0; z-index: 10000;
       display: flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, #0b2b44 0%, #1c4b72 50%, #2f80ed 100%);
-      padding: 20px;
+      padding: calc(20px + var(--safe-top)) calc(20px + var(--safe-right)) calc(20px + var(--safe-bottom)) calc(20px + var(--safe-left));
       overflow-y: auto;
     }
     .auth-screen.hidden { display: none; }
@@ -295,6 +327,7 @@
       padding: 40px 36px;
       position: relative;
       animation: authIn 0.5s cubic-bezier(0.4,0,0.2,1);
+      margin: auto;
     }
     @keyframes authIn {
       from { opacity: 0; transform: translateY(30px) scale(0.96); }
@@ -417,6 +450,7 @@
     .demo-creds .cred-row {
       display: flex; justify-content: space-between;
       font-size: 11.5px; padding: 4px 0; color: #5d738b;
+      gap: 6px; flex-wrap: wrap;
     }
     .demo-creds .cred-row b { color: #1a2b3e; font-weight: 700; }
     .demo-creds .cred-row code {
@@ -424,28 +458,220 @@
       font-family: 'Courier New', monospace; font-size: 11px;
       color: #2f80ed; font-weight: 700;
     }
-    @media (max-width: 640px) {
-      .auth-box { padding: 28px 22px; }
-      .auth-box h1 { font-size: 20px; }
-      .demo-creds .cred-row { flex-direction: column; gap: 2px; }
+
+    /* ============================================================
+       RESPONSIVE BREAKPOINTS
+    ============================================================ */
+
+    /* Small tablet / large tablet landscape */
+    @media (max-width: 1200px) {
+      .grid-two, .grid-three { grid-template-columns: 1fr; }
+      .grid-four { grid-template-columns: repeat(2, 1fr); }
+      .stats { grid-template-columns: repeat(3, 1fr); }
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    .sidebar .user-info {
-      background: rgba(255,255,255,0.06);
-      border-radius: 12px; padding: 10px 14px;
-      margin-bottom: 10px; font-size: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
+
+    /* Tablet portrait — collapse sidebar to icons */
+    @media (max-width: 1024px) {
+      :root { --sidebar-w: 240px; }
+      .main { padding: 18px 18px; }
+      .search-global input { width: 200px; }
+      .search-global input:focus { width: 240px; }
     }
-    .sidebar .user-info .uname {
-      color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px;
-      font-size: 12.5px; margin-bottom: 3px;
-    }
-    .sidebar .user-info .urole {
-      color: #9ac2ff; font-size: 10.5px; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.4px;
-    }
-    .sidebar .user-info .urole i { margin-right: 4px; }
+
     @media (max-width: 900px) {
-      .sidebar .user-info { display: none; }
+      :root { --sidebar-w: 76px; }
+      .brand div:not(.logo) { display: none; }
+      .brand { justify-content: center; padding-left: 0; }
+      .user-info { display: none; }
+      .nav-btn span { display: none; }
+      .nav-btn i { width: auto; font-size: 19px; margin: 0 auto; }
+      .nav-btn { justify-content: center; padding: 12px 0; }
+      .nav-section-label, .sidebar-footer, .live-clock span { display: none; }
+      .live-clock { justify-content: center; padding: 10px 0; }
+      .nav-badge { position: absolute; top: 3px; right: 3px; margin: 0; font-size: 9px; padding: 1px 5px; min-width: 16px; }
+      .logout-btn { padding: 10px 0; justify-content: center; }
+      .logout-btn span { display: none; }
+      .logout-btn i { margin: 0; font-size: 16px; }
+      .main { padding: 16px 14px; }
+      .search-global input { width: 180px; }
+      .search-global input:focus { width: 220px; }
+      .notif-panel { width: 340px; }
+    }
+
+    /* Small tablet / large phone */
+    @media (max-width: 768px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .topbar { padding: 14px 16px; }
+      .topbar-left h1 { font-size: 19px; }
+      .card { padding: 16px 16px; }
+      .modal-body { padding: 18px; }
+      .geofence-map-real { height: 360px; }
+      .chart-container.lg { height: 280px; }
+      .gps-telemetry-panel { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); padding: 14px; }
+    }
+
+    /* Phone portrait */
+    @media (max-width: 640px) {
+      :root { --sidebar-w: 68px; }
+      .main { padding: 12px 10px; padding-left: calc(10px + var(--safe-left)); padding-right: calc(10px + var(--safe-right)); }
+      .topbar { padding: 12px 14px; border-radius: 16px; margin-bottom: 14px; }
+      .topbar-left h1 { font-size: 17px; }
+      .topbar-left p { font-size: 11.5px; }
+      .search-global { display: none; }
+      .icon-btn { width: 36px; height: 36px; font-size: 13px; }
+      .admin-badge { padding: 8px 12px; font-size: 12px; }
+      .admin-badge span#currentRoleLabel { max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid button { width: 100%; }
+      .stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat { padding: 14px; }
+      .stat strong { font-size: 22px; }
+      .stat-icon { width: 30px; height: 30px; font-size: 13px; }
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .summary-item { padding: 12px; }
+      .summary-item b { font-size: 17px; }
+      .card { padding: 14px; border-radius: 16px; }
+      .card h2 { font-size: 14px; }
+      .filters { flex-direction: column; width: 100%; }
+      .filters input, .filters select { width: 100%; min-width: 0; }
+      .card-head { flex-direction: column; align-items: flex-start; }
+      .card-head > .btn-group { width: 100%; }
+      .card-head .btn-group .primary, .card-head .btn-group .secondary, .card-head .btn-group .ghost { flex: 1; }
+      .notif-panel { width: calc(100% - 20px); right: 10px; left: 10px; top: 70px; max-width: none; }
+      .toast-container { left: 10px; right: 10px; bottom: calc(10px + var(--safe-bottom)); max-width: none; }
+      .toast { max-width: 100%; min-width: auto; }
+      .grid-four { grid-template-columns: 1fr 1fr; }
+      .grid-three { grid-template-columns: 1fr; }
+      .modal { max-width: 100%; border-radius: 16px; }
+      .modal-overlay { padding: 10px; }
+      .modal-head { padding: 14px 16px; }
+      .modal-body { padding: 16px; }
+      .modal-foot { padding: 12px 16px; }
+      .modal-foot button { flex: 1; }
+      .geofence-map-real { height: 300px; border-radius: 12px; }
+      .gps-telemetry-panel { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; }
+      .gps-metric { padding: 10px 12px; }
+      .gps-metric .value { font-size: 15px; }
+      .chart-container { height: 220px; }
+      .chart-container.lg { height: 240px; }
+      .chart-container.sm { height: 180px; }
+      .ai-card { padding: 16px; }
+      .ai-card h3 { font-size: 14px; }
+      .ai-insight { padding: 10px 12px; font-size: 12px; }
+      .role-info { padding: 12px 14px; }
+      .role-info-icon { width: 36px; height: 36px; font-size: 15px; }
+      .role-info-content b { font-size: 12.5px; }
+      .role-info-content small { font-size: 11px; }
+      .role-info .ghost.btn-sm { width: 100%; }
+      .timeline { padding-left: 26px; }
+      .timeline-time { font-size: 10px; }
+      .timeline-label { font-size: 12px; }
+      .table-wrap { border-radius: 12px; }
+      th, td { padding: 10px 12px; font-size: 11.5px; }
+      .table-actions button { width: 26px; height: 26px; font-size: 10px; }
+      .btn-group .primary, .btn-group .secondary, .btn-group .ghost, .btn-group .danger { padding: 8px 12px; font-size: 11.5px; }
+      .admin-badge i.fa-chevron-down { display: none; }
+      .role-dropdown { right: -10px; min-width: 200px; }
+      .auth-box { padding: 28px 22px; border-radius: 20px; }
+      .auth-box h1 { font-size: 20px; }
+      .auth-logo { width: 60px; height: 60px; font-size: 24px; border-radius: 18px; }
+      .auth-sub { font-size: 12px !important; }
+      .demo-creds .cred-row { flex-direction: column; gap: 2px; }
+      .demo-creds .cred-row code { font-size: 10px; }
+    }
+
+    /* Small phone */
+    @media (max-width: 420px) {
+      .stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .stat { padding: 12px; }
+      .stat strong { font-size: 20px; }
+      .stat span.label { font-size: 10px; }
+      .summary-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+      .summary-item { padding: 10px; }
+      .summary-item span { font-size: 9.5px; }
+      .summary-item b { font-size: 15px; }
+      .gps-telemetry-panel { grid-template-columns: 1fr 1fr; }
+      .gps-metric .value { font-size: 14px; }
+      .gps-metric .label { font-size: 9px; }
+      .gps-metric .sub { font-size: 10px; }
+      .grid-four { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .quick-actions-grid .secondary { padding: 12px 6px !important; }
+    }
+
+    /* Extra small phone */
+    @media (max-width: 360px) {
+      .topbar-left h1 { font-size: 15px; }
+      .icon-btn { width: 34px; height: 34px; font-size: 12px; }
+      .admin-badge { padding: 7px 10px; font-size: 11px; }
+      .stats { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: 1fr; }
+      .gps-telemetry-panel { grid-template-columns: 1fr; }
+      .grid-four { grid-template-columns: 1fr; }
+      .auth-box { padding: 22px 16px; }
+      .auth-box h1 { font-size: 18px; }
+      .auth-tab { font-size: 12px; padding: 8px; }
+    }
+
+    /* Landscape phone */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .auth-screen { align-items: flex-start; padding: 10px; }
+      .auth-box { padding: 20px; max-width: 560px; }
+      .auth-logo { width: 48px; height: 48px; font-size: 20px; margin-bottom: 10px; }
+      .auth-box h1 { font-size: 18px; margin-bottom: 4px; }
+      .auth-sub { margin-bottom: 14px; }
+      .auth-tabs { margin-bottom: 14px; }
+      .auth-field { margin-bottom: 12px; }
+      .demo-creds { margin-top: 14px; padding: 10px 12px; }
+      .geofence-map-real { height: 240px; }
+    }
+
+    /* Large desktop screens */
+    @media (min-width: 1600px) {
+      :root { --sidebar-w: 300px; }
+      .main { padding: 26px 36px; }
+      .stats { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+      .chart-container { height: 300px; }
+      .chart-container.lg { height: 380px; }
+      .geofence-map-real { height: 520px; }
+    }
+
+    @media (min-width: 2000px) {
+      :root { --sidebar-w: 320px; }
+      body { font-size: 15px; }
+      .main { max-width: 1800px; margin-left: auto; margin-right: auto; }
+    }
+
+    /* Touch devices: larger tap targets */
+    @media (hover: none) and (pointer: coarse) {
+      .nav-btn { min-height: 44px; }
+      .table-actions button { width: 34px; height: 34px; font-size: 12px; }
+      .icon-btn { min-width: 44px; min-height: 44px; }
+      .primary, .secondary, .ghost, .danger, .success-btn, .warning-btn { min-height: 40px; }
+      .btn-sm { min-height: 36px; }
+    }
+
+    /* Print */
+    @media print {
+      .sidebar, .topbar, .nav-btn, .card-head button, .filters, .toast-container, .notif-panel, .icon-btn, .role-info, .gps-telemetry-panel, .geofence-map-real, .mobile-menu-btn, .logout-btn {
+        display: none !important;
+      }
+      .main { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+      .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+      body { background: white; }
+      .auth-screen { display: none !important; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
+    /* Fix iOS input zoom on focus */
+    @media (max-width: 640px) {
+      input, select, textarea { font-size: 16px !important; }
+      .form-grid input, .form-grid select, .form-grid textarea, .search, .filters input, .filters select { font-size: 16px !important; }
+      .auth-field input, .auth-field select { font-size: 16px !important; }
     }
   </style>
 </head>
@@ -580,10 +806,10 @@
 </div>
 
 <!-- ============================================================
-     MAIN APPLICATION (hidden until authenticated)
+     MAIN APPLICATION
 ============================================================ -->
 <div class="app" id="appRoot" style="display:none;">
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="logo">SP</div>
       <div>
@@ -617,7 +843,7 @@
       <button class="nav-btn" data-section="communication"><i class="fas fa-comments"></i><span>Communication</span></button>
       <button class="nav-btn" data-section="settings"><i class="fas fa-cog"></i><span>Settings</span></button>
     </nav>
-    <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+    <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></button>
     <div class="sidebar-footer">
       <i class="fas fa-shield-alt" style="margin-right: 6px;"></i> Enterprise<br>
       <span style="opacity:0.7;">v4.0 Ultimate + GPS</span>
@@ -858,8 +1084,8 @@
         </div>
         <div class="card">
           <div class="card-head"><h2><i class="fas fa-qrcode"></i> QR Code Generator</h2></div>
-          <div style="display:flex;gap:8px;margin-bottom:12px;">
-            <select id="qrPupilSelect" class="search" style="flex:1;"><option value="">Select pupil</option></select>
+          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+            <select id="qrPupilSelect" class="search" style="flex:1;min-width:140px;"><option value="">Select pupil</option></select>
             <button class="primary btn-sm" onclick="generateQR()"><i class="fas fa-qrcode"></i> Generate</button>
           </div>
           <div class="qr-container" id="qrContainer">
@@ -1165,7 +1391,6 @@
 const KEY_USERS = 'spms_users_v4';
 const KEY_CURRENT_USER = 'spms_current_user_v4';
 
-// Seed default users if not present
 function seedDefaultUsers() {
   let users = JSON.parse(localStorage.getItem(KEY_USERS) || '[]');
   const defaults = [
@@ -1177,27 +1402,17 @@ function seedDefaultUsers() {
   let changed = false;
   defaults.forEach(def => {
     if (!users.some(u => u.username.toLowerCase() === def.username.toLowerCase())) {
-      users.push(def);
-      changed = true;
+      users.push(def); changed = true;
     }
   });
   if (changed) localStorage.setItem(KEY_USERS, JSON.stringify(users));
   return users;
 }
-
 function getUsers() { return JSON.parse(localStorage.getItem(KEY_USERS) || '[]'); }
 function saveUsers(users) { localStorage.setItem(KEY_USERS, JSON.stringify(users)); }
-function getCurrentUser() {
-  try { return JSON.parse(localStorage.getItem(KEY_CURRENT_USER) || 'null'); } catch(e) { return null; }
-}
+function getCurrentUser() { try { return JSON.parse(localStorage.getItem(KEY_CURRENT_USER) || 'null'); } catch(e) { return null; } }
 function setCurrentUser(u) { localStorage.setItem(KEY_CURRENT_USER, JSON.stringify(u)); }
 function clearCurrentUser() { localStorage.removeItem(KEY_CURRENT_USER); }
-
-// Per-user data storage keys
-function userKey(base) {
-  const u = getCurrentUser();
-  return u ? `${base}__${u.username.toLowerCase()}` : `${base}__guest`;
-}
 
 function switchAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -1211,103 +1426,63 @@ function switchAuthTab(tab) {
   }
   hideAuthMessages();
 }
-
 function togglePassword(fieldId, btn) {
-  const inp = document.getElementById(fieldId);
-  if (!inp) return;
-  if (inp.type === 'password') {
-    inp.type = 'text';
-    btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
-  } else {
-    inp.type = 'password';
-    btn.innerHTML = '<i class="fas fa-eye"></i>';
-  }
+  const inp = document.getElementById(fieldId); if (!inp) return;
+  if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = '<i class="fas fa-eye-slash"></i>'; }
+  else { inp.type = 'password'; btn.innerHTML = '<i class="fas fa-eye"></i>'; }
 }
-
 function hideAuthMessages() {
   ['loginError','loginSuccess','signupError','signupSuccess'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('show');
+    const el = document.getElementById(id); if (el) el.classList.remove('show');
   });
 }
-
 function showAuthMessage(id, text) {
-  const el = document.getElementById(id);
-  if (!el) return;
+  const el = document.getElementById(id); if (!el) return;
   el.querySelector('span').textContent = text;
   el.classList.add('show');
 }
-
 function fillLogin(u, p) {
   document.getElementById('loginUsername').value = u;
   document.getElementById('loginPassword').value = p;
   hideAuthMessages();
 }
-
 function handleLogin(e) {
-  e.preventDefault();
-  hideAuthMessages();
+  e.preventDefault(); hideAuthMessages();
   const username = document.getElementById('loginUsername').value.trim();
   const password = document.getElementById('loginPassword').value;
-  if (!username || !password) {
-    showAuthMessage('loginError', 'Please enter both username and password.');
-    return;
-  }
+  if (!username || !password) { showAuthMessage('loginError', 'Please enter both username and password.'); return; }
   const users = getUsers();
   const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-  if (!user) {
-    showAuthMessage('loginError', 'Invalid username or password. Please try again.');
-    return;
-  }
-  // Successful login
+  if (!user) { showAuthMessage('loginError', 'Invalid username or password. Please try again.'); return; }
   setCurrentUser({ username: user.username, name: user.name, role: user.role });
   showAuthMessage('loginSuccess', `Welcome back, ${user.name}! Redirecting...`);
   setTimeout(() => enterApp(), 700);
 }
-
 function handleSignup(e) {
-  e.preventDefault();
-  hideAuthMessages();
+  e.preventDefault(); hideAuthMessages();
   const name = document.getElementById('signupName').value.trim();
   const username = document.getElementById('signupUsername').value.trim();
   const role = document.getElementById('signupRole').value;
   const pass = document.getElementById('signupPassword').value;
   const confirm = document.getElementById('signupConfirm').value;
-
-  if (!name || !username || !role || !pass || !confirm) {
-    showAuthMessage('signupError', 'All fields are required.');
-    return;
-  }
-  if (pass.length < 6) {
-    showAuthMessage('signupError', 'Password must be at least 6 characters.');
-    return;
-  }
-  if (pass !== confirm) {
-    showAuthMessage('signupError', 'Passwords do not match.');
-    return;
-  }
+  if (!name || !username || !role || !pass || !confirm) { showAuthMessage('signupError', 'All fields are required.'); return; }
+  if (pass.length < 6) { showAuthMessage('signupError', 'Password must be at least 6 characters.'); return; }
+  if (pass !== confirm) { showAuthMessage('signupError', 'Passwords do not match.'); return; }
   const users = getUsers();
-  if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-    showAuthMessage('signupError', 'That username is already taken. Please choose another.');
-    return;
-  }
+  if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) { showAuthMessage('signupError', 'That username is already taken. Please choose another.'); return; }
   const newUser = { username, password: pass, name, role, createdAt: new Date().toISOString() };
-  users.push(newUser);
-  saveUsers(users);
+  users.push(newUser); saveUsers(users);
   showAuthMessage('signupSuccess', 'Account created successfully! Signing you in...');
   setCurrentUser({ username: newUser.username, name: newUser.name, role: newUser.role });
   setTimeout(() => enterApp(), 900);
 }
-
 function enterApp() {
   document.getElementById('authScreen').classList.add('hidden');
   document.getElementById('appRoot').style.display = 'flex';
   const u = getCurrentUser();
   if (u) {
     currentRole = u.role;
-    // Load this user's own isolated data
     loadUserData();
-    // Update UI
     document.getElementById('userInfoName').textContent = u.name;
     document.getElementById('userInfoRole').textContent = roleConfig[u.role]?.label || u.role;
   }
@@ -1317,43 +1492,34 @@ function enterApp() {
   startAutoRefresh();
   if (!map && document.getElementById('geofence').classList.contains('active')) initLeafletMap();
   showToast(`Signed in as ${u ? u.name : 'User'}`, 'success');
+  // Refresh map size after layout settles
+  setTimeout(() => { if (map) map.invalidateSize(); }, 500);
 }
-
 function handleLogout() {
   if (!confirm('Sign out of your account?')) return;
   if (autoRefreshInterval) clearInterval(autoRefreshInterval);
   if (liveClockInterval) clearInterval(liveClockInterval);
   if (gpsSimInterval) clearInterval(gpsSimInterval);
+  autoRefreshInterval = null; liveClockInterval = null; gpsSimInterval = null;
   clearCurrentUser();
-  // Reset in-memory data
   pupils = []; records = []; notifications = []; communications = [];
   settings = { ...defaultSettings };
-  // Reset forms
   document.getElementById('loginForm').reset();
   document.getElementById('signupForm').reset();
   hideAuthMessages();
-  // Show auth screen
   document.getElementById('authScreen').classList.remove('hidden');
   document.getElementById('appRoot').style.display = 'none';
   showToast('Signed out successfully', 'info');
 }
 
-/* ============================================================
-   PER-USER DATA ISOLATION
-============================================================ */
 function loadUserData() {
   const u = getCurrentUser();
-  if (!u) {
-    pupils = []; records = []; notifications = []; communications = [];
-    settings = { ...defaultSettings };
-    return;
-  }
+  if (!u) { pupils = []; records = []; notifications = []; communications = []; settings = { ...defaultSettings }; return; }
   const P = 'spms_pupils_v4__' + u.username.toLowerCase();
   const R = 'spms_records_v4__' + u.username.toLowerCase();
   const S = 'spms_settings_v4__' + u.username.toLowerCase();
   const N = 'spms_notifs_v4__' + u.username.toLowerCase();
   const C = 'spms_comm_v4__' + u.username.toLowerCase();
-
   pupils = JSON.parse(localStorage.getItem(P) || '[]');
   records = JSON.parse(localStorage.getItem(R) || '[]');
   notifications = JSON.parse(localStorage.getItem(N) || '[]');
@@ -1363,7 +1529,7 @@ function loadUserData() {
 }
 
 /* ============================================================
-   STATE & STORAGE (now per-user)
+   STATE
 ============================================================ */
 const KEY_P = 'spms_pupils_v4';
 const KEY_R = 'spms_records_v4';
@@ -1384,15 +1550,8 @@ const defaultSettings = {
   startTime: '08:00', endTime: '17:00', lateArrival: '08:00', lateDeparture: '17:00',
   timezone: 'Africa/Kampala', refreshInterval: '30'
 };
-
-const movementNames = {
-  left_home: 'Left Home', arrived_school: 'Arrived at School',
-  left_school: 'Left School', arrived_home: 'Arrived Home'
-};
-const movementIcons = {
-  left_home: 'fa-home', arrived_school: 'fa-school',
-  left_school: 'fa-door-open', arrived_home: 'fa-house-user'
-};
+const movementNames = { left_home: 'Left Home', arrived_school: 'Arrived at School', left_school: 'Left School', arrived_home: 'Arrived Home' };
+const movementIcons = { left_home: 'fa-home', arrived_school: 'fa-school', left_school: 'fa-door-open', arrived_home: 'fa-house-user' };
 const roleConfig = {
   admin: { label: 'Administrator', icon: 'fa-user-shield', color: 'accent', desc: 'Full system access. All features are available.' },
   teacher: { label: 'Teacher', icon: 'fa-chalkboard-teacher', color: 'success', desc: 'Monitor and record pupil movements.' },
@@ -1412,20 +1571,14 @@ const HOME_ZONES = [
   { name: 'Home B', lat: 0.3300, lng: 32.5800, radius: 300 },
   { name: 'Home C', lat: 0.3550, lng: 32.6000, radius: 300 }
 ];
-let gpsState = {
-  lat: SCHOOL_LAT, lng: SCHOOL_LNG, altitude: 1180, speed: 0, heading: 0,
-  satellites: 12, utcTime: new Date().toISOString(), fix: '3D Fix', lastUpdate: Date.now()
-};
+let gpsState = { lat: SCHOOL_LAT, lng: SCHOOL_LNG, altitude: 1180, speed: 0, heading: 0, satellites: 12, utcTime: new Date().toISOString(), fix: '3D Fix', lastUpdate: Date.now() };
 let map, markerGroup, zoneGroup;
 
 /* ============================================================
    INIT
 ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Seed default users
   seedDefaultUsers();
-
-  // Setup initial date/time in topbar (before login too)
   const now = new Date();
   const todayEl = document.getElementById('today');
   if (todayEl) todayEl.textContent = now.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
@@ -1438,18 +1591,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const sessEl = document.getElementById('sessionId');
   if (sessEl) sessEl.textContent = sessionId;
 
-  // Setup event listeners (existing app)
   setupAppListeners();
 
-  // Check auto-login
   const currentUser = getCurrentUser();
-  if (currentUser) {
-    enterApp();
-  } else {
+  if (currentUser) { enterApp(); }
+  else {
     document.getElementById('authScreen').classList.remove('hidden');
     document.getElementById('appRoot').style.display = 'none';
     setTimeout(() => document.getElementById('loginUsername')?.focus(), 300);
   }
+
+  // Handle orientation change — refresh map
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => { if (map) map.invalidateSize(); }, 300);
+  });
+  window.addEventListener('resize', () => {
+    clearTimeout(window._resizeTimer);
+    window._resizeTimer = setTimeout(() => { if (map) map.invalidateSize(); }, 200);
+  });
 });
 
 function setupAppListeners() {
@@ -1518,31 +1677,18 @@ function initLeafletMap() {
 function drawGeofenceZones() {
   if (!zoneGroup) return;
   zoneGroup.clearLayers();
-  L.circle([SCHOOL_LAT, SCHOOL_LNG], { radius: 250, color: '#0e6b3e', fillColor: '#0e6b3e', fillOpacity: 0.08, weight: 2, dashArray: '6 6' })
-    .addTo(zoneGroup).bindPopup('<b>School Zone</b><br>Geofence radius 250m');
+  L.circle([SCHOOL_LAT, SCHOOL_LNG], { radius: 250, color: '#0e6b3e', fillColor: '#0e6b3e', fillOpacity: 0.08, weight: 2, dashArray: '6 6' }).addTo(zoneGroup).bindPopup('<b>School Zone</b><br>Geofence radius 250m');
   HOME_ZONES.forEach(hz => {
-    L.circle([hz.lat, hz.lng], { radius: hz.radius, color: '#2f80ed', fillColor: '#2f80ed', fillOpacity: 0.06, weight: 2, dashArray: '4 6' })
-      .addTo(zoneGroup).bindPopup(`<b>${hz.name}</b><br>Safe home zone`);
+    L.circle([hz.lat, hz.lng], { radius: hz.radius, color: '#2f80ed', fillColor: '#2f80ed', fillOpacity: 0.06, weight: 2, dashArray: '4 6' }).addTo(zoneGroup).bindPopup(`<b>${hz.name}</b><br>Safe home zone`);
   });
 }
 function getPupilMarkerPosition(pupil) {
   const status = getStatus(pupil);
   let baseLat = SCHOOL_LAT, baseLng = SCHOOL_LNG;
-  if (status.label === 'At School') {
-    baseLat = SCHOOL_LAT + (Math.random() - 0.5) * 0.0015;
-    baseLng = SCHOOL_LNG + (Math.random() - 0.5) * 0.0015;
-  } else if (status.label === 'In Transit') {
-    const home = HOME_ZONES[Math.floor(Math.random() * HOME_ZONES.length)];
-    baseLat = (SCHOOL_LAT + home.lat) / 2 + (Math.random() - 0.5) * 0.003;
-    baseLng = (SCHOOL_LNG + home.lng) / 2 + (Math.random() - 0.5) * 0.003;
-  } else if (status.label === 'At Home') {
-    const home = HOME_ZONES[Math.floor(Math.random() * HOME_ZONES.length)];
-    baseLat = home.lat + (Math.random() - 0.5) * 0.001;
-    baseLng = home.lng + (Math.random() - 0.5) * 0.001;
-  } else {
-    baseLat = SCHOOL_LAT + (Math.random() - 0.5) * 0.005;
-    baseLng = SCHOOL_LNG + (Math.random() - 0.5) * 0.005;
-  }
+  if (status.label === 'At School') { baseLat = SCHOOL_LAT + (Math.random() - 0.5) * 0.0015; baseLng = SCHOOL_LNG + (Math.random() - 0.5) * 0.0015; }
+  else if (status.label === 'In Transit') { const home = HOME_ZONES[Math.floor(Math.random() * HOME_ZONES.length)]; baseLat = (SCHOOL_LAT + home.lat) / 2 + (Math.random() - 0.5) * 0.003; baseLng = (SCHOOL_LNG + home.lng) / 2 + (Math.random() - 0.5) * 0.003; }
+  else if (status.label === 'At Home') { const home = HOME_ZONES[Math.floor(Math.random() * HOME_ZONES.length)]; baseLat = home.lat + (Math.random() - 0.5) * 0.001; baseLng = home.lng + (Math.random() - 0.5) * 0.001; }
+  else { baseLat = SCHOOL_LAT + (Math.random() - 0.5) * 0.005; baseLng = SCHOOL_LNG + (Math.random() - 0.5) * 0.005; }
   return [baseLat + (Math.random() - 0.5) * 0.0008, baseLng + (Math.random() - 0.5) * 0.0008];
 }
 function updateMapMarkers() {
@@ -1553,22 +1699,15 @@ function updateMapMarkers() {
     const status = getStatus(p);
     const pos = getPupilMarkerPosition(p);
     const initials = p.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-    const colorClass = status.label === 'At School' ? 'marker-school' :
-                      status.label === 'In Transit' ? 'marker-transit' :
-                      status.label === 'At Home' ? 'marker-home' : 'marker-pending';
-    const icon = L.divIcon({
-      className: 'custom-div-icon',
-      html: `<div class="pupil-marker-icon ${colorClass}">${initials}</div>`,
-      iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14]
-    });
+    const colorClass = status.label === 'At School' ? 'marker-school' : status.label === 'In Transit' ? 'marker-transit' : status.label === 'At Home' ? 'marker-home' : 'marker-pending';
+    const icon = L.divIcon({ className: 'custom-div-icon', html: `<div class="pupil-marker-icon ${colorClass}">${initials}</div>`, iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14] });
     const marker = L.marker(pos, { icon }).addTo(markerGroup);
     const lastRecord = records.filter(r => r.pupilId === p.id).sort((a,b)=>new Date(b.time)-new Date(a.time))[0];
     const lastTime = lastRecord ? new Date(lastRecord.time).toLocaleTimeString() : '—';
     marker.bindPopup(`<b>${esc(p.name)}</b> (${esc(p.id)})<br>Class: ${esc(p.className)}<br>Status: ${status.label}<br>Last event: ${lastTime}`);
   });
   if (pupils.length > 0) {
-    const group = L.featureGroup(markerGroup.getLayers());
-    map.fitBounds(group.getBounds().pad(0.2));
+    try { const group = L.featureGroup(markerGroup.getLayers()); map.fitBounds(group.getBounds().pad(0.2)); } catch(e) {}
   }
 }
 function fitMapToMarkers() {
@@ -1577,9 +1716,6 @@ function fitMapToMarkers() {
   map.fitBounds(group.getBounds().pad(0.2));
 }
 
-/* ============================================================
-   GPS TELEMETRY
-============================================================ */
 function startGPSSimulation() {
   if (gpsSimInterval) clearInterval(gpsSimInterval);
   gpsSimInterval = setInterval(() => {
@@ -1616,13 +1752,9 @@ function updateTelemetryUI() {
 /* ============================================================
    UTILITIES
 ============================================================ */
-function localDateTime() {
-  const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 16);
-}
+function localDateTime() { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); }
 function save() {
-  const u = getCurrentUser();
-  if (!u) return;
+  const u = getCurrentUser(); if (!u) return;
   try {
     const suffix = '__' + u.username.toLowerCase();
     localStorage.setItem(KEY_P + suffix, JSON.stringify(pupils));
@@ -1667,8 +1799,7 @@ function getStatus(p) {
    TOAST / NOTIFICATIONS / ROLE
 ============================================================ */
 function showToast(message, type = 'info') {
-  const container = document.getElementById('toastContainer');
-  if (!container) return;
+  const container = document.getElementById('toastContainer'); if (!container) return;
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
   const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
@@ -1707,19 +1838,14 @@ function renderNotifications() {
   `).join('');
 }
 function toggleNotifPanel() {
-  const panel = document.getElementById('notifPanel');
-  if (!panel) return;
+  const panel = document.getElementById('notifPanel'); if (!panel) return;
   panel.classList.toggle('active');
-  if (panel.classList.contains('active')) {
-    notifications.forEach(n => n.read = true);
-    save(); setTimeout(renderNotifications, 300);
-  }
+  if (panel.classList.contains('active')) { notifications.forEach(n => n.read = true); save(); setTimeout(renderNotifications, 300); }
 }
 function clearNotifications() { notifications = []; save(); renderNotifications(); showToast('Notifications cleared', 'success'); }
 function toggleRoleDropdown() { document.getElementById('roleDropdown')?.classList.toggle('active'); }
 function switchRole(role) {
-  currentRole = role;
-  updateRoleUI();
+  currentRole = role; updateRoleUI();
   document.getElementById('roleDropdown')?.classList.remove('active');
   showToast(`Switched to ${roleConfig[role].label} role`, 'success');
   addNotification(`Role switched to ${roleConfig[role].label}`, 'info');
@@ -1766,11 +1892,10 @@ function showSection(id) {
   if (id === 'ai') renderAIInsights();
   if (id === 'communication') renderCommunicationHistory();
   if (id === 'settings') { loadSettingsUI(); updateStorageInfo(); }
+  // Scroll to top on section change (especially useful on mobile)
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ============================================================
-   REGISTER / RECORD
-============================================================ */
 function registerPupil(e) {
   e.preventDefault();
   const id = document.getElementById('pupilId').value.trim();
@@ -1800,12 +1925,7 @@ function recordMovement(e) {
   const type = document.getElementById('movementType').value;
   const time = document.getElementById('movementTime').value;
   if (!pupilId || !type || !time) return;
-  const newRecord = {
-    id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
-    pupilId, type, time,
-    note: document.getElementById('movementNote').value.trim(),
-    verify: document.getElementById('verifyMethod').value
-  };
+  const newRecord = { id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())), pupilId, type, time, note: document.getElementById('movementNote').value.trim(), verify: document.getElementById('verifyMethod').value };
   records.push(newRecord);
   records.sort((a, b) => new Date(b.time) - new Date(a.time));
   save();
@@ -1945,13 +2065,10 @@ function renderDashWeeklyChart() {
   if (dashWeeklyChart) dashWeeklyChart.destroy();
   dashWeeklyChart = new Chart(ctx, {
     type: 'line',
-    data: {
-      labels: days,
-      datasets: [
-        { label: 'Arrivals', data: arrData, borderColor: '#2f80ed', backgroundColor: 'rgba(47,128,237,0.1)', fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#2f80ed', pointBorderColor: '#fff', pointBorderWidth: 2 },
-        { label: 'Departures', data: depData, borderColor: '#0e6b3e', backgroundColor: 'rgba(14,107,62,0.08)', fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#0e6b3e', pointBorderColor: '#fff', pointBorderWidth: 2 }
-      ]
-    },
+    data: { labels: days, datasets: [
+      { label: 'Arrivals', data: arrData, borderColor: '#2f80ed', backgroundColor: 'rgba(47,128,237,0.1)', fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#2f80ed', pointBorderColor: '#fff', pointBorderWidth: 2 },
+      { label: 'Departures', data: depData, borderColor: '#0e6b3e', backgroundColor: 'rgba(14,107,62,0.08)', fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#0e6b3e', pointBorderColor: '#fff', pointBorderWidth: 2 }
+    ] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, padding: 14, font: { size: 11, weight: '600' } } } }, scales: { y: { beginAtZero: true, grid: { color: '#eef3f9' }, ticks: { stepSize: 1, font: { size: 11 } } }, x: { grid: { display: false }, ticks: { font: { size: 11 } } } } }
   });
 }
@@ -2008,6 +2125,7 @@ function locatePupilOnMap(pupilId) {
     const pos = getPupilMarkerPosition(p);
     map.setView(pos, 17);
     updateMapMarkers();
+    setTimeout(() => map.invalidateSize(), 300);
     showToast(`Located ${p.name} on map`, 'success');
   }, 600);
 }
@@ -2088,10 +2206,7 @@ function generateAIInsights() {
   pupils.forEach(p => {
     const lh = latestToday(p.id, 'left_home');
     const as = latestToday(p.id, 'arrived_school');
-    if (lh && as) {
-      const diff = (new Date(as.time) - new Date(lh.time)) / 60000;
-      if (diff > 0 && diff < 240) transitTimes.push(diff);
-    }
+    if (lh && as) { const diff = (new Date(as.time) - new Date(lh.time)) / 60000; if (diff > 0 && diff < 240) transitTimes.push(diff); }
   });
   if (transitTimes.length > 0) {
     const avg = Math.round(transitTimes.reduce((a, b) => a + b, 0) / transitTimes.length);
@@ -2165,13 +2280,10 @@ function renderPredictionChart() {
   if (predictionChart) predictionChart.destroy();
   predictionChart = new Chart(ctx, {
     type: 'line',
-    data: {
-      labels,
-      datasets: [
-        { label: 'Actual Arrivals', data: actual, borderColor: '#2f80ed', backgroundColor: 'rgba(47,128,237,0.1)', fill: true, tension: 0.4, pointRadius: 3, spanGaps: true },
-        { label: 'Predicted', data: predicted, borderColor: '#6f42c1', backgroundColor: 'rgba(111,66,193,0.08)', fill: true, tension: 0.4, borderDash: [5, 5], pointRadius: 3, spanGaps: true }
-      ]
-    },
+    data: { labels, datasets: [
+      { label: 'Actual Arrivals', data: actual, borderColor: '#2f80ed', backgroundColor: 'rgba(47,128,237,0.1)', fill: true, tension: 0.4, pointRadius: 3, spanGaps: true },
+      { label: 'Predicted', data: predicted, borderColor: '#6f42c1', backgroundColor: 'rgba(111,66,193,0.08)', fill: true, tension: 0.4, borderDash: [5, 5], pointRadius: 3, spanGaps: true }
+    ] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, padding: 14, font: { size: 11, weight: '600' } } } }, scales: { y: { beginAtZero: true, grid: { color: '#eef3f9' }, ticks: { stepSize: 1, font: { size: 11 } } }, x: { grid: { display: false }, ticks: { font: { size: 9 }, maxRotation: 45 } } } }
   });
 }
@@ -2228,13 +2340,10 @@ function renderWeeklyChart(days = 7) {
   if (weeklyChart) weeklyChart.destroy();
   weeklyChart = new Chart(ctx, {
     type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        { label: 'Arrivals', data: arrData, backgroundColor: 'rgba(47,128,237,0.75)', borderRadius: 8, borderSkipped: false },
-        { label: 'Departures', data: depData, backgroundColor: 'rgba(14,107,62,0.65)', borderRadius: 8, borderSkipped: false }
-      ]
-    },
+    data: { labels, datasets: [
+      { label: 'Arrivals', data: arrData, backgroundColor: 'rgba(47,128,237,0.75)', borderRadius: 8, borderSkipped: false },
+      { label: 'Departures', data: depData, backgroundColor: 'rgba(14,107,62,0.65)', borderRadius: 8, borderSkipped: false }
+    ] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, padding: 14, font: { size: 11, weight: '600' } } } }, scales: { y: { beginAtZero: true, grid: { color: '#eef3f9' }, ticks: { stepSize: 1, font: { size: 11 } } }, x: { grid: { display: false }, ticks: { font: { size: 10 } } } } }
   });
 }
@@ -2249,10 +2358,7 @@ function renderStatusChart() {
   if (statusChart) statusChart.destroy();
   statusChart = new Chart(ctx, {
     type: 'doughnut',
-    data: {
-      labels: ['At School', 'Left School', 'At Home', 'In Transit', 'Pending'],
-      datasets: [{ data: [atSchool, leftSchool, atHome, inTransit, pending], backgroundColor: ['#0e6b3e', '#17a2b8', '#2f80ed', '#b88e1a', '#b9c9dc'], borderWidth: 0, hoverOffset: 10 }]
-    },
+    data: { labels: ['At School', 'Left School', 'At Home', 'In Transit', 'Pending'], datasets: [{ data: [atSchool, leftSchool, atHome, inTransit, pending], backgroundColor: ['#0e6b3e', '#17a2b8', '#2f80ed', '#b88e1a', '#b9c9dc'], borderWidth: 0, hoverOffset: 10 }] },
     options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 14, font: { size: 11, weight: '600' } } } } }
   });
 }
@@ -2284,14 +2390,11 @@ function renderClassChart() {
   if (classChart) classChart.destroy();
   classChart = new Chart(ctx, {
     type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        { label: 'Total Pupils', data: totals, backgroundColor: 'rgba(47,128,237,0.6)', borderRadius: 6 },
-        { label: 'Arrived Today', data: arrived, backgroundColor: 'rgba(14,107,62,0.7)', borderRadius: 6 },
-        { label: 'Late Arrivals', data: late, backgroundColor: 'rgba(179,58,58,0.7)', borderRadius: 6 }
-      ]
-    },
+    data: { labels, datasets: [
+      { label: 'Total Pupils', data: totals, backgroundColor: 'rgba(47,128,237,0.6)', borderRadius: 6 },
+      { label: 'Arrived Today', data: arrived, backgroundColor: 'rgba(14,107,62,0.7)', borderRadius: 6 },
+      { label: 'Late Arrivals', data: late, backgroundColor: 'rgba(179,58,58,0.7)', borderRadius: 6 }
+    ] },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, padding: 14, font: { size: 11, weight: '600' } } } }, scales: { y: { beginAtZero: true, grid: { color: '#eef3f9' }, ticks: { stepSize: 1, font: { size: 11 } } }, x: { grid: { display: false }, ticks: { font: { size: 11 } } } } }
   });
 }
@@ -2702,8 +2805,7 @@ function resetData() {
   save(); renderAll(); showToast('All data reset', 'success');
 }
 function updateStorageInfo() {
-  const u = getCurrentUser();
-  if (!u) return;
+  const u = getCurrentUser(); if (!u) return;
   try {
     const suffix = '__' + u.username.toLowerCase();
     const size = (localStorage.getItem(KEY_P + suffix)?.length || 0) + (localStorage.getItem(KEY_R + suffix)?.length || 0) + (localStorage.getItem(KEY_COMM + suffix)?.length || 0);
@@ -2725,8 +2827,7 @@ function toggleTheme() {
   showToast(`Switched to ${next} theme`, 'info');
 }
 function refreshData() {
-  const u = getCurrentUser();
-  if (!u) return;
+  const u = getCurrentUser(); if (!u) return;
   const suffix = '__' + u.username.toLowerCase();
   pupils = JSON.parse(localStorage.getItem(KEY_P + suffix) || '[]');
   records = JSON.parse(localStorage.getItem(KEY_R + suffix) || '[]');
