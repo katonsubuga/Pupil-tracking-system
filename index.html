@@ -308,6 +308,146 @@
     .role-info-content small { font-size: 11.5px; color: var(--text-muted); }
 
     /* ============================================================
+       PHOTO CAPTURE & PREVIEW STYLES
+    ============================================================ */
+    .photo-capture-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .photo-preview-box {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 3px solid var(--border);
+      background: #f0f4f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 0 auto;
+      position: relative;
+      transition: var(--transition);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .photo-preview-box:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px rgba(47,128,237,0.15);
+    }
+    .photo-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-preview-box .photo-placeholder-icon {
+      font-size: 48px;
+      color: #b9c9dc;
+    }
+    .photo-preview-box .photo-overlay-badge {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(11,43,68,0.7);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      text-align: center;
+      padding: 3px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      backdrop-filter: blur(4px);
+    }
+    .photo-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .photo-actions .btn-sm {
+      min-width: 120px;
+    }
+    .photo-thumb-sm {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      vertical-align: middle;
+      margin-right: 8px;
+      flex-shrink: 0;
+      background: #f0f4f9;
+    }
+    .photo-thumb-xs {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      vertical-align: middle;
+      margin-right: 6px;
+      flex-shrink: 0;
+      background: #f0f4f9;
+    }
+    .photo-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .photo-cell .no-photo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #eef2f7;
+      display: grid;
+      place-items: center;
+      color: #b9c9dc;
+      font-size: 14px;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+    }
+    .photo-cell .no-photo-icon.xs {
+      width: 32px;
+      height: 32px;
+      font-size: 12px;
+    }
+    .camera-modal-video-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0b2b44;
+      aspect-ratio: 4/3;
+    }
+    .camera-modal-video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scaleX(-1);
+    }
+    .camera-modal-video-wrap canvas {
+      display: none;
+    }
+    .camera-modal-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+    .camera-error {
+      text-align: center;
+      padding: 20px;
+      color: var(--danger);
+      font-size: 13px;
+    }
+
+    /* ============================================================
        AUTH SCREENS
     ============================================================ */
     .auth-screen {
@@ -463,7 +603,6 @@
        RESPONSIVE BREAKPOINTS
     ============================================================ */
 
-    /* Small tablet / large tablet landscape */
     @media (max-width: 1200px) {
       .grid-two, .grid-three { grid-template-columns: 1fr; }
       .grid-four { grid-template-columns: repeat(2, 1fr); }
@@ -471,7 +610,6 @@
       .summary-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    /* Tablet portrait — collapse sidebar to icons */
     @media (max-width: 1024px) {
       :root { --sidebar-w: 240px; }
       .main { padding: 18px 18px; }
@@ -499,7 +637,6 @@
       .notif-panel { width: 340px; }
     }
 
-    /* Small tablet / large phone */
     @media (max-width: 768px) {
       .stats { grid-template-columns: repeat(2, 1fr); }
       .topbar { padding: 14px 16px; }
@@ -509,9 +646,9 @@
       .geofence-map-real { height: 360px; }
       .chart-container.lg { height: 280px; }
       .gps-telemetry-panel { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); padding: 14px; }
+      .photo-preview-box { width: 120px; height: 120px; }
     }
 
-    /* Phone portrait */
     @media (max-width: 640px) {
       :root { --sidebar-w: 68px; }
       .main { padding: 12px 10px; padding-left: calc(10px + var(--safe-left)); padding-right: calc(10px + var(--safe-right)); }
@@ -579,9 +716,14 @@
       .auth-sub { font-size: 12px !important; }
       .demo-creds .cred-row { flex-direction: column; gap: 2px; }
       .demo-creds .cred-row code { font-size: 10px; }
+      .photo-preview-box { width: 110px; height: 110px; }
+      .photo-actions .btn-sm { min-width: 90px; font-size: 11px; padding: 7px 10px; }
+      .photo-thumb-sm { width: 32px; height: 32px; }
+      .photo-thumb-xs { width: 26px; height: 26px; }
+      .photo-cell .no-photo-icon { width: 32px; height: 32px; font-size: 12px; }
+      .photo-cell .no-photo-icon.xs { width: 26px; height: 26px; font-size: 10px; }
     }
 
-    /* Small phone */
     @media (max-width: 420px) {
       .stats { grid-template-columns: 1fr 1fr; gap: 8px; }
       .stat { padding: 12px; }
@@ -597,9 +739,9 @@
       .gps-metric .sub { font-size: 10px; }
       .grid-four { grid-template-columns: 1fr 1fr; gap: 8px; }
       .quick-actions-grid .secondary { padding: 12px 6px !important; }
+      .photo-preview-box { width: 100px; height: 100px; }
     }
 
-    /* Extra small phone */
     @media (max-width: 360px) {
       .topbar-left h1 { font-size: 15px; }
       .icon-btn { width: 34px; height: 34px; font-size: 12px; }
@@ -613,7 +755,6 @@
       .auth-tab { font-size: 12px; padding: 8px; }
     }
 
-    /* Landscape phone */
     @media (max-height: 500px) and (orientation: landscape) {
       .auth-screen { align-items: flex-start; padding: 10px; }
       .auth-box { padding: 20px; max-width: 560px; }
@@ -626,7 +767,6 @@
       .geofence-map-real { height: 240px; }
     }
 
-    /* Large desktop screens */
     @media (min-width: 1600px) {
       :root { --sidebar-w: 300px; }
       .main { padding: 26px 36px; }
@@ -642,7 +782,6 @@
       .main { max-width: 1800px; margin-left: auto; margin-right: auto; }
     }
 
-    /* Touch devices: larger tap targets */
     @media (hover: none) and (pointer: coarse) {
       .nav-btn { min-height: 44px; }
       .table-actions button { width: 34px; height: 34px; font-size: 12px; }
@@ -651,7 +790,6 @@
       .btn-sm { min-height: 36px; }
     }
 
-    /* Print */
     @media print {
       .sidebar, .topbar, .nav-btn, .card-head button, .filters, .toast-container, .notif-panel, .icon-btn, .role-info, .gps-telemetry-panel, .geofence-map-real, .mobile-menu-btn, .logout-btn {
         display: none !important;
@@ -660,14 +798,13 @@
       .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
       body { background: white; }
       .auth-screen { display: none !important; }
+      .photo-thumb-sm, .photo-thumb-xs { width: 36px; height: 36px; }
     }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
 
-    /* Fix iOS input zoom on focus */
     @media (max-width: 640px) {
       input, select, textarea { font-size: 16px !important; }
       .form-grid input, .form-grid select, .form-grid textarea, .search, .filters input, .filters select { font-size: 16px !important; }
@@ -1017,6 +1154,28 @@
           <div><label class="form-label">Expected Departure</label><input id="expectedDeparture" type="time" value="16:30"></div>
           <div><label class="form-label">Home GPS (Lat, Lng)</label><input id="homeGPS" placeholder="0.3476, 32.5825"></div>
           <div><label class="form-label">Emergency Contact</label><input id="emergency" placeholder="+256 700 000000"></div>
+          <div style="grid-column: 1 / -1;">
+            <label class="form-label"><i class="fas fa-camera" style="margin-right:4px;"></i> Pupil Photo</label>
+            <div class="photo-capture-container">
+              <div class="photo-preview-box" id="registerPhotoPreview">
+                <i class="fas fa-user photo-placeholder-icon"></i>
+                <div class="photo-overlay-badge" id="registerPhotoBadge" style="display:none;">Photo Ready</div>
+              </div>
+              <div class="photo-actions">
+                <button type="button" class="secondary btn-sm" onclick="document.getElementById('pupilPhotoInput').click()">
+                  <i class="fas fa-upload"></i> Upload
+                </button>
+                <button type="button" class="secondary btn-sm" onclick="openCameraModal('register')">
+                  <i class="fas fa-camera"></i> Take Photo
+                </button>
+                <button type="button" class="ghost btn-sm" onclick="clearRegisterPhoto()">
+                  <i class="fas fa-trash-alt"></i> Clear
+                </button>
+              </div>
+              <input type="file" id="pupilPhotoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePupilPhotoUpload(event)">
+              <input type="hidden" id="pupilPhotoData" value="">
+            </div>
+          </div>
           <button class="primary" type="submit"><i class="fas fa-save"></i> Register Pupil</button>
         </form>
       </div>
@@ -1038,7 +1197,7 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Class</th><th>Guardian</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody id="pupilTable"></tbody>
           </table>
         </div>
@@ -1113,7 +1272,7 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Pupil</th><th>Class</th><th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th><th>Status</th><th>Action</th></tr></thead>
+            <thead><tr><th>Photo</th><th>Pupil</th><th>Class</th><th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th><th>Status</th><th>Action</th></tr></thead>
             <tbody id="liveTable"></tbody>
           </table>
         </div>
@@ -1168,7 +1327,7 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Date/Time</th><th>Pupil</th><th>Class</th><th>Movement</th><th>Verify</th><th>Note</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Photo</th><th>Date/Time</th><th>Pupil</th><th>Class</th><th>Movement</th><th>Verify</th><th>Note</th><th>Actions</th></tr></thead>
             <tbody id="recordTable"></tbody>
           </table>
         </div>
@@ -1492,7 +1651,6 @@ function enterApp() {
   startAutoRefresh();
   if (!map && document.getElementById('geofence').classList.contains('active')) initLeafletMap();
   showToast(`Signed in as ${u ? u.name : 'User'}`, 'success');
-  // Refresh map size after layout settles
   setTimeout(() => { if (map) map.invalidateSize(); }, 500);
 }
 function handleLogout() {
@@ -1575,6 +1733,121 @@ let gpsState = { lat: SCHOOL_LAT, lng: SCHOOL_LNG, altitude: 1180, speed: 0, hea
 let map, markerGroup, zoneGroup;
 
 /* ============================================================
+   PHOTO CAPTURE STATE
+============================================================ */
+let registerPhotoData = null;
+let cameraStream = null;
+let cameraTarget = null; // 'register' or pupil id for edit
+
+/* ============================================================
+   PHOTO FUNCTIONS
+============================================================ */
+function handlePupilPhotoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { showToast('Photo too large. Max 2MB.', 'warning'); return; }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    registerPhotoData = ev.target.result;
+    updateRegisterPhotoPreview(ev.target.result);
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+}
+function updateRegisterPhotoPreview(dataUrl) {
+  const box = document.getElementById('registerPhotoPreview');
+  const badge = document.getElementById('registerPhotoBadge');
+  if (!box) return;
+  if (dataUrl) {
+    box.innerHTML = `<img src="${dataUrl}" alt="Pupil photo"><div class="photo-overlay-badge" id="registerPhotoBadge">Photo Ready</div>`;
+  } else {
+    box.innerHTML = `<i class="fas fa-user photo-placeholder-icon"></i><div class="photo-overlay-badge" id="registerPhotoBadge" style="display:none;">Photo Ready</div>`;
+  }
+}
+function clearRegisterPhoto() {
+  registerPhotoData = null;
+  updateRegisterPhotoPreview(null);
+  const input = document.getElementById('pupilPhotoInput');
+  if (input) input.value = '';
+  const hidden = document.getElementById('pupilPhotoData');
+  if (hidden) hidden.value = '';
+}
+function openCameraModal(target) {
+  cameraTarget = target;
+  openModal(
+    `<i class="fas fa-camera" style="color:var(--accent);margin-right:8px;"></i> Take Photo`,
+    `<div id="cameraContainer">
+      <div class="camera-modal-video-wrap">
+        <video id="cameraVideo" autoplay playsinline muted></video>
+        <canvas id="cameraCanvas"></canvas>
+      </div>
+      <div class="camera-modal-controls">
+        <button class="primary" onclick="captureCameraPhoto()"><i class="fas fa-camera"></i> Capture</button>
+        <button class="secondary" onclick="closeCameraModal()"><i class="fas fa-times"></i> Cancel</button>
+      </div>
+      <div id="cameraError" class="camera-error" style="display:none;"></div>
+    </div>`,
+    `<button class="secondary" onclick="closeCameraModal()">Cancel</button>`
+  );
+  startCamera();
+}
+function startCamera() {
+  const video = document.getElementById('cameraVideo');
+  const errorEl = document.getElementById('cameraError');
+  if (!video) return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    if (errorEl) { errorEl.style.display = 'block'; errorEl.textContent = 'Camera not supported in this browser. Please upload a photo instead.'; }
+    return;
+  }
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false })
+    .then(stream => {
+      cameraStream = stream;
+      video.srcObject = stream;
+      video.play();
+    })
+    .catch(err => {
+      if (errorEl) { errorEl.style.display = 'block'; errorEl.textContent = 'Camera access denied. Please upload a photo instead.'; }
+    });
+}
+function captureCameraPhoto() {
+  const video = document.getElementById('cameraVideo');
+  const canvas = document.getElementById('cameraCanvas');
+  if (!video || !canvas || !cameraStream) return;
+  canvas.width = video.videoWidth || 640;
+  canvas.height = video.videoHeight || 480;
+  const ctx = canvas.getContext('2d');
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+  if (cameraTarget === 'register') {
+    registerPhotoData = dataUrl;
+    updateRegisterPhotoPreview(dataUrl);
+  }
+  closeCameraModal();
+  showToast('Photo captured successfully', 'success');
+}
+function closeCameraModal() {
+  if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+  closeModal();
+}
+
+/* ============================================================
+   PHOTO RENDERING HELPERS
+============================================================ */
+function getPupilPhoto(id) {
+  const p = pupil(id);
+  return p && p.photo ? p.photo : null;
+}
+function renderPhotoCell(id, size = 'sm') {
+  const photo = getPupilPhoto(id);
+  if (photo) {
+    return `<img src="${photo}" class="photo-thumb-${size}" alt="Photo">`;
+  }
+  return `<div class="no-photo-icon${size === 'xs' ? ' xs' : ''}"><i class="fas fa-user"></i></div>`;
+}
+
+/* ============================================================
    INIT
 ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1601,7 +1874,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => document.getElementById('loginUsername')?.focus(), 300);
   }
 
-  // Handle orientation change — refresh map
   window.addEventListener('orientationchange', () => {
     setTimeout(() => { if (map) map.invalidateSize(); }, 300);
   });
@@ -1700,7 +1972,10 @@ function updateMapMarkers() {
     const pos = getPupilMarkerPosition(p);
     const initials = p.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
     const colorClass = status.label === 'At School' ? 'marker-school' : status.label === 'In Transit' ? 'marker-transit' : status.label === 'At Home' ? 'marker-home' : 'marker-pending';
-    const icon = L.divIcon({ className: 'custom-div-icon', html: `<div class="pupil-marker-icon ${colorClass}">${initials}</div>`, iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14] });
+    const photoHtml = p.photo
+      ? `<img src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;border:2px solid white;">`
+      : `<div class="pupil-marker-icon ${colorClass}">${initials}</div>`;
+    const icon = L.divIcon({ className: 'custom-div-icon', html: photoHtml, iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14] });
     const marker = L.marker(pos, { icon }).addTo(markerGroup);
     const lastRecord = records.filter(r => r.pupilId === p.id).sort((a,b)=>new Date(b.time)-new Date(a.time))[0];
     const lastTime = lastRecord ? new Date(lastRecord.time).toLocaleTimeString() : '—';
@@ -1892,7 +2167,6 @@ function showSection(id) {
   if (id === 'ai') renderAIInsights();
   if (id === 'communication') renderCommunicationHistory();
   if (id === 'settings') { loadSettingsUI(); updateStorageInfo(); }
-  // Scroll to top on section change (especially useful on mobile)
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1909,12 +2183,14 @@ function registerPupil(e) {
     expectedArrival: document.getElementById('expectedArrival').value || '07:30',
     expectedDeparture: document.getElementById('expectedDeparture').value || '16:30',
     homeGPS: document.getElementById('homeGPS').value.trim(),
-    emergency: document.getElementById('emergency').value.trim()
+    emergency: document.getElementById('emergency').value.trim(),
+    photo: registerPhotoData || null
   };
   pupils.push(newPupil); save();
   e.target.reset();
   document.getElementById('expectedArrival').value = '07:30';
   document.getElementById('expectedDeparture').value = '16:30';
+  clearRegisterPhoto();
   addNotification(`New pupil registered: ${newPupil.name} (${newPupil.id})`, 'success');
   showToast('Pupil registered successfully.', 'success');
   renderAll();
@@ -1978,6 +2254,7 @@ function renderPupils() {
   }).map(p => {
     const st = getStatus(p);
     return `<tr>
+      <td><div class="photo-cell">${renderPhotoCell(p.id, 'sm')}</div></td>
       <td><strong>${esc(p.id)}</strong></td><td>${esc(p.name)}</td>
       <td><span class="chip accent">${esc(p.className)}</span></td>
       <td>${esc(p.guardian)}</td><td>${esc(p.phone)}</td>
@@ -1991,7 +2268,7 @@ function renderPupils() {
       </div></td>
     </tr>`;
   }).join('');
-  document.getElementById('pupilTable').innerHTML = rows || '<tr><td colspan="7" class="empty"><i class="fas fa-user-slash"></i><b>No pupils found</b><span>Register a pupil to get started.</span></td></tr>';
+  document.getElementById('pupilTable').innerHTML = rows || '<tr><td colspan="8" class="empty"><i class="fas fa-user-slash"></i><b>No pupils found</b><span>Register a pupil to get started.</span></td></tr>';
 }
 function renderRecords() {
   const q = (document.getElementById('recordSearch').value || '').toLowerCase();
@@ -2007,6 +2284,7 @@ function renderRecords() {
   document.getElementById('recordTable').innerHTML = data.slice(0, 200).map(r => {
     const p = pupil(r.pupilId);
     return `<tr>
+      <td><div class="photo-cell">${renderPhotoCell(r.pupilId, 'xs')}</div></td>
       <td>${new Date(r.time).toLocaleString()}</td>
       <td>${esc(pupilName(r.pupilId))}</td>
       <td>${esc(p ? p.className : '—')}</td>
@@ -2015,7 +2293,7 @@ function renderRecords() {
       <td>${esc(r.note || '—')}</td>
       <td><div class="table-actions"><button class="del" onclick="deleteRecord('${esc(r.id)}')"><i class="fas fa-trash"></i></button></div></td>
     </tr>`;
-  }).join('') || '<tr><td colspan="7" class="empty"><i class="fas fa-inbox"></i><b>No records found</b></td></tr>';
+  }).join('') || '<tr><td colspan="8" class="empty"><i class="fas fa-inbox"></i><b>No records found</b></td></tr>';
 }
 function renderDashboard() {
   const t = todayRecords();
@@ -2085,6 +2363,7 @@ function renderLiveMonitor() {
     const ls = latestToday(p.id, 'left_school');
     const ah = latestToday(p.id, 'arrived_home');
     return `<tr>
+      <td><div class="photo-cell">${renderPhotoCell(p.id, 'sm')}</div></td>
       <td><strong>${esc(p.name)}</strong><br><small style="color:var(--text-muted);">${esc(p.id)}</small></td>
       <td><span class="chip accent">${esc(p.className)}</span></td>
       <td>${fmtTime(lh)}</td>
@@ -2099,7 +2378,7 @@ function renderLiveMonitor() {
       </div></td>
     </tr>`;
   }).join('');
-  document.getElementById('liveTable').innerHTML = rows || '<tr><td colspan="8" class="empty"><i class="fas fa-satellite-dish"></i><b>No pupils registered</b></td></tr>';
+  document.getElementById('liveTable').innerHTML = rows || '<tr><td colspan="9" class="empty"><i class="fas fa-satellite-dish"></i><b>No pupils registered</b></td></tr>';
   document.getElementById('liveAtSchool').textContent = atSchool;
   document.getElementById('liveInTransit').textContent = inTransit;
   document.getElementById('liveAtHome').textContent = atHome;
@@ -2142,7 +2421,7 @@ function renderGeofence() {
   });
   const renderList = (arr, icon, color) => arr.length ? arr.map(p => `
     <div class="notif-item" style="padding:8px 0;">
-      <div class="notif-icon ${color}"><i class="fas ${icon}"></i></div>
+      <div class="photo-cell">${renderPhotoCell(p.id, 'xs')}</div>
       <div class="notif-content"><p>${esc(p.name)}</p><small>${esc(p.className)}</small></div>
     </div>
   `).join('') : '<div class="empty" style="padding:16px;"><i class="fas fa-inbox"></i><b>None</b></div>';
@@ -2252,7 +2531,7 @@ function renderRiskArea() {
   }
   container.innerHTML = riskPupils.map(r => `
     <div class="notif-item" style="padding:10px 0;">
-      <div class="notif-icon danger"><i class="fas fa-exclamation-triangle"></i></div>
+      <div class="photo-cell">${renderPhotoCell(r.pupil.id, 'xs')}</div>
       <div class="notif-content">
         <p><b>${esc(r.pupil.name)}</b> <span class="chip danger" style="font-size:9px;padding:2px 6px;">${Math.round(r.lateRate * 100)}% late</span></p>
         <small>${r.lateCount} late out of ${r.totalCount} arrivals · ${esc(r.pupil.className)}</small>
@@ -2313,13 +2592,13 @@ function renderAlerts() {
     </div>`).join('') : '<div class="empty"><i class="fas fa-check-circle" style="color:var(--success);"></i><b>No active alerts</b><span>Everything is running smoothly</span></div>';
   const lateArr = todayRecords().filter(r => isLateArrival(r));
   document.getElementById('lateArrivalsList').innerHTML = lateArr.length ? lateArr.map(r => `
-    <div class="notif-item" style="padding:8px 0;"><div class="notif-icon danger"><i class="fas fa-clock"></i></div><div class="notif-content"><p>${esc(pupilName(r.pupilId))}</p><small>Arrived ${fmtTime(r)} · ${esc(pupil(r.pupilId)?.className || '')}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;"><i class="fas fa-check"></i><b>No late arrivals</b></div>';
+    <div class="notif-item" style="padding:8px 0;"><div class="photo-cell">${renderPhotoCell(r.pupilId, 'xs')}</div><div class="notif-content"><p>${esc(pupilName(r.pupilId))}</p><small>Arrived ${fmtTime(r)} · ${esc(pupil(r.pupilId)?.className || '')}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;"><i class="fas fa-check"></i><b>No late arrivals</b></div>';
   const lateDep = todayRecords().filter(r => isLateDeparture(r));
   document.getElementById('lateDeparturesList').innerHTML = lateDep.length ? lateDep.map(r => `
-    <div class="notif-item" style="padding:8px 0;"><div class="notif-icon warn"><i class="fas fa-hourglass-end"></i></div><div class="notif-content"><p>${esc(pupilName(r.pupilId))}</p><small>Left ${fmtTime(r)} · ${esc(pupil(r.pupilId)?.className || '')}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;"><i class="fas fa-check"></i><b>No late departures</b></div>';
+    <div class="notif-item" style="padding:8px 0;"><div class="photo-cell">${renderPhotoCell(r.pupilId, 'xs')}</div><div class="notif-content"><p>${esc(pupilName(r.pupilId))}</p><small>Left ${fmtTime(r)} · ${esc(pupil(r.pupilId)?.className || '')}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;"><i class="fas fa-check"></i><b>No late departures</b></div>';
   const missing = pupils.filter(p => !latestToday(p.id, 'arrived_school'));
   document.getElementById('missingArrivalsList').innerHTML = missing.length ? missing.map(p => `
-    <div class="notif-item" style="padding:8px 0;"><div class="notif-icon"><i class="fas fa-user-clock"></i></div><div class="notif-content"><p>${esc(p.name)}</p><small>${esc(p.className)} · ${esc(p.guardian)}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;"><i class="fas fa-check"></i><b>All pupils arrived</b></div>';
+    <div class="notif-item" style="padding:8px 0;"><div class="photo-cell">${renderPhotoCell(p.id, 'xs')}</div><div class="notif-content"><p>${esc(p.name)}</p><small>${esc(p.className)} · ${esc(p.guardian)}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;"><i class="fas fa-check"></i><b>All pupils arrived</b></div>';
 }
 function clearAlerts() { showToast('All alerts marked as read', 'success'); }
 function renderAnalytics() {
@@ -2437,6 +2716,7 @@ function renderReport() {
     const ls = dayRecs.find(r => r.pupilId === p.id && r.type === 'left_school');
     const ah = dayRecs.find(r => r.pupilId === p.id && r.type === 'arrived_home');
     return `<tr>
+      <td><div class="photo-cell">${renderPhotoCell(p.id, 'xs')}</div></td>
       <td><strong>${esc(p.id)}</strong></td><td>${esc(p.name)}</td>
       <td><span class="chip accent">${esc(p.className)}</span></td>
       <td>${fmtTime(lh)}</td>
@@ -2453,7 +2733,7 @@ function renderReport() {
       </div>
       <div class="chip success"><i class="fas fa-check-circle"></i> ${pupils.filter(p => dayRecs.some(r => r.pupilId === p.id && r.type === 'arrived_school')).length} arrived</div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>ID</th><th>Pupil</th><th>Class</th><th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th></tr></thead><tbody>${rows || '<tr><td colspan="7" class="empty"><i class="fas fa-users"></i><b>No pupils registered</b></td></tr>'}</tbody></table></div>`;
+    <div class="table-wrap"><table><thead><tr><th>Photo</th><th>ID</th><th>Pupil</th><th>Class</th><th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th></tr></thead><tbody>${rows || '<tr><td colspan="8" class="empty"><i class="fas fa-users"></i><b>No pupils registered</b></td></tr>'}</tbody></table></div>`;
 }
 function initCustomReport() {
   const today = new Date(); const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate() - 7);
@@ -2471,20 +2751,20 @@ function buildCustomReport() {
   if (cls) { const classPupils = pupils.filter(p => p.className === cls).map(p => p.id); filtered = filtered.filter(r => classPupils.includes(r.pupilId)); }
   let html = '';
   if (type === 'detailed') {
-    html = `<div class="table-wrap"><table><thead><tr><th>Date/Time</th><th>Pupil</th><th>Class</th><th>Movement</th><th>Note</th></tr></thead><tbody>` +
-      (filtered.length ? filtered.map(r => `<tr><td>${new Date(r.time).toLocaleString()}</td><td>${esc(pupilName(r.pupilId))}</td><td>${esc(pupil(r.pupilId)?.className || '—')}</td><td><i class="fas ${movementIcons[r.type]}" style="color:var(--accent);margin-right:6px;"></i>${movementNames[r.type]}</td><td>${esc(r.note || '—')}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">No records</td></tr>') + '</tbody></table></div>';
+    html = `<div class="table-wrap"><table><thead><tr><th>Photo</th><th>Date/Time</th><th>Pupil</th><th>Class</th><th>Movement</th><th>Note</th></tr></thead><tbody>` +
+      (filtered.length ? filtered.map(r => `<tr><td><div class="photo-cell">${renderPhotoCell(r.pupilId, 'xs')}</div></td><td>${new Date(r.time).toLocaleString()}</td><td>${esc(pupilName(r.pupilId))}</td><td>${esc(pupil(r.pupilId)?.className || '—')}</td><td><i class="fas ${movementIcons[r.type]}" style="color:var(--accent);margin-right:6px;"></i>${movementNames[r.type]}</td><td>${esc(r.note || '—')}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">No records</td></tr>') + '</tbody></table></div>';
   } else if (type === 'late') {
     const lateArr = filtered.filter(r => isLateArrival(r));
     const lateDep = filtered.filter(r => isLateDeparture(r));
-    html = `<div class="grid-two"><div><h3 style="font-size:13px;margin-bottom:10px;color:var(--danger);">Late Arrivals (${lateArr.length})</h3>${lateArr.length ? lateArr.map(r => `<div class="notif-item" style="padding:8px 0;"><div class="notif-icon danger"><i class="fas fa-clock"></i></div><div class="notif-content"><p>${esc(pupilName(r.pupilId))}</p><small>${new Date(r.time).toLocaleString()}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;">None</div>'}</div><div><h3 style="font-size:13px;margin-bottom:10px;color:var(--warning);">Late Departures (${lateDep.length})</h3>${lateDep.length ? lateDep.map(r => `<div class="notif-item" style="padding:8px 0;"><div class="notif-icon warn"><i class="fas fa-hourglass-end"></i></div><div class="notif-content"><p>${esc(pupilName(r.pupilId))}</p><small>${new Date(r.time).toLocaleString()}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;">None</div>'}</div></div>`;
+    html = `<div class="grid-two"><div><h3 style="font-size:13px;margin-bottom:10px;color:var(--danger);">Late Arrivals (${lateArr.length})</h3>${lateArr.length ? lateArr.map(r => `<div class="notif-item" style="padding:8px 0;"><div class="photo-cell">${renderPhotoCell(r.pupilId, 'xs')}</div><div class="notif-content"><p>${esc(pupilName(r.pupilId))}</p><small>${new Date(r.time).toLocaleString()}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;">None</div>'}</div><div><h3 style="font-size:13px;margin-bottom:10px;color:var(--warning);">Late Departures (${lateDep.length})</h3>${lateDep.length ? lateDep.map(r => `<div class="notif-item" style="padding:8px 0;"><div class="photo-cell">${renderPhotoCell(r.pupilId, 'xs')}</div><div class="notif-content"><p>${esc(pupilName(r.pupilId))}</p><small>${new Date(r.time).toLocaleString()}</small></div></div>`).join('') : '<div class="empty" style="padding:16px;">None</div>'}</div></div>`;
   } else if (type === 'individual') {
     const individualRows = pupils.map(p => {
       const pRecs = filtered.filter(r => r.pupilId === p.id);
       const lh = pRecs.find(r => r.type === 'left_home'); const as = pRecs.find(r => r.type === 'arrived_school');
       const ls = pRecs.find(r => r.type === 'left_school'); const ah = pRecs.find(r => r.type === 'arrived_home');
-      return `<tr><td><strong>${esc(p.name)}</strong></td><td>${esc(p.className)}</td><td>${fmtTime(lh)}</td><td>${fmtTime(as)}</td><td>${fmtTime(ls)}</td><td>${fmtTime(ah)}</td><td>${pRecs.length}</td></tr>`;
+      return `<tr><td><div class="photo-cell">${renderPhotoCell(p.id, 'xs')}</div></td><td><strong>${esc(p.name)}</strong></td><td>${esc(p.className)}</td><td>${fmtTime(lh)}</td><td>${fmtTime(as)}</td><td>${fmtTime(ls)}</td><td>${fmtTime(ah)}</td><td>${pRecs.length}</td></tr>`;
     }).join('');
-    html = `<div class="table-wrap"><table><thead><tr><th>Pupil</th><th>Class</th><th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th><th>Total Events</th></tr></thead><tbody>${individualRows}</tbody></table></div>`;
+    html = `<div class="table-wrap"><table><thead><tr><th>Photo</th><th>Pupil</th><th>Class</th><th>Left Home</th><th>Arrived School</th><th>Left School</th><th>Arrived Home</th><th>Total Events</th></tr></thead><tbody>${individualRows}</tbody></table></div>`;
   } else {
     const totalEvents = filtered.length;
     const uniquePupils = new Set(filtered.map(r => r.pupilId)).size;
@@ -2499,11 +2779,11 @@ function buildCustomReport() {
 function printReport() {
   const content = document.getElementById('reportArea').innerHTML;
   const w = window.open('', '_blank');
-  w.document.write(`<html><head><title>Pupil Movement Report</title><style>body{font-family:Inter,Arial,sans-serif;padding:40px;color:#1a2b3e}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #ccc;padding:10px;text-align:left;font-size:12px}th{background:#f0f6fc;font-weight:700;text-transform:uppercase;font-size:10px}h1{text-align:center;font-size:22px;margin-bottom:6px}.sub{text-align:center;color:#5d738b;font-size:12px;margin-bottom:24px}.footer{margin-top:32px;text-align:center;font-size:11px;color:#5d738b;border-top:1px solid #eef3f9;padding-top:16px}.table-wrap{overflow-x:auto}.chip{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#e9f2ff;color:#1d5fa7;display:inline-block}.chip.danger{background:#fdeaea;color:#b33a3a}.chip.warning{background:#fff9e8;color:#8b6500}.chip.accent{background:#e9f2ff;color:#1d5fa7}.chip.success{background:#e3f7eb;color:#0e6b3e}</style></head><body><h1>${esc(settings.schoolName)}</h1><div class="sub">Pupil Movement Report · ${new Date().toLocaleDateString()}</div>${content}<div class="footer">Smart Pupil Tracking System v4.0 Ultimate + GPS · Generated ${new Date().toLocaleString()}</div></body></html>`);
+  w.document.write(`<html><head><title>Pupil Movement Report</title><style>body{font-family:Inter,Arial,sans-serif;padding:40px;color:#1a2b3e}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #ccc;padding:10px;text-align:left;font-size:12px}th{background:#f0f6fc;font-weight:700;text-transform:uppercase;font-size:10px}h1{text-align:center;font-size:22px;margin-bottom:6px}.sub{text-align:center;color:#5d738b;font-size:12px;margin-bottom:24px}.footer{margin-top:32px;text-align:center;font-size:11px;color:#5d738b;border-top:1px solid #eef3f9;padding-top:16px}.table-wrap{overflow-x:auto}.chip{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#e9f2ff;color:#1d5fa7;display:inline-block}.chip.danger{background:#fdeaea;color:#b33a3a}.chip.warning{background:#fff9e8;color:#8b6500}.chip.accent{background:#e9f2ff;color:#1d5fa7}.chip.success{background:#e3f7eb;color:#0e6b3e}.photo-thumb-sm{width:36px;height:36px;border-radius:50%;object-fit:cover}.photo-thumb-xs{width:28px;height:28px;border-radius:50%;object-fit:cover}.no-photo-icon{width:36px;height:36px;border-radius:50%;background:#eef2f7;display:grid;place-items:center;color:#b9c9dc;font-size:14px}.photo-cell{display:flex;align-items:center}</style></head><body><h1>${esc(settings.schoolName)}</h1><div class="sub">Pupil Movement Report · ${new Date().toLocaleDateString()}</div>${content}<div class="footer">Smart Pupil Tracking System v4.0 Ultimate + GPS · Generated ${new Date().toLocaleString()}</div></body></html>`);
   w.document.close(); w.print();
 }
 function exportPupilsExcel() {
-  const data = pupils.map(p => ({ 'Pupil ID': p.id, 'Name': p.name, 'Class': p.className, 'Guardian': p.guardian, 'Phone': p.phone, 'Address': p.address, 'Expected Arrival': p.expectedArrival || '', 'Expected Departure': p.expectedDeparture || '', 'Home GPS': p.homeGPS || '', 'Emergency': p.emergency || '' }));
+  const data = pupils.map(p => ({ 'Pupil ID': p.id, 'Name': p.name, 'Class': p.className, 'Guardian': p.guardian, 'Phone': p.phone, 'Address': p.address, 'Expected Arrival': p.expectedArrival || '', 'Expected Departure': p.expectedDeparture || '', 'Home GPS': p.homeGPS || '', 'Emergency': p.emergency || '', 'Photo': p.photo ? 'Available' : 'No' }));
   const ws = XLSX.utils.json_to_sheet(data); const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Pupils');
   XLSX.writeFile(wb, `pupils_${new Date().toISOString().slice(0, 10)}.xlsx`);
@@ -2524,7 +2804,8 @@ function exportReportExcel() {
     'Left Home': fmtTime(dayRecs.find(r => r.pupilId === p.id && r.type === 'left_home')),
     'Arrived School': fmtTime(dayRecs.find(r => r.pupilId === p.id && r.type === 'arrived_school')),
     'Left School': fmtTime(dayRecs.find(r => r.pupilId === p.id && r.type === 'left_school')),
-    'Arrived Home': fmtTime(dayRecs.find(r => r.pupilId === p.id && r.type === 'arrived_home'))
+    'Arrived Home': fmtTime(dayRecs.find(r => r.pupilId === p.id && r.type === 'arrived_home')),
+    'Photo': p.photo ? 'Available' : 'No'
   }));
   const ws = XLSX.utils.json_to_sheet(rows); const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Daily Report');
@@ -2545,8 +2826,9 @@ function generateQR() {
 }
 function showQRForPupil(id) {
   const p = pupil(id); if (!p) return;
+  const photoHtml = p.photo ? `<img src="${p.photo}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--border);margin-bottom:8px;">` : '';
   openModal('QR Code · ' + p.name,
-    `<div class="qr-container" id="modalQR"><p style="font-size:12px;color:var(--text-muted);">Generating...</p></div>`,
+    `${photoHtml}<div class="qr-container" id="modalQR"><p style="font-size:12px;color:var(--text-muted);">Generating...</p></div>`,
     `<button class="secondary" onclick="closeModal()">Close</button><button class="primary" onclick="downloadQR('${esc(p.id)}')"><i class="fas fa-download"></i> Download</button>`);
   setTimeout(() => {
     const mc = document.getElementById('modalQR'); if (!mc) return;
@@ -2571,14 +2853,22 @@ function viewPupilHistory(id) {
   const p = pupil(id); if (!p) return;
   const pRecords = records.filter(r => r.pupilId === id).sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 20);
   const timeline = pRecords.length ? pRecords.map(r => `<div class="timeline-item done"><div class="timeline-time">${new Date(r.time).toLocaleString()}</div><div class="timeline-label"><i class="fas ${movementIcons[r.type]}" style="color:var(--accent);margin-right:6px;"></i>${movementNames[r.type]}</div>${r.note ? `<div class="timeline-note">${esc(r.note)}</div>` : ''}</div>`).join('') : '<div class="empty"><i class="fas fa-history"></i><b>No records yet</b></div>';
+  const photoHtml = p.photo ? `<img src="${p.photo}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--border);margin:0 auto 12px;display:block;">` : `<div style="width:80px;height:80px;border-radius:50%;background:#eef2f7;display:grid;place-items:center;color:#b9c9dc;font-size:28px;margin:0 auto 12px;"><i class="fas fa-user"></i></div>`;
   openModal(`Movement History · ${p.name}`,
-    `<div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;"><span class="chip accent"><i class="fas fa-id-card"></i> ${esc(p.id)}</span><span class="chip"><i class="fas fa-graduation-cap"></i> ${esc(p.className)}</span><span class="chip success"><i class="fas fa-user"></i> ${esc(p.guardian)}</span><span class="chip"><i class="fas fa-phone"></i> ${esc(p.phone)}</span></div><div class="timeline">${timeline}</div>`,
+    `${photoHtml}<div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;"><span class="chip accent"><i class="fas fa-id-card"></i> ${esc(p.id)}</span><span class="chip"><i class="fas fa-graduation-cap"></i> ${esc(p.className)}</span><span class="chip success"><i class="fas fa-user"></i> ${esc(p.guardian)}</span><span class="chip"><i class="fas fa-phone"></i> ${esc(p.phone)}</span></div><div class="timeline">${timeline}</div>`,
     `<button class="secondary" onclick="closeModal()">Close</button>`);
 }
 function editPupil(id) {
   const p = pupil(id); if (!p) return;
+  const photoHtml = p.photo ? `<img src="${p.photo}" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--border);margin:0 auto 12px;display:block;">` : `<div style="width:100px;height:100px;border-radius:50%;background:#eef2f7;display:grid;place-items:center;color:#b9c9dc;font-size:32px;margin:0 auto 12px;"><i class="fas fa-user"></i></div>`;
   openModal('Edit Pupil · ' + p.name,
-    `<div class="form-grid">
+    `${photoHtml}
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:14px;">
+      <button class="secondary btn-sm" onclick="document.getElementById('editPhotoInput').click()"><i class="fas fa-upload"></i> Change Photo</button>
+      <button class="ghost btn-sm" onclick="clearEditPhoto('${esc(p.id)}')"><i class="fas fa-trash-alt"></i> Remove</button>
+    </div>
+    <input type="file" id="editPhotoInput" accept="image/*" style="display:none" onchange="handleEditPhotoUpload(event, '${esc(p.id)}')">
+    <div class="form-grid">
       <div><label class="form-label">Pupil ID</label><input id="editId" value="${esc(p.id)}" disabled></div>
       <div><label class="form-label">Full Name</label><input id="editName" value="${esc(p.name)}"></div>
       <div><label class="form-label">Class</label><input id="editClass" value="${esc(p.className)}"></div>
@@ -2587,6 +2877,35 @@ function editPupil(id) {
       <div><label class="form-label">Address</label><input id="editAddress" value="${esc(p.address)}"></div>
     </div>`,
     `<button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="savePupilEdit('${esc(p.id)}')"><i class="fas fa-save"></i> Save</button>`);
+}
+function handleEditPhotoUpload(e, id) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) { showToast('Photo too large. Max 2MB.', 'warning'); return; }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const p = pupil(id);
+    if (p) {
+      p.photo = ev.target.result;
+      save();
+      showToast('Photo updated', 'success');
+      renderAll();
+      closeModal();
+      // Re-open edit modal to reflect new photo
+      setTimeout(() => editPupil(id), 300);
+    }
+  };
+  reader.readAsDataURL(file);
+}
+function clearEditPhoto(id) {
+  const p = pupil(id);
+  if (p) {
+    p.photo = null;
+    save();
+    showToast('Photo removed', 'success');
+    renderAll();
+    closeModal();
+  }
 }
 function savePupilEdit(id) {
   const p = pupil(id); if (!p) return;
@@ -2643,7 +2962,7 @@ function handleBulkUpload(e) {
       json.forEach(row => {
         const id = row['Pupil ID'] || row['ID'] || row['id'];
         if (!id || pupils.some(p => p.id === String(id))) return;
-        pupils.push({ id: String(id), name: row['Name'] || '', className: row['Class'] || '', guardian: row['Guardian'] || '', phone: row['Phone'] || '', address: row['Address'] || '', expectedArrival: '07:30', expectedDeparture: '16:30' });
+        pupils.push({ id: String(id), name: row['Name'] || '', className: row['Class'] || '', guardian: row['Guardian'] || '', phone: row['Phone'] || '', address: row['Address'] || '', expectedArrival: '07:30', expectedDeparture: '16:30', photo: null });
         added++;
       });
       save(); closeModal(); showToast(`${added} pupils imported`, 'success'); renderAll();
@@ -2678,14 +2997,14 @@ function importData(e) {
 function loadDemoData() {
   if (!confirm('Load demo data? This will replace existing data.')) return;
   pupils = [
-    { id: 'P001', name: 'Alice Johnson', className: 'P.5', guardian: 'Mary Johnson', phone: '+256 700 123456', address: 'Kampala Central', expectedArrival: '07:30', expectedDeparture: '16:30', homeGPS: '0.3476, 32.5825', emergency: '+256 700 999111' },
-    { id: 'P002', name: 'Brian Ochieng', className: 'P.6', guardian: 'Peter Ochieng', phone: '+256 701 234567', address: 'Nakawa', expectedArrival: '07:30', expectedDeparture: '16:30', homeGPS: '0.3500, 32.5900', emergency: '+256 700 999222' },
-    { id: 'P003', name: 'Catherine Mbabazi', className: 'P.4', guardian: 'Grace Mbabazi', phone: '+256 702 345678', address: 'Kawempe', expectedArrival: '07:45', expectedDeparture: '16:00', homeGPS: '0.3600, 32.5700', emergency: '+256 700 999333' },
-    { id: 'P004', name: 'David Ssemakula', className: 'P.7', guardian: 'John Ssemakula', phone: '+256 703 456789', address: 'Makindye', expectedArrival: '07:30', expectedDeparture: '17:00', homeGPS: '0.3300, 32.5800', emergency: '+256 700 999444' },
-    { id: 'P005', name: 'Esther Nakato', className: 'P.5', guardian: 'Sarah Nakato', phone: '+256 704 567890', address: 'Rubaga', expectedArrival: '07:30', expectedDeparture: '16:30', homeGPS: '0.3400, 32.5600', emergency: '+256 700 999555' },
-    { id: 'P006', name: 'Francis Kato', className: 'P.6', guardian: 'Robert Kato', phone: '+256 705 678901', address: 'Ntinda', expectedArrival: '07:30', expectedDeparture: '16:30', homeGPS: '0.3550, 32.6000', emergency: '+256 700 999666' },
-    { id: 'P007', name: 'Grace Akello', className: 'P.4', guardian: 'Betty Akello', phone: '+256 706 789012', address: 'Bugolobi', expectedArrival: '07:45', expectedDeparture: '16:00', homeGPS: '0.3450, 32.6150', emergency: '+256 700 999777' },
-    { id: 'P008', name: 'Henry Mugisha', className: 'P.7', guardian: 'James Mugisha', phone: '+256 707 890123', address: 'Kololo', expectedArrival: '07:30', expectedDeparture: '17:00', homeGPS: '0.3400, 32.5950', emergency: '+256 700 999888' }
+    { id: 'P001', name: 'Alice Johnson', className: 'P.5', guardian: 'Mary Johnson', phone: '+256 700 123456', address: 'Kampala Central', expectedArrival: '07:30', expectedDeparture: '16:30', homeGPS: '0.3476, 32.5825', emergency: '+256 700 999111', photo: null },
+    { id: 'P002', name: 'Brian Ochieng', className: 'P.6', guardian: 'Peter Ochieng', phone: '+256 701 234567', address: 'Nakawa', expectedArrival: '07:30', expectedDeparture: '16:30', homeGPS: '0.3500, 32.5900', emergency: '+256 700 999222', photo: null },
+    { id: 'P003', name: 'Catherine Mbabazi', className: 'P.4', guardian: 'Grace Mbabazi', phone: '+256 702 345678', address: 'Kawempe', expectedArrival: '07:45', expectedDeparture: '16:00', homeGPS: '0.3600, 32.5700', emergency: '+256 700 999333', photo: null },
+    { id: 'P004', name: 'David Ssemakula', className: 'P.7', guardian: 'John Ssemakula', phone: '+256 703 456789', address: 'Makindye', expectedArrival: '07:30', expectedDeparture: '17:00', homeGPS: '0.3300, 32.5800', emergency: '+256 700 999444', photo: null },
+    { id: 'P005', name: 'Esther Nakato', className: 'P.5', guardian: 'Sarah Nakato', phone: '+256 704 567890', address: 'Rubaga', expectedArrival: '07:30', expectedDeparture: '16:30', homeGPS: '0.3400, 32.5600', emergency: '+256 700 999555', photo: null },
+    { id: 'P006', name: 'Francis Kato', className: 'P.6', guardian: 'Robert Kato', phone: '+256 705 678901', address: 'Ntinda', expectedArrival: '07:30', expectedDeparture: '16:30', homeGPS: '0.3550, 32.6000', emergency: '+256 700 999666', photo: null },
+    { id: 'P007', name: 'Grace Akello', className: 'P.4', guardian: 'Betty Akello', phone: '+256 706 789012', address: 'Bugolobi', expectedArrival: '07:45', expectedDeparture: '16:00', homeGPS: '0.3450, 32.6150', emergency: '+256 700 999777', photo: null },
+    { id: 'P008', name: 'Henry Mugisha', className: 'P.7', guardian: 'James Mugisha', phone: '+256 707 890123', address: 'Kololo', expectedArrival: '07:30', expectedDeparture: '17:00', homeGPS: '0.3400, 32.5950', emergency: '+256 700 999888', photo: null }
   ];
   records = [];
   for (let d = 13; d >= 0; d--) {
