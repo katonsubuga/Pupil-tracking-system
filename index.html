@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="description" content="Ultimate Enterprise Smart Pupil Tracking System with AI-powered insights and Live GPS Geofencing">
-  <title>Smart Pupil Tracking System | Ultimate Enterprise + GPS</title>
+  <meta name="description" content="Ultimate Enterprise Smart Pupil Tracking System with AI-powered insights, Live GPS Geofencing, and Uganda-wide Security Map">
+  <title>Smart Pupil Tracking System | Ultimate Enterprise + GPS + Security Map</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
@@ -291,6 +291,7 @@
     .ai-insight b { display: block; font-weight: 700; margin-bottom: 2px; }
     .geofence-map-real { height: 420px; border-radius: var(--radius-md); border: 1px solid var(--border); overflow: hidden; z-index: 1; box-shadow: var(--shadow-sm); }
     #leafletMap { width: 100%; height: 100%; background: #d4e4f7; }
+    #securityGoogleMap { width: 100%; height: 100%; background: #f4f7fc; }
     .gps-telemetry-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-top: 16px; background: #f9fcff; border-radius: var(--radius-md); padding: 16px 18px; border: 1px solid var(--border); }
     .gps-metric { background: white; border-radius: 12px; padding: 12px 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.02); border: 1px solid #eef3f9; }
     .gps-metric .label { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.3px; }
@@ -445,6 +446,53 @@
       padding: 20px;
       color: var(--danger);
       font-size: 13px;
+    }
+
+    /* ============================================================
+       SECURITY MAP SPECIFIC STYLES
+    ============================================================ */
+    .security-search-wrap {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      position: relative;
+    }
+    .security-search-wrap i {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8ba9c9;
+      font-size: 13px;
+      pointer-events: none;
+    }
+    .security-search-wrap input {
+      padding-left: 38px;
+      width: 100%;
+      border: 1px solid #cfddee;
+      border-radius: var(--radius-sm);
+      padding: 10px 13px 10px 38px;
+      font-size: 13px;
+      background: var(--surface);
+      font-family: inherit;
+      color: var(--text-main);
+    }
+    .security-search-wrap input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(47,128,237,0.1);
+    }
+    .security-pupil-marker {
+      background: transparent !important;
+      border: none !important;
+    }
+    .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .leaflet-popup-content {
+      margin: 12px 14px;
+      font-family: 'Inter', system-ui, sans-serif;
     }
 
     /* ============================================================
@@ -647,6 +695,7 @@
       .chart-container.lg { height: 280px; }
       .gps-telemetry-panel { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); padding: 14px; }
       .photo-preview-box { width: 120px; height: 120px; }
+      #securityGoogleMap { height: 400px; }
     }
 
     @media (max-width: 640px) {
@@ -687,6 +736,7 @@
       .modal-foot { padding: 12px 16px; }
       .modal-foot button { flex: 1; }
       .geofence-map-real { height: 300px; border-radius: 12px; }
+      #securityGoogleMap { height: 320px; }
       .gps-telemetry-panel { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; }
       .gps-metric { padding: 10px 12px; }
       .gps-metric .value { font-size: 15px; }
@@ -722,6 +772,7 @@
       .photo-thumb-xs { width: 26px; height: 26px; }
       .photo-cell .no-photo-icon { width: 32px; height: 32px; font-size: 12px; }
       .photo-cell .no-photo-icon.xs { width: 26px; height: 26px; font-size: 10px; }
+      .security-search-wrap { min-width: 100%; }
     }
 
     @media (max-width: 420px) {
@@ -740,6 +791,7 @@
       .grid-four { grid-template-columns: 1fr 1fr; gap: 8px; }
       .quick-actions-grid .secondary { padding: 12px 6px !important; }
       .photo-preview-box { width: 100px; height: 100px; }
+      #securityGoogleMap { height: 280px; }
     }
 
     @media (max-width: 360px) {
@@ -753,6 +805,7 @@
       .auth-box { padding: 22px 16px; }
       .auth-box h1 { font-size: 18px; }
       .auth-tab { font-size: 12px; padding: 8px; }
+      #securityGoogleMap { height: 240px; }
     }
 
     @media (max-height: 500px) and (orientation: landscape) {
@@ -765,6 +818,7 @@
       .auth-field { margin-bottom: 12px; }
       .demo-creds { margin-top: 14px; padding: 10px 12px; }
       .geofence-map-real { height: 240px; }
+      #securityGoogleMap { height: 220px; }
     }
 
     @media (min-width: 1600px) {
@@ -774,6 +828,7 @@
       .chart-container { height: 300px; }
       .chart-container.lg { height: 380px; }
       .geofence-map-real { height: 520px; }
+      #securityGoogleMap { height: 620px; }
     }
 
     @media (min-width: 2000px) {
@@ -791,7 +846,7 @@
     }
 
     @media print {
-      .sidebar, .topbar, .nav-btn, .card-head button, .filters, .toast-container, .notif-panel, .icon-btn, .role-info, .gps-telemetry-panel, .geofence-map-real, .mobile-menu-btn, .logout-btn {
+      .sidebar, .topbar, .nav-btn, .card-head button, .filters, .toast-container, .notif-panel, .icon-btn, .role-info, .gps-telemetry-panel, .geofence-map-real, #securityGoogleMap, .mobile-menu-btn, .logout-btn {
         display: none !important;
       }
       .main { margin: 0 !important; padding: 0 !important; width: 100% !important; }
@@ -821,7 +876,7 @@
   <div class="auth-box">
     <div class="auth-logo">SP</div>
     <h1>Smart Pupil Tracking</h1>
-    <p class="auth-sub">Ultimate Enterprise · v4.0 + GPS</p>
+    <p class="auth-sub">Ultimate Enterprise · v4.0 + GPS + Security Map</p>
 
     <div class="auth-tabs">
       <button class="auth-tab active" onclick="switchAuthTab('login')" id="tabLogin">
@@ -975,6 +1030,7 @@
       <div class="nav-section-label">Monitor</div>
       <button class="nav-btn" data-section="live"><i class="fas fa-satellite-dish"></i><span>Live Monitor</span><span class="nav-badge danger" id="liveBadge">0</span></button>
       <button class="nav-btn" data-section="geofence"><i class="fas fa-map-marked-alt"></i><span>Geofence Map</span></button>
+      <button class="nav-btn" data-section="securitymap"><i class="fas fa-map"></i><span>Security Map</span><span class="nav-badge danger" id="securityMapBadge">UG</span></button>
       <button class="nav-btn" data-section="records"><i class="fas fa-history"></i><span>Records</span></button>
       <button class="nav-btn" data-section="alerts"><i class="fas fa-bell"></i><span>Alerts</span><span class="nav-badge warn" id="alertBadge">0</span></button>
       <div class="nav-section-label">Intelligence</div>
@@ -988,7 +1044,7 @@
     <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> <span>Sign Out</span></button>
     <div class="sidebar-footer">
       <i class="fas fa-shield-alt" style="margin-right: 6px;"></i> Enterprise<br>
-      <span style="opacity:0.7;">v4.0 Ultimate + GPS</span>
+      <span style="opacity:0.7;">v4.0 Ultimate + GPS + UG Map</span>
     </div>
   </aside>
 
@@ -1020,7 +1076,7 @@
               <i class="fas fa-chalkboard-teacher"></i> <div><b>Teacher</b><br><small style="color:var(--text-muted);font-size:11px;">Monitor & record</small></div>
             </div>
             <div class="role-option" data-role="security" onclick="switchRole('security')">
-              <i class="fas fa-shield-alt"></i> <div><b>Security</b><br><small style="color:var(--text-muted);font-size:11px;">Gate access only</small></div>
+              <i class="fas fa-shield-alt"></i> <div><b>Security</b><br><small style="color:var(--text-muted);font-size:11px;">Gate access + UG Map</small></div>
             </div>
             <div class="role-option" data-role="parent" onclick="switchRole('parent')">
               <i class="fas fa-users"></i> <div><b>Parent</b><br><small style="color:var(--text-muted);font-size:11px;">View child only</small></div>
@@ -1160,7 +1216,15 @@
           <div><label class="form-label">Home Address *</label><input id="address" placeholder="Area / Zone" required></div>
           <div><label class="form-label">Expected Arrival</label><input id="expectedArrival" type="time" value="07:30"></div>
           <div><label class="form-label">Expected Departure</label><input id="expectedDeparture" type="time" value="16:30"></div>
-          <div><label class="form-label">Home GPS (Lat, Lng)</label><input id="homeGPS" placeholder="0.3476, 32.5825"></div>
+          <div>
+            <label class="form-label">Home GPS (Lat, Lng)</label>
+            <div style="display:flex;gap:6px;">
+              <input id="homeGPS" placeholder="0.3476, 32.5825">
+              <button type="button" class="secondary btn-sm" onclick="capturePupilGPS()" title="Use this device's current GPS">
+                <i class="fas fa-location-crosshairs"></i> GPS
+              </button>
+            </div>
+          </div>
           <div><label class="form-label">Emergency Contact</label><input id="emergency" placeholder="+256 700 000000"></div>
           <div style="grid-column: 1 / -1;">
             <label class="form-label"><i class="fas fa-camera" style="margin-right:4px;"></i> Pupil Photo</label>
@@ -1312,6 +1376,64 @@
         <div class="card"><div class="card-head"><h2><i class="fas fa-users"></i> Pupils at School</h2></div><div id="geofenceAtSchool"></div></div>
         <div class="card"><div class="card-head"><h2><i class="fas fa-truck"></i> In Transit</h2></div><div id="geofenceInTransit"></div></div>
         <div class="card"><div class="card-head"><h2><i class="fas fa-home"></i> At Home</h2></div><div id="geofenceAtHome"></div></div>
+      </div>
+    </section>
+
+    <section id="securitymap" class="section">
+      <div class="card">
+        <div class="card-head">
+          <div><h2><i class="fas fa-map"></i> Uganda-Wide Google Security Tracking Map</h2><div class="card-sub">Google Maps security view for pupil locations across all regions of Uganda — search any place and click markers for details</div></div>
+          <div class="btn-group">
+            <span class="chip success"><i class="fas fa-shield-alt"></i> Security Access</span>
+            <button class="ghost btn-sm" onclick="centerSecurityMapOnUganda()"><i class="fas fa-flag"></i> Uganda View</button>
+            <button class="ghost btn-sm" onclick="fitSecurityMapToPupils()"><i class="fas fa-expand"></i> Fit All Pupils</button>
+            <button class="ghost btn-sm" onclick="refreshSecurityMap()"><i class="fas fa-sync-alt"></i> Refresh</button>
+          </div>
+        </div>
+        <div class="notice info" style="margin-bottom:14px;">
+          <i class="fas fa-info-circle"></i>
+          <span><b>Security Operations Center:</b> This Google Map displays registered/received pupil GPS positions across Uganda. Use the search box to locate a pupil or any Ugandan place, filter by region/status, and click markers for details. For true remote live movement, each pupil device must send GPS updates to a secure server/database; this single-file version uses the pupil's saved GPS when available.</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+          <div class="security-search-wrap">
+            <i class="fas fa-search"></i>
+            <input id="securityMapSearch" placeholder="Search pupil, district, town, road or place in Uganda...">
+            <button class="primary btn-sm" type="button" onclick="searchSecurityMap()"><i class="fas fa-search"></i> Locate</button>
+          </div>
+          <select id="securityRegionFilter" class="search" style="width:auto;min-width:160px;padding:10px 13px;">
+            <option value="">All Uganda Regions</option>
+            <option value="Central">Central Uganda</option>
+            <option value="Eastern">Eastern Uganda</option>
+            <option value="Northern">Northern Uganda</option>
+            <option value="Western">Western Uganda</option>
+          </select>
+          <select id="securityStatusFilter" class="search" style="width:auto;min-width:150px;padding:10px 13px;">
+            <option value="">All Statuses</option>
+            <option value="At School">At School</option>
+            <option value="In Transit">In Transit</option>
+            <option value="At Home">At Home</option>
+            <option value="Pending">Pending</option>
+          </select>
+        </div>
+        <div id="securityGoogleMap" style="height: 520px; width: 100%; border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; background: #f4f7fc;"></div>
+        <div class="gps-telemetry-panel" id="securityTelemetryPanel" style="margin-top:16px;">
+          <div class="gps-metric"><div class="label"><i class="fas fa-users"></i> Total Pupils</div><div class="value" id="secTotalPupils">0</div><div class="sub">Registered</div></div>
+          <div class="gps-metric"><div class="label"><i class="fas fa-school"></i> At School</div><div class="value" id="secAtSchool" style="color:var(--success);">0</div><div class="sub">On campus</div></div>
+          <div class="gps-metric"><div class="label"><i class="fas fa-truck"></i> In Transit</div><div class="value" id="secInTransit" style="color:var(--warning);">0</div><div class="sub">Moving</div></div>
+          <div class="gps-metric"><div class="label"><i class="fas fa-home"></i> At Home</div><div class="value" id="secAtHome" style="color:var(--accent);">0</div><div class="sub">Safe at home</div></div>
+          <div class="gps-metric"><div class="label"><i class="fas fa-map-marker-alt"></i> Districts</div><div class="value" id="secDistricts">0</div><div class="sub">Coverage</div></div>
+          <div class="gps-metric"><div class="label"><i class="fas fa-clock"></i> Last Update</div><div class="value" id="secLastUpdate">--:--</div><div class="sub">Live sync</div></div>
+        </div>
+      </div>
+      <div class="grid-two">
+        <div class="card">
+          <div class="card-head"><h2><i class="fas fa-list-ul"></i> Pupil Location Directory</h2><span class="chip accent" id="secDirectoryCount">0 pupils</span></div>
+          <div style="max-height:400px;overflow-y:auto;" id="securityPupilDirectory"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2><i class="fas fa-exclamation-triangle" style="color:var(--danger);"></i> Security Alerts</h2></div>
+          <div id="securityAlertsList"></div>
+        </div>
       </div>
     </section>
 
@@ -1506,6 +1628,13 @@
                 <option value="0">Manual only</option>
               </select>
             </div>
+            <div style="grid-column:1 / -1;">
+              <label class="form-label"><i class="fas fa-map-marked-alt" style="margin-right:4px;"></i> Google Maps API Key</label>
+              <input id="settingGoogleMapsKey" type="password" autocomplete="off" placeholder="Paste your Google Maps JavaScript API key">
+              <small style="display:block;margin-top:5px;color:var(--text-muted);font-size:10.5px;">
+                Required for the Security Google Map. Restrict the key to your website domain and enable Maps JavaScript API.
+              </small>
+            </div>
             <button class="primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save Settings</button>
             <button class="danger" onclick="resetData()"><i class="fas fa-trash-alt"></i> Reset All Data</button>
           </div>
@@ -1526,7 +1655,7 @@
       <div class="card">
         <div class="card-head"><h2><i class="fas fa-info-circle"></i> System Information</h2></div>
         <div class="summary-grid">
-          <div class="summary-item"><span>Version</span><b>4.0 Ultimate + GPS</b></div>
+          <div class="summary-item"><span>Version</span><b>4.0 Ultimate + GPS + UG Map</b></div>
           <div class="summary-item"><span>Storage Used</span><b id="storageUsed">0 KB</b></div>
           <div class="summary-item"><span>Total Pupils</span><b id="settingTotalPupils">0</b></div>
           <div class="summary-item"><span>Total Records</span><b id="settingTotalRecords">0</b></div>
@@ -1715,14 +1844,15 @@ let currentRole = 'admin';
 const defaultSettings = {
   schoolName: 'Smart International School', term: 'Term 1, 2025',
   startTime: '08:00', endTime: '17:00', lateArrival: '08:00', lateDeparture: '17:00',
-  timezone: 'Africa/Kampala', refreshInterval: '30'
+  timezone: 'Africa/Kampala', refreshInterval: '30',
+  googleMapsApiKey: ''
 };
 const movementNames = { left_home: 'Left Home', arrived_school: 'Arrived at School', left_school: 'Left School', arrived_home: 'Arrived Home' };
 const movementIcons = { left_home: 'fa-home', arrived_school: 'fa-school', left_school: 'fa-door-open', arrived_home: 'fa-house-user' };
 const roleConfig = {
   admin: { label: 'Administrator', icon: 'fa-user-shield', color: 'accent', desc: 'Full system access. All features are available.' },
   teacher: { label: 'Teacher', icon: 'fa-chalkboard-teacher', color: 'success', desc: 'Monitor and record pupil movements.' },
-  security: { label: 'Security', icon: 'fa-shield-alt', color: 'warning', desc: 'Gate access and movement recording only.' },
+  security: { label: 'Security', icon: 'fa-shield-alt', color: 'warning', desc: 'Gate access and Uganda-wide tracking map.' },
   parent: { label: 'Parent', icon: 'fa-users', color: 'purple', desc: 'View-only access to your child\'s records.' },
   student: { label: 'Student', icon: 'fa-user-graduate', color: 'teal', desc: 'View your own movement records and schedule.' }
 };
@@ -1741,6 +1871,119 @@ const HOME_ZONES = [
 ];
 let gpsState = { lat: SCHOOL_LAT, lng: SCHOOL_LNG, altitude: 1180, speed: 0, heading: 0, satellites: 12, utcTime: new Date().toISOString(), fix: '3D Fix', lastUpdate: Date.now() };
 let map, markerGroup, zoneGroup;
+
+/* ============================================================
+   UGANDA SECURITY MAP DATA
+============================================================ */
+let securityMap = null;
+
+// Uganda districts/regions coordinates (comprehensive coverage)
+const UGANDA_DISTRICTS = [
+  { name: 'Kampala', region: 'Central', lat: 0.3476, lng: 32.5825 },
+  { name: 'Entebbe', region: 'Central', lat: 0.0512, lng: 32.4637 },
+  { name: 'Mukono', region: 'Central', lat: 0.3533, lng: 32.7553 },
+  { name: 'Wakiso', region: 'Central', lat: 0.4000, lng: 32.4667 },
+  { name: 'Mpigi', region: 'Central', lat: 0.2250, lng: 32.3167 },
+  { name: 'Luweero', region: 'Central', lat: 0.8492, lng: 32.4758 },
+  { name: 'Mityana', region: 'Central', lat: 0.4000, lng: 32.0500 },
+  { name: 'Mubende', region: 'Central', lat: 0.5575, lng: 31.3967 },
+  { name: 'Kiboga', region: 'Central', lat: 0.9167, lng: 31.7667 },
+  { name: 'Nakaseke', region: 'Central', lat: 1.0000, lng: 32.1000 },
+  { name: 'Kayunga', region: 'Central', lat: 0.7000, lng: 32.9000 },
+  { name: 'Buikwe', region: 'Central', lat: 0.3500, lng: 33.0500 },
+  { name: 'Buvuma', region: 'Central', lat: 0.2000, lng: 33.3000 },
+  { name: 'Kalangala', region: 'Central', lat: -0.3000, lng: 32.5000 },
+  { name: 'Jinja', region: 'Eastern', lat: 0.4244, lng: 33.2041 },
+  { name: 'Mbale', region: 'Eastern', lat: 1.0800, lng: 34.1750 },
+  { name: 'Soroti', region: 'Eastern', lat: 1.7144, lng: 33.6111 },
+  { name: 'Tororo', region: 'Eastern', lat: 0.6928, lng: 34.1809 },
+  { name: 'Iganga', region: 'Eastern', lat: 0.6092, lng: 33.4686 },
+  { name: 'Busia', region: 'Eastern', lat: 0.4600, lng: 34.1000 },
+  { name: 'Bugiri', region: 'Eastern', lat: 0.5700, lng: 33.7500 },
+  { name: 'Kamuli', region: 'Eastern', lat: 0.9500, lng: 33.1167 },
+  { name: 'Pallisa', region: 'Eastern', lat: 1.1500, lng: 33.7167 },
+  { name: 'Kumi', region: 'Eastern', lat: 1.4833, lng: 33.9333 },
+  { name: 'Kapchorwa', region: 'Eastern', lat: 1.4000, lng: 34.4500 },
+  { name: 'Sironko', region: 'Eastern', lat: 1.2333, lng: 34.2500 },
+  { name: 'Manafwa', region: 'Eastern', lat: 0.9500, lng: 34.2833 },
+  { name: 'Bududa', region: 'Eastern', lat: 1.0167, lng: 34.3333 },
+  { name: 'Bulambuli', region: 'Eastern', lat: 1.1667, lng: 34.3833 },
+  { name: 'Namutumba', region: 'Eastern', lat: 0.8333, lng: 33.6833 },
+  { name: 'Butaleja', region: 'Eastern', lat: 0.9167, lng: 33.9500 },
+  { name: 'Kaliro', region: 'Eastern', lat: 0.9000, lng: 33.5000 },
+  { name: 'Buyende', region: 'Eastern', lat: 1.1500, lng: 33.2000 },
+  { name: 'Serere', region: 'Eastern', lat: 1.5000, lng: 33.5500 },
+  { name: 'Amuria', region: 'Eastern', lat: 2.0333, lng: 33.6500 },
+  { name: 'Katakwi', region: 'Eastern', lat: 1.8833, lng: 34.0500 },
+  { name: 'Bukedea', region: 'Eastern', lat: 1.3500, lng: 34.0500 },
+  { name: 'Kaberamaido', region: 'Eastern', lat: 1.7333, lng: 33.1500 },
+  { name: 'Gulu', region: 'Northern', lat: 2.7746, lng: 32.2990 },
+  { name: 'Lira', region: 'Northern', lat: 2.2499, lng: 32.9000 },
+  { name: 'Arua', region: 'Northern', lat: 3.0303, lng: 30.9100 },
+  { name: 'Kitgum', region: 'Northern', lat: 3.2783, lng: 32.8867 },
+  { name: 'Pader', region: 'Northern', lat: 2.8333, lng: 33.1000 },
+  { name: 'Amuru', region: 'Northern', lat: 2.9000, lng: 31.9000 },
+  { name: 'Nwoya', region: 'Northern', lat: 2.6000, lng: 32.0000 },
+  { name: 'Oyam', region: 'Northern', lat: 2.2333, lng: 32.3833 },
+  { name: 'Kole', region: 'Northern', lat: 2.4000, lng: 32.8000 },
+  { name: 'Apac', region: 'Northern', lat: 1.9833, lng: 32.5333 },
+  { name: 'Dokolo', region: 'Northern', lat: 1.9167, lng: 33.1667 },
+  { name: 'Amolatar', region: 'Northern', lat: 1.6333, lng: 32.8333 },
+  { name: 'Alebtong', region: 'Northern', lat: 2.2500, lng: 33.3000 },
+  { name: 'Otuke', region: 'Northern', lat: 2.5000, lng: 33.5000 },
+  { name: 'Agago', region: 'Northern', lat: 2.8333, lng: 33.3333 },
+  { name: 'Lamwo', region: 'Northern', lat: 3.5333, lng: 32.5333 },
+  { name: 'Adjumani', region: 'Northern', lat: 3.3775, lng: 31.7903 },
+  { name: 'Moyo', region: 'Northern', lat: 3.6500, lng: 31.7167 },
+  { name: 'Yumbe', region: 'Northern', lat: 3.4667, lng: 31.2500 },
+  { name: 'Koboko', region: 'Northern', lat: 3.4167, lng: 30.9667 },
+  { name: 'Maracha', region: 'Northern', lat: 3.2833, lng: 30.9500 },
+  { name: 'Nebbi', region: 'Northern', lat: 2.4833, lng: 31.0833 },
+  { name: 'Zombo', region: 'Northern', lat: 2.5167, lng: 30.9000 },
+  { name: 'Pakwach', region: 'Northern', lat: 2.4667, lng: 31.5000 },
+  { name: 'Amudat', region: 'Northern', lat: 1.9500, lng: 34.9500 },
+  { name: 'Nakapiripirit', region: 'Northern', lat: 1.9167, lng: 34.7500 },
+  { name: 'Moroto', region: 'Northern', lat: 2.5333, lng: 34.6667 },
+  { name: 'Kotido', region: 'Northern', lat: 2.9833, lng: 34.1333 },
+  { name: 'Kaabong', region: 'Northern', lat: 3.5167, lng: 34.1333 },
+  { name: 'Abim', region: 'Northern', lat: 2.7000, lng: 33.6667 },
+  { name: 'Karenga', region: 'Northern', lat: 3.7000, lng: 33.7500 },
+  { name: 'Mbarara', region: 'Western', lat: -0.6072, lng: 30.6545 },
+  { name: 'Fort Portal', region: 'Western', lat: 0.6710, lng: 30.2750 },
+  { name: 'Kasese', region: 'Western', lat: 0.1833, lng: 30.0833 },
+  { name: 'Hoima', region: 'Western', lat: 1.4356, lng: 31.3436 },
+  { name: 'Masindi', region: 'Western', lat: 1.6833, lng: 31.7167 },
+  { name: 'Bushenyi', region: 'Western', lat: -0.5333, lng: 30.1833 },
+  { name: 'Kabale', region: 'Western', lat: -1.2500, lng: 29.9833 },
+  { name: 'Rukungiri', region: 'Western', lat: -0.7833, lng: 29.9333 },
+  { name: 'Ntungamo', region: 'Western', lat: -0.8833, lng: 30.2667 },
+  { name: 'Isingiro', region: 'Western', lat: -0.8500, lng: 30.8000 },
+  { name: 'Kiruhura', region: 'Western', lat: -0.2000, lng: 30.8333 },
+  { name: 'Ibanda', region: 'Western', lat: -0.1333, lng: 30.5000 },
+  { name: 'Kamwenge', region: 'Western', lat: 0.1833, lng: 30.4500 },
+  { name: 'Kyenjojo', region: 'Western', lat: 0.6167, lng: 30.6167 },
+  { name: 'Kyegegwa', region: 'Western', lat: 0.4833, lng: 31.0333 },
+  { name: 'Kibaale', region: 'Western', lat: 0.7833, lng: 31.0833 },
+  { name: 'Kagadi', region: 'Western', lat: 0.9333, lng: 30.8000 },
+  { name: 'Kakumiro', region: 'Western', lat: 0.7833, lng: 31.3167 },
+  { name: 'Bulisa', region: 'Western', lat: 2.1167, lng: 31.4167 },
+  { name: 'Ntoroko', region: 'Western', lat: 1.0500, lng: 30.5000 },
+  { name: 'Bundibugyo', region: 'Western', lat: 0.7000, lng: 30.0667 },
+  { name: 'Kanungu', region: 'Western', lat: -0.9500, lng: 29.7833 },
+  { name: 'Kisoro', region: 'Western', lat: -1.2833, lng: 29.6833 },
+  { name: 'Rubanda', region: 'Western', lat: -1.1833, lng: 29.8500 },
+  { name: 'Rukiga', region: 'Western', lat: -1.1000, lng: 30.1000 },
+  { name: 'Buhweju', region: 'Western', lat: -0.3500, lng: 30.3000 },
+  { name: 'Mitooma', region: 'Western', lat: -0.6000, lng: 30.0500 },
+  { name: 'Sheema', region: 'Western', lat: -0.5500, lng: 30.3833 },
+  { name: 'Rubirizi', region: 'Western', lat: -0.3000, lng: 30.1333 }
+];
+
+const UGANDA_CENTER = [1.3733, 32.2903];
+const UGANDA_BOUNDS = L.latLngBounds(
+  L.latLng(-1.482, 29.573),
+  L.latLng(4.234, 35.036)
+);
 
 /* ============================================================
    PHOTO CAPTURE STATE
@@ -1766,7 +2009,6 @@ function handlePupilPhotoUpload(e) {
 }
 function updateRegisterPhotoPreview(dataUrl) {
   const box = document.getElementById('registerPhotoPreview');
-  const badge = document.getElementById('registerPhotoBadge');
   if (!box) return;
   if (dataUrl) {
     box.innerHTML = `<img src="${dataUrl}" alt="Pupil photo"><div class="photo-overlay-badge" id="registerPhotoBadge">Photo Ready</div>`;
@@ -1885,11 +2127,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.addEventListener('orientationchange', () => {
-    setTimeout(() => { if (map) map.invalidateSize(); }, 300);
+    setTimeout(() => { 
+      if (map) map.invalidateSize(); 
+      if (securityMap && window.google?.maps) google.maps.event.trigger(securityMap, 'resize'); 
+    }, 300);
   });
   window.addEventListener('resize', () => {
     clearTimeout(window._resizeTimer);
-    window._resizeTimer = setTimeout(() => { if (map) map.invalidateSize(); }, 200);
+    window._resizeTimer = setTimeout(() => { 
+      if (map) map.invalidateSize(); 
+      if (securityMap && window.google?.maps) google.maps.event.trigger(securityMap, 'resize'); 
+    }, 200);
   });
 });
 
@@ -1935,6 +2183,7 @@ function startAutoRefresh() {
     autoRefreshInterval = setInterval(() => {
       if (document.getElementById('live').classList.contains('active')) renderLiveMonitor();
       if (document.getElementById('geofence').classList.contains('active')) { updateMapMarkers(); updateTelemetryUI(); }
+      if (document.getElementById('securitymap').classList.contains('active')) { updateSecurityMapMarkers(); updateSecurityTelemetry(); }
     }, interval * 1000);
   }
   if (!liveClockInterval) liveClockInterval = setInterval(updateLiveClock, 1000);
@@ -1942,7 +2191,7 @@ function startAutoRefresh() {
 }
 
 /* ============================================================
-   LEAFLET MAP
+   LEAFLET MAP (GEOFENCE)
 ============================================================ */
 function initLeafletMap() {
   const mapEl = document.getElementById('leafletMap');
@@ -1996,11 +2245,502 @@ function updateMapMarkers() {
   }
 }
 function fitMapToMarkers() {
-  if (!map || !markerGroup || markerGroup.getLayers().length === 0) { map.setView([SCHOOL_LAT, SCHOOL_LNG], 14); return; }
+  if (!map || !markerGroup || markerGroup.getLayers().length === 0) {
+    if (map) map.setView([SCHOOL_LAT, SCHOOL_LNG], 14);
+    return;
+  }
   const group = L.featureGroup(markerGroup.getLayers());
   map.fitBounds(group.getBounds().pad(0.2));
 }
 
+/* ============================================================
+   UGANDA SECURITY GOOGLE MAP
+   Google Maps is used only for the Security Map. The existing
+   Geofence Map remains unchanged and continues to use Leaflet.
+============================================================ */
+let googleMapsReady = false;
+let googleMapsLoading = false;
+let securityMarkers = [];
+let securityInfoWindow = null;
+let securityGeocoder = null;
+
+function getGoogleMapsApiKey() {
+  return String(settings.googleMapsApiKey || '').trim();
+}
+
+function loadGoogleMapsApi() {
+  return new Promise((resolve, reject) => {
+    if (window.google && window.google.maps) {
+      googleMapsReady = true;
+      resolve();
+      return;
+    }
+    const key = getGoogleMapsApiKey();
+    if (!key) {
+      reject(new Error('Google Maps API key is not configured. Open Settings and add the key.'));
+      return;
+    }
+    if (googleMapsLoading) {
+      const wait = setInterval(() => {
+        if (window.google && window.google.maps) {
+          clearInterval(wait);
+          googleMapsReady = true;
+          resolve();
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(wait);
+        if (!(window.google && window.google.maps)) reject(new Error('Google Maps timed out while loading.'));
+      }, 15000);
+      return;
+    }
+
+    googleMapsLoading = true;
+    const callbackName = '__spmsGoogleMapsReady';
+    window[callbackName] = () => {
+      googleMapsReady = true;
+      googleMapsLoading = false;
+      delete window[callbackName];
+      resolve();
+    };
+
+    const existing = document.getElementById('googleMapsScript');
+    if (existing) return;
+
+    const script = document.createElement('script');
+    script.id = 'googleMapsScript';
+    script.async = true;
+    script.defer = true;
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=' +
+      encodeURIComponent(key) + '&libraries=geometry&callback=' + callbackName;
+    script.onerror = () => {
+      googleMapsLoading = false;
+      reject(new Error('Google Maps could not be loaded. Check the API key, enabled APIs, billing and domain restrictions.'));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+function showGoogleMapsSetupMessage(message) {
+  const el = document.getElementById('securityGoogleMap');
+  if (!el) return;
+  el.innerHTML = `
+    <div style="height:100%;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;background:linear-gradient(135deg,#eef5ff,#f9fcff);">
+      <div style="max-width:520px;">
+        <div style="width:58px;height:58px;border-radius:16px;background:#e9f2ff;color:#2f80ed;display:grid;place-items:center;margin:0 auto 12px;font-size:24px;">
+          <i class="fas fa-map-marked-alt"></i>
+        </div>
+        <h3 style="color:#0b2b44;margin-bottom:7px;">Google Maps Security Tracking</h3>
+        <p style="font-size:12px;color:#5d738b;line-height:1.6;">${esc(message)}</p>
+        <p style="font-size:11px;color:#5d738b;margin-top:10px;">Open <b>Settings → Google Maps API Key</b>, save the key, then return to Security Map.</p>
+      </div>
+    </div>`;
+}
+
+async function initSecurityMap() {
+  const mapEl = document.getElementById('securityGoogleMap');
+  if (!mapEl) return;
+
+  if (securityMap && googleMapsReady) {
+    setTimeout(() => {
+      google.maps.event.trigger(securityMap, 'resize');
+      updateSecurityMapMarkers();
+    }, 150);
+    return;
+  }
+
+  try {
+    await loadGoogleMapsApi();
+  } catch (err) {
+    showGoogleMapsSetupMessage(err.message);
+    return;
+  }
+
+  mapEl.innerHTML = '';
+  securityMap = new google.maps.Map(mapEl, {
+    center: { lat: UGANDA_CENTER[0], lng: UGANDA_CENTER[1] },
+    zoom: 7,
+    minZoom: 6,
+    maxZoom: 19,
+    mapTypeControl: true,
+    streetViewControl: false,
+    fullscreenControl: true,
+    zoomControl: true,
+    gestureHandling: 'greedy',
+    restriction: {
+      latLngBounds: {
+        north: 4.6, south: -1.9, east: 35.6, west: 29.1
+      },
+      strictBounds: false
+    }
+  });
+
+  securityInfoWindow = new google.maps.InfoWindow();
+  securityGeocoder = new google.maps.Geocoder();
+
+  updateSecurityMapMarkers();
+  updateSecurityTelemetry();
+  renderSecurityPupilDirectory();
+  renderSecurityAlerts();
+
+  const searchInput = document.getElementById('securityMapSearch');
+  if (searchInput) {
+    searchInput.oninput = () => {
+      updateSecurityMapMarkers();
+      renderSecurityPupilDirectory();
+    };
+    searchInput.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        searchSecurityMap();
+      }
+    };
+  }
+
+  const regionFilter = document.getElementById('securityRegionFilter');
+  if (regionFilter) regionFilter.onchange = () => {
+    updateSecurityMapMarkers();
+    renderSecurityPupilDirectory();
+  };
+
+  const statusFilter = document.getElementById('securityStatusFilter');
+  if (statusFilter) statusFilter.onchange = () => {
+    updateSecurityMapMarkers();
+    renderSecurityPupilDirectory();
+  };
+
+  setTimeout(() => google.maps.event.trigger(securityMap, 'resize'), 400);
+}
+
+function parseGPS(value) {
+  if (!value) return null;
+  const m = String(value).trim().match(/^\s*(-?\d+(?:\.\d+)?)\s*[,;]\s*(-?\d+(?:\.\d+)?)\s*$/);
+  if (!m) return null;
+  const lat = Number(m[1]), lng = Number(m[2]);
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+  return { lat, lng };
+}
+
+function getPupilUgandaLocation(pupil) {
+  /* Prefer an actual GPS coordinate saved against the pupil. */
+  const actual = parseGPS(pupil.homeGPS);
+  if (actual) {
+    const district = findNearestUgandaDistrict(actual.lat, actual.lng);
+    return {
+      lat: actual.lat,
+      lng: actual.lng,
+      district: district ? district.name : 'Uganda',
+      region: district ? district.region : 'Uganda',
+      source: 'Registered GPS'
+    };
+  }
+
+  /* Deterministic fallback keeps demo pupils stable instead of jumping
+     randomly every refresh. It is clearly labelled as an estimated location. */
+  const hash = pupil.id.split('').reduce((acc, c) => (acc * 31 + c.charCodeAt(0)) >>> 0, 7);
+  const district = UGANDA_DISTRICTS[hash % UGANDA_DISTRICTS.length];
+  const latOffset = (((hash >>> 8) % 1000) / 1000 - 0.5) * 0.03;
+  const lngOffset = (((hash >>> 18) % 1000) / 1000 - 0.5) * 0.03;
+  return {
+    lat: district.lat + latOffset,
+    lng: district.lng + lngOffset,
+    district: district.name,
+    region: district.region,
+    source: 'Estimated district location'
+  };
+}
+
+function findNearestUgandaDistrict(lat, lng) {
+  let nearest = null, best = Infinity;
+  UGANDA_DISTRICTS.forEach(d => {
+    const dist = Math.pow(d.lat - lat, 2) + Math.pow(d.lng - lng, 2);
+    if (dist < best) { best = dist; nearest = d; }
+  });
+  return nearest;
+}
+
+function clearSecurityMarkers() {
+  securityMarkers.forEach(marker => marker.setMap(null));
+  securityMarkers = [];
+}
+
+function markerColorForStatus(status) {
+  return status.label === 'At School' ? '#0e6b3e' :
+         status.label === 'In Transit' ? '#b88e1a' :
+         status.label === 'At Home' ? '#2f80ed' : '#8ba9c9';
+}
+
+function makeSecurityMarkerIcon(color, photo, initials) {
+  if (photo) {
+    return {
+      url: photo,
+      scaledSize: new google.maps.Size(38, 38),
+      anchor: new google.maps.Point(19, 19)
+    };
+  }
+  return {
+    path: google.maps.SymbolPath.CIRCLE,
+    scale: 17,
+    fillColor: color,
+    fillOpacity: 1,
+    strokeColor: '#ffffff',
+    strokeWeight: 3
+  };
+}
+
+function updateSecurityMapMarkers() {
+  if (!securityMap || !googleMapsReady) return;
+
+  clearSecurityMarkers();
+
+  const searchQuery = (document.getElementById('securityMapSearch')?.value || '').toLowerCase().trim();
+  const regionFilter = document.getElementById('securityRegionFilter')?.value || '';
+  const statusFilter = document.getElementById('securityStatusFilter')?.value || '';
+  let markerCount = 0;
+
+  pupils.forEach(pupil => {
+    const status = getStatus(pupil);
+    const loc = getPupilUgandaLocation(pupil);
+
+    if (searchQuery && !(pupil.name.toLowerCase().includes(searchQuery) || pupil.id.toLowerCase().includes(searchQuery))) return;
+    if (regionFilter && loc.region !== regionFilter) return;
+    if (statusFilter && status.label !== statusFilter) return;
+
+    const color = markerColorForStatus(status);
+    const initials = pupil.name.split(/\s+/).map(n => n[0]).join('').slice(0, 2).toUpperCase();
+    const marker = new google.maps.Marker({
+      map: securityMap,
+      position: { lat: loc.lat, lng: loc.lng },
+      title: `${pupil.name} · ${status.label}`,
+      icon: makeSecurityMarkerIcon(color, pupil.photo, initials),
+      optimized: true
+    });
+    marker.__pupilId = pupil.id;
+    marker.__location = loc;
+
+    const lastRecord = records.filter(r => r.pupilId === pupil.id)
+      .sort((a, b) => new Date(b.time) - new Date(a.time))[0];
+    const lastEvent = lastRecord
+      ? `${movementNames[lastRecord.type] || lastRecord.type} at ${new Date(lastRecord.time).toLocaleString()}`
+      : 'No movements recorded';
+
+    const popupContent = `
+      <div style="font-family:Inter,sans-serif;padding:4px;min-width:245px;max-width:300px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          ${pupil.photo
+            ? `<img src="${esc(pupil.photo)}" style="width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid ${color};">`
+            : `<div style="width:46px;height:46px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px;">${esc(initials)}</div>`}
+          <div>
+            <div style="font-weight:700;color:#0b2b44;font-size:14px;">${esc(pupil.name)}</div>
+            <div style="font-size:11px;color:#5d738b;">${esc(pupil.id)} · ${esc(pupil.className)}</div>
+          </div>
+        </div>
+        <div style="display:inline-block;padding:3px 10px;border-radius:20px;background:${color}20;color:${color};font-size:10px;font-weight:700;text-transform:uppercase;margin-bottom:8px;">${esc(status.label)}</div>
+        <div style="font-size:11.5px;color:#5d738b;line-height:1.7;">
+          <div><i class="fas fa-map-marker-alt" style="color:${color};width:14px;"></i> <b>${esc(loc.district)}</b>, ${esc(loc.region)} Uganda</div>
+          <div><i class="fas fa-location-crosshairs" style="color:${color};width:14px;"></i> ${esc(loc.source)}</div>
+          <div><i class="fas fa-user" style="color:${color};width:14px;"></i> Guardian: ${esc(pupil.guardian)}</div>
+          <div><i class="fas fa-phone" style="color:${color};width:14px;"></i> ${esc(pupil.phone)}</div>
+          <div><i class="fas fa-clock" style="color:${color};width:14px;"></i> ${esc(lastEvent)}</div>
+          <div><i class="fas fa-compass" style="color:${color};width:14px;"></i> GPS: ${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)}</div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px;">
+          <button onclick="locatePupilOnSecurityMap('${esc(pupil.id)}')" style="flex:1;padding:6px 10px;border:0;border-radius:6px;background:#2f80ed;color:white;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">Center</button>
+          <button onclick="viewPupilHistory('${esc(pupil.id)}')" style="flex:1;padding:6px 10px;border:1px solid #e6edf6;border-radius:6px;background:white;color:#5d738b;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;">History</button>
+        </div>
+      </div>`;
+
+    marker.addListener('click', () => {
+      securityInfoWindow.setContent(popupContent);
+      securityInfoWindow.open({ map: securityMap, anchor: marker });
+    });
+
+    securityMarkers.push(marker);
+    markerCount++;
+  });
+
+  const badge = document.getElementById('securityMapBadge');
+  if (badge) badge.textContent = markerCount || 'UG';
+}
+
+function updateSecurityTelemetry() {
+  const total = pupils.length;
+  const atSchool = pupils.filter(p => getStatus(p).label === 'At School').length;
+  const inTransit = pupils.filter(p => getStatus(p).label === 'In Transit').length;
+  const atHome = pupils.filter(p => getStatus(p).label === 'At Home').length;
+  const districtSet = new Set(pupils.map(p => getPupilUgandaLocation(p).district));
+
+  const ids = {
+    secTotalPupils: total,
+    secAtSchool: atSchool,
+    secInTransit: inTransit,
+    secAtHome: atHome,
+    secDistricts: districtSet.size,
+    secLastUpdate: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+  };
+  Object.entries(ids).forEach(([id, value]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  });
+}
+
+function renderSecurityPupilDirectory() {
+  const container = document.getElementById('securityPupilDirectory');
+  if (!container) return;
+
+  const searchQuery = (document.getElementById('securityMapSearch')?.value || '').toLowerCase().trim();
+  const regionFilter = document.getElementById('securityRegionFilter')?.value || '';
+  const statusFilter = document.getElementById('securityStatusFilter')?.value || '';
+
+  const rows = pupils.filter(p => {
+    const st = getStatus(p);
+    const loc = getPupilUgandaLocation(p);
+    const matchSearch = !searchQuery || p.name.toLowerCase().includes(searchQuery) || p.id.toLowerCase().includes(searchQuery);
+    return matchSearch && (!regionFilter || loc.region === regionFilter) && (!statusFilter || st.label === statusFilter);
+  });
+
+  const count = document.getElementById('secDirectoryCount');
+  if (count) count.textContent = `${rows.length} pupil${rows.length === 1 ? '' : 's'}`;
+
+  if (!rows.length) {
+    container.innerHTML = `<div class="empty" style="padding:28px;"><i class="fas fa-map-marker-alt"></i><b>No matching pupils</b><span>Try another name, ID, region or status.</span></div>`;
+    return;
+  }
+
+  container.innerHTML = rows.map(p => {
+    const st = getStatus(p);
+    const loc = getPupilUgandaLocation(p);
+    const color = markerColorForStatus(st);
+    return `
+      <div class="notif-item" style="cursor:pointer;" onclick="locatePupilOnSecurityMap('${esc(p.id)}')">
+        <div class="notif-icon" style="background:${color}18;color:${color};"><i class="fas fa-location-dot"></i></div>
+        <div class="notif-content">
+          <p>${esc(p.name)} <span class="status ${st.cls}" style="font-size:8px;padding:2px 7px;margin-left:5px;">${esc(st.label)}</span></p>
+          <small>${esc(p.id)} · ${esc(p.className)} · ${esc(loc.district)}, ${esc(loc.region)} · ${esc(loc.source)}</small>
+        </div>
+        <i class="fas fa-chevron-right" style="color:#b9c9dc;"></i>
+      </div>`;
+  }).join('');
+}
+
+function locatePupilOnSecurityMap(pupilId) {
+  const p = pupil(pupilId);
+  if (!p) { showToast('Pupil not found', 'warning'); return; }
+  if (!securityMap) {
+    showSection('securitymap');
+    setTimeout(() => locatePupilOnSecurityMap(pupilId), 800);
+    return;
+  }
+
+  const loc = getPupilUgandaLocation(p);
+  securityMap.panTo({ lat: loc.lat, lng: loc.lng });
+  securityMap.setZoom(15);
+
+  const marker = securityMarkers.find(m => m.__pupilId === p.id);
+  if (marker) {
+    securityInfoWindow.setContent(`<b>${esc(p.name)}</b><br>${esc(loc.district)}, ${esc(loc.region)} Uganda<br>GPS: ${loc.lat.toFixed(6)}, ${loc.lng.toFixed(6)}`);
+    securityInfoWindow.open({ map: securityMap, anchor: marker });
+  }
+  showToast(`Located ${p.name} · ${loc.district}, ${loc.region}`, 'success');
+}
+
+function centerSecurityMapOnUganda() {
+  if (!securityMap) {
+    showSection('securitymap');
+    return;
+  }
+  securityMap.setCenter({ lat: UGANDA_CENTER[0], lng: UGANDA_CENTER[1] });
+  securityMap.setZoom(7);
+  showToast('Centered on Uganda', 'info');
+}
+
+function fitSecurityMapToPupils() {
+  if (!securityMap || !securityMarkers.length) {
+    centerSecurityMapOnUganda();
+    return;
+  }
+  const bounds = new google.maps.LatLngBounds();
+  securityMarkers.forEach(marker => bounds.extend(marker.getPosition()));
+  securityMap.fitBounds(bounds, 60);
+  showToast(`Showing ${securityMarkers.length} pupils across Uganda`, 'success');
+}
+
+function refreshSecurityMap() {
+  if (!securityMap) {
+    initSecurityMap();
+    return;
+  }
+  updateSecurityMapMarkers();
+  updateSecurityTelemetry();
+  renderSecurityPupilDirectory();
+  renderSecurityAlerts();
+  google.maps.event.trigger(securityMap, 'resize');
+  showToast('Security Google Map refreshed', 'success');
+}
+
+function searchSecurityMap() {
+  const input = document.getElementById('securityMapSearch');
+  const q = (input?.value || '').trim();
+  if (!q) {
+    centerSecurityMapOnUganda();
+    return;
+  }
+
+  const pupilMatch = pupils.find(p =>
+    p.id.toLowerCase() === q.toLowerCase() ||
+    p.name.toLowerCase().includes(q.toLowerCase())
+  );
+  if (pupilMatch) {
+    locatePupilOnSecurityMap(pupilMatch.id);
+    return;
+  }
+
+  if (!securityGeocoder || !securityMap) return;
+  securityGeocoder.geocode({ address: `${q}, Uganda` }, (results, status) => {
+    if (status === 'OK' && results[0]) {
+      const loc = results[0].geometry.location;
+      securityMap.panTo(loc);
+      securityMap.setZoom(13);
+      securityInfoWindow.setContent(`<b>${esc(q)}</b><br><small>Google Maps location in Uganda</small>`);
+      securityInfoWindow.setPosition(loc);
+      securityInfoWindow.open(securityMap);
+      showToast(`Located ${q}, Uganda`, 'success');
+    } else {
+      showToast('Location not found in Uganda. Try a district, town, road or pupil name/ID.', 'warning');
+    }
+  });
+}
+
+function capturePupilGPS() {
+  if (!navigator.geolocation) {
+    showToast('This device does not support GPS location.', 'error');
+    return;
+  }
+  showToast('Requesting current device location…', 'info');
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      const lat = position.coords.latitude.toFixed(6);
+      const lng = position.coords.longitude.toFixed(6);
+      const input = document.getElementById('homeGPS');
+      if (input) input.value = `${lat}, ${lng}`;
+      showToast(`GPS captured: ${lat}, ${lng}`, 'success');
+    },
+    error => {
+      const messages = {
+        1: 'Location permission was denied.',
+        2: 'Current location is unavailable.',
+        3: 'GPS request timed out.'
+      };
+      showToast(messages[error.code] || 'Unable to capture GPS location.', 'error');
+    },
+    { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+  );
+}
+
+/* ============================================================
+   GPS SIMULATION
+============================================================ */
 function startGPSSimulation() {
   if (gpsSimInterval) clearInterval(gpsSimInterval);
   gpsSimInterval = setInterval(() => {
@@ -2130,7 +2870,15 @@ function toggleNotifPanel() {
 function clearNotifications() { notifications = []; save(); renderNotifications(); showToast('Notifications cleared', 'success'); }
 function toggleRoleDropdown() { document.getElementById('roleDropdown')?.classList.toggle('active'); }
 function switchRole(role) {
-  currentRole = role; updateRoleUI();
+  const u = getCurrentUser();
+  if (!u || u.role !== 'admin') {
+    document.getElementById('roleDropdown')?.classList.remove('active');
+    showToast('Only an Administrator can switch roles. Sign in with the appropriate account for Security access.', 'warning');
+    return;
+  }
+  if (!roleConfig[role]) return;
+  currentRole = role;
+  updateRoleUI();
   document.getElementById('roleDropdown')?.classList.remove('active');
   showToast(`Switched to ${roleConfig[role].label} role`, 'success');
   addNotification(`Role switched to ${roleConfig[role].label}`, 'info');
@@ -2152,7 +2900,12 @@ function updateRoleUI() {
   const uiRole = document.getElementById('userInfoRole'); if (uiRole) uiRole.textContent = cfg.label;
 }
 function applyRoleRestrictions() {
-  const restricted = { parent: ['movement', 'pupils', 'settings', 'communication'], security: ['pupils', 'settings', 'communication', 'ai', 'analytics'], teacher: ['settings', 'communication'], student: ['pupils', 'movement', 'settings', 'communication', 'ai', 'analytics', 'alerts', 'reports'] };
+  const restricted = { 
+    parent: ['movement', 'pupils', 'settings', 'communication', 'securitymap'], 
+    security: ['pupils', 'settings', 'communication', 'ai', 'analytics'], 
+    teacher: ['settings', 'communication', 'securitymap'], 
+    student: ['pupils', 'movement', 'settings', 'communication', 'ai', 'analytics', 'alerts', 'reports', 'securitymap'] 
+  };
   const hidden = restricted[currentRole] || [];
   document.querySelectorAll('.nav-btn').forEach(btn => {
     if (hidden.includes(btn.dataset.section)) { btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none'; }
@@ -2173,6 +2926,18 @@ function showSection(id) {
     if (!map) initLeafletMap();
     else setTimeout(() => { if (map) map.invalidateSize(); }, 300);
     setTimeout(() => { updateMapMarkers(); updateTelemetryUI(); }, 400);
+  }
+  if (id === 'securitymap') {
+    initSecurityMap();
+    setTimeout(() => { 
+      if (securityMap) { 
+        google.maps.event.trigger(securityMap, 'resize'); 
+        updateSecurityMapMarkers(); 
+        updateSecurityTelemetry();
+        renderSecurityPupilDirectory();
+        renderSecurityAlerts();
+      } 
+    }, 500);
   }
   if (id === 'ai') renderAIInsights();
   if (id === 'communication') renderCommunicationHistory();
@@ -2228,6 +2993,7 @@ function renderAll() {
   if (document.getElementById('live').classList.contains('active')) renderLiveMonitor();
   if (document.getElementById('geofence').classList.contains('active')) { updateMapMarkers(); }
   if (document.getElementById('analytics').classList.contains('active')) renderAnalytics();
+  if (document.getElementById('securitymap').classList.contains('active')) { updateSecurityMapMarkers(); updateSecurityTelemetry(); renderSecurityPupilDirectory(); renderSecurityAlerts(); }
   updateBadges();
 }
 function updateBadges() {
@@ -2789,7 +3555,7 @@ function buildCustomReport() {
 function printReport() {
   const content = document.getElementById('reportArea').innerHTML;
   const w = window.open('', '_blank');
-  w.document.write(`<html><head><title>Pupil Movement Report</title><style>body{font-family:Inter,Arial,sans-serif;padding:40px;color:#1a2b3e}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #ccc;padding:10px;text-align:left;font-size:12px}th{background:#f0f6fc;font-weight:700;text-transform:uppercase;font-size:10px}h1{text-align:center;font-size:22px;margin-bottom:6px}.sub{text-align:center;color:#5d738b;font-size:12px;margin-bottom:24px}.footer{margin-top:32px;text-align:center;font-size:11px;color:#5d738b;border-top:1px solid #eef3f9;padding-top:16px}.table-wrap{overflow-x:auto}.chip{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#e9f2ff;color:#1d5fa7;display:inline-block}.chip.danger{background:#fdeaea;color:#b33a3a}.chip.warning{background:#fff9e8;color:#8b6500}.chip.accent{background:#e9f2ff;color:#1d5fa7}.chip.success{background:#e3f7eb;color:#0e6b3e}.photo-thumb-sm{width:36px;height:36px;border-radius:50%;object-fit:cover}.photo-thumb-xs{width:28px;height:28px;border-radius:50%;object-fit:cover}.no-photo-icon{width:36px;height:36px;border-radius:50%;background:#eef2f7;display:grid;place-items:center;color:#b9c9dc;font-size:14px}.photo-cell{display:flex;align-items:center}</style></head><body><h1>${esc(settings.schoolName)}</h1><div class="sub">Pupil Movement Report · ${new Date().toLocaleDateString()}</div>${content}<div class="footer">Smart Pupil Tracking System v4.0 Ultimate + GPS · Generated ${new Date().toLocaleString()}</div></body></html>`);
+  w.document.write(`<html><head><title>Pupil Movement Report</title><style>body{font-family:Inter,Arial,sans-serif;padding:40px;color:#1a2b3e}table{width:100%;border-collapse:collapse;margin-top:20px}th,td{border:1px solid #ccc;padding:10px;text-align:left;font-size:12px}th{background:#f0f6fc;font-weight:700;text-transform:uppercase;font-size:10px}h1{text-align:center;font-size:22px;margin-bottom:6px}.sub{text-align:center;color:#5d738b;font-size:12px;margin-bottom:24px}.footer{margin-top:32px;text-align:center;font-size:11px;color:#5d738b;border-top:1px solid #eef3f9;padding-top:16px}.table-wrap{overflow-x:auto}.chip{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#e9f2ff;color:#1d5fa7;display:inline-block}.chip.danger{background:#fdeaea;color:#b33a3a}.chip.warning{background:#fff9e8;color:#8b6500}.chip.accent{background:#e9f2ff;color:#1d5fa7}.chip.success{background:#e3f7eb;color:#0e6b3e}.photo-thumb-sm{width:36px;height:36px;border-radius:50%;object-fit:cover}.photo-thumb-xs{width:28px;height:28px;border-radius:50%;object-fit:cover}.no-photo-icon{width:36px;height:36px;border-radius:50%;background:#eef2f7;display:grid;place-items:center;color:#b9c9dc;font-size:14px}.photo-cell{display:flex;align-items:center}</style></head><body><h1>${esc(settings.schoolName)}</h1><div class="sub">Pupil Movement Report · ${new Date().toLocaleDateString()}</div>${content}<div class="footer">Smart Pupil Tracking System v4.0 Ultimate + GPS + UG Map · Generated ${new Date().toLocaleString()}</div></body></html>`);
   w.document.close(); w.print();
 }
 function exportPupilsExcel() {
@@ -3112,6 +3878,7 @@ function loadSettingsUI() {
   const ld = document.getElementById('settingLateDeparture'); if (ld) ld.value = settings.lateDeparture;
   const tz = document.getElementById('settingTimezone'); if (tz) tz.value = settings.timezone;
   const rf = document.getElementById('settingRefresh'); if (rf) rf.value = settings.refreshInterval;
+  const gm = document.getElementById('settingGoogleMapsKey'); if (gm) gm.value = settings.googleMapsApiKey || '';
   const ti = document.getElementById('termInfo'); if (ti) ti.textContent = settings.term;
 }
 function saveSettings() {
@@ -3123,8 +3890,17 @@ function saveSettings() {
   settings.lateDeparture = document.getElementById('settingLateDeparture').value;
   settings.timezone = document.getElementById('settingTimezone').value;
   settings.refreshInterval = document.getElementById('settingRefresh').value;
-  save(); document.getElementById('termInfo').textContent = settings.term;
-  startAutoRefresh(); showToast('Settings saved', 'success'); renderAll();
+  settings.googleMapsApiKey = (document.getElementById('settingGoogleMapsKey')?.value || '').trim();
+  save();
+  document.getElementById('termInfo').textContent = settings.term;
+  if (securityMap) {
+    securityMap = null;
+    clearSecurityMarkers();
+    securityInfoWindow = null;
+    securityGeocoder = null;
+  }
+  showToast('Settings saved. Google Maps will reload with the new configuration.', 'success');
+  startAutoRefresh(); renderAll();
 }
 function resetData() {
   if (!confirm('Reset ALL data? This will delete all pupils and records permanently.')) return;
