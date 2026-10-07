@@ -876,6 +876,10 @@
           <span><b>Parent</b></span>
           <span><code>Parent</code> / <code>parent@125</code></span>
         </div>
+        <div class="cred-row" onclick="fillLogin('Student','student@127')" style="cursor:pointer;">
+          <span><b>Student</b></span>
+          <span><code>Student</code> / <code>student@127</code></span>
+        </div>
       </div>
     </form>
 
@@ -908,6 +912,7 @@
             <option value="teacher">Teacher</option>
             <option value="security">Security</option>
             <option value="parent">Parent</option>
+            <option value="student">Student</option>
           </select>
         </div>
       </div>
@@ -1019,6 +1024,9 @@
             </div>
             <div class="role-option" data-role="parent" onclick="switchRole('parent')">
               <i class="fas fa-users"></i> <div><b>Parent</b><br><small style="color:var(--text-muted);font-size:11px;">View child only</small></div>
+            </div>
+            <div class="role-option" data-role="student" onclick="switchRole('student')">
+              <i class="fas fa-user-graduate"></i> <div><b>Student</b><br><small style="color:var(--text-muted);font-size:11px;">View own records</small></div>
             </div>
           </div>
         </div>
@@ -1556,7 +1564,8 @@ function seedDefaultUsers() {
     { username: 'Admin', password: 'admin@123', name: 'System Administrator', role: 'admin', createdAt: new Date().toISOString() },
     { username: 'Teacher', password: 'teacher@124', name: 'Default Teacher', role: 'teacher', createdAt: new Date().toISOString() },
     { username: 'Security', password: 'security@125', name: 'Gate Security', role: 'security', createdAt: new Date().toISOString() },
-    { username: 'Parent', password: 'parent@125', name: 'Default Parent', role: 'parent', createdAt: new Date().toISOString() }
+    { username: 'Parent', password: 'parent@125', name: 'Default Parent', role: 'parent', createdAt: new Date().toISOString() },
+    { username: 'Student', password: 'student@127', name: 'Default Student', role: 'student', createdAt: new Date().toISOString() }
   ];
   let changed = false;
   defaults.forEach(def => {
@@ -1714,7 +1723,8 @@ const roleConfig = {
   admin: { label: 'Administrator', icon: 'fa-user-shield', color: 'accent', desc: 'Full system access. All features are available.' },
   teacher: { label: 'Teacher', icon: 'fa-chalkboard-teacher', color: 'success', desc: 'Monitor and record pupil movements.' },
   security: { label: 'Security', icon: 'fa-shield-alt', color: 'warning', desc: 'Gate access and movement recording only.' },
-  parent: { label: 'Parent', icon: 'fa-users', color: 'purple', desc: 'View-only access to your child\'s records.' }
+  parent: { label: 'Parent', icon: 'fa-users', color: 'purple', desc: 'View-only access to your child\'s records.' },
+  student: { label: 'Student', icon: 'fa-user-graduate', color: 'teal', desc: 'View your own movement records and schedule.' }
 };
 
 let weeklyChart, statusChart, hourlyChart, classChart, dashWeeklyChart, predictionChart, heatmapChart;
@@ -1737,7 +1747,7 @@ let map, markerGroup, zoneGroup;
 ============================================================ */
 let registerPhotoData = null;
 let cameraStream = null;
-let cameraTarget = null; // 'register' or pupil id for edit
+let cameraTarget = null;
 
 /* ============================================================
    PHOTO FUNCTIONS
@@ -2142,7 +2152,7 @@ function updateRoleUI() {
   const uiRole = document.getElementById('userInfoRole'); if (uiRole) uiRole.textContent = cfg.label;
 }
 function applyRoleRestrictions() {
-  const restricted = { parent: ['movement', 'pupils', 'settings', 'communication'], security: ['pupils', 'settings', 'communication', 'ai', 'analytics'], teacher: ['settings', 'communication'] };
+  const restricted = { parent: ['movement', 'pupils', 'settings', 'communication'], security: ['pupils', 'settings', 'communication', 'ai', 'analytics'], teacher: ['settings', 'communication'], student: ['pupils', 'movement', 'settings', 'communication', 'ai', 'analytics', 'alerts', 'reports'] };
   const hidden = restricted[currentRole] || [];
   document.querySelectorAll('.nav-btn').forEach(btn => {
     if (hidden.includes(btn.dataset.section)) { btn.style.opacity = '0.4'; btn.style.pointerEvents = 'none'; }
@@ -2891,7 +2901,6 @@ function handleEditPhotoUpload(e, id) {
       showToast('Photo updated', 'success');
       renderAll();
       closeModal();
-      // Re-open edit modal to reflect new photo
       setTimeout(() => editPupil(id), 300);
     }
   };
